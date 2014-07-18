@@ -8,13 +8,14 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.interfaces.ViewPhoto;
-import com.rewyndr.reflectbig.parse.Constants;
+import com.rewyndr.reflectbig.parse.model.FieldNames;
 import com.rewyndr.reflectbig.parse.model.Photo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This provides an implementation of <tt>ViewPhoto</tt> by retrieving photos from Parse
  * Created by Satish on 7/16/2014.
  */
 public class ViewPhotoParse implements ViewPhoto {
@@ -43,7 +44,7 @@ public class ViewPhotoParse implements ViewPhoto {
         for (int i = start; i <= end; i++) {
             idList.add(i);
         }
-        query.whereContainedIn(Constants.PHOTO_NO, idList);
+        query.whereContainedIn(FieldNames.PHOTO_NO, idList);
         queryResult = query.find();
         for (Photo photo : queryResult) {
             result.add(photo.getPhotoFile().getUrl());
