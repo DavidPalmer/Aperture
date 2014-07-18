@@ -22,6 +22,12 @@ public class ViewPhotoParse implements ViewPhoto {
 
     private static ViewPhotoParse instance = null;
 
+    private enum PhotoType {
+        SMALL,
+        THUMBNAIL,
+        ACTUAL
+    }
+
     protected ViewPhotoParse() {
         // Exists only to defeat instantiation.
     }
@@ -35,8 +41,7 @@ public class ViewPhotoParse implements ViewPhoto {
         return instance;
     }
 
-    @Override
-    public List<String> getPhotos(int start, int end) throws ParseException {
+    private List<String> getPhotos(int start, int end, PhotoType photoType) throws ParseException {
         List<String> result = new ArrayList<String>();
         List<Photo> queryResult = null;
         ParseQuery<Photo> query = ParseQuery.getQuery(Photo.class);
@@ -47,13 +52,64 @@ public class ViewPhotoParse implements ViewPhoto {
         query.whereContainedIn(FieldNames.PHOTO_NO, idList);
         queryResult = query.find();
         for (Photo photo : queryResult) {
-            result.add(photo.getPhotoFile().getUrl());
+            if (photoType == PhotoType.ACTUAL) {
+                result.add(photo.getPhotoFile().getUrl());
+            } else if (photoType == PhotoType.THUMBNAIL) {
+                result.add(photo.getPhotoFile640().getUrl());
+            } else if (photoType == PhotoType.SMALL) {
+                result.add(photo.getPhotoFile1024().getUrl());
+            }
         }
         return result;
     }
 
     @Override
-    public List<String> getPhoto(int num) throws ParseException {
-        return getPhotos(num, num);
+    public List<String> getPhotos(int start, int end) throws ParseException {
+        return getPhotos(start, end, PhotoType.ACTUAL);
+    }
+
+    @Override
+    public String getPhoto(int num) throws ParseException {
+        List<String> results = getPhotos(num, num);
+        if (results.size() > 0) {
+            return results.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<String> getPhotosThumbnail(int start, int end) throws ParseException {
+        return getPhotos(start, end, PhotoType.THUMBNAIL);
+    }
+
+    @Override
+    public String getPhotoThumbnail(int num) throws ParseException {
+        List<String> results = getPhotosThumbnail(num, num);
+        if (results.size() > 0) {
+            return results.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<String> getPhotosSmall(int start, int end) throws ParseException {
+        return getPhotos(start, end, PhotoType.SMALL);
+    }
+
+    @Override
+    public String getPhotoSmall(int num) throws ParseException {
+        List<String> results = getPhotosSmall(num, num);
+        if (results.size() > 0) {
+            return results.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public int getCount() throws ParseException {
+        ParseQuery<Photo> query = ParseQuery.getQuery(Photo.class);
+        return query.count();
     }
 }
