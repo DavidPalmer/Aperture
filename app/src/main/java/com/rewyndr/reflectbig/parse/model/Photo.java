@@ -15,6 +15,10 @@ public class Photo extends ParseObject {
 
     private ParseFile photoFile;
 
+    private ParseFile photoFile640;
+
+    private ParseFile photoFile1024;
+
     public int getPhotoNo() {
         return getInt(FieldNames.PHOTO_NO);
     }
@@ -29,6 +33,22 @@ public class Photo extends ParseObject {
 
     public void setPhotoFile(ParseFile photoFile) {
         put(FieldNames.PHOTO_FILE, photoFile);
+    }
+
+    public ParseFile getPhotoFile640() {
+        return getParseFile(FieldNames.PHOTO_FILE_640);
+    }
+
+    public void setPhotoFile640(ParseFile photoFile) {
+        put(FieldNames.PHOTO_FILE_640, photoFile);
+    }
+
+    public ParseFile getPhotoFile1024() {
+        return getParseFile(FieldNames.PHOTO_FILE_1024);
+    }
+
+    public void setPhotoFile1024(ParseFile photoFile) {
+        put(FieldNames.PHOTO_FILE_1024, photoFile);
     }
 
 }
