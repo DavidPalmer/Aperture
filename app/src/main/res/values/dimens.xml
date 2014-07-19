@@ -1,5 +1,9 @@
 <resources>
-  <dimen name="padding_small">4dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name = "custom_pad">5dp</dimen>
+    <dimen name="padding_small">4dp</dimen>
   <dimen name="padding_medium">8dp</dimen>
   <dimen name="padding_large">16dp</dimen>
   <dimen name="come_to_bottom">400dp</dimen>

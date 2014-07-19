@@ -1,0 +1,11 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/custom_pad"
+    android:paddingRight="@dimen/custom_pad"
+    android:paddingTop="@dimen/custom_pad"
+    android:paddingBottom="@dimen/custom_pad"
+    tools:context="com.rewyndr.reflectbig.activity.PhotoMultiViewActivity">
+    <include layout="@layout/multi_photo_grid_view"/>
+</RelativeLayout>
