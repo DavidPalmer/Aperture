@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@android:color/background_dark"
     android:id="@+id/grid_view1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:numColumns="auto_fit"
-    android:verticalSpacing="1dp"
-    android:horizontalSpacing="1dp"
+    android:background="@android:color/background_dark"
+    android:clickable="true"
     android:columnWidth="100dp"
     android:gravity="center"
+    android:horizontalSpacing="4dp"
+    android:numColumns="auto_fit"
     android:stretchMode="columnWidth"
-    android:clickable="true">
-</GridView>
+    android:verticalSpacing="2dp"></GridView>
