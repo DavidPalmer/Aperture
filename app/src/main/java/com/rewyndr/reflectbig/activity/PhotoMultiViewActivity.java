@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,10 +14,10 @@ import android.widget.GridView;
 
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.adapter.ImageAdapter;
-import com.rewyndr.reflectbig.common.PhotoType;
 import com.rewyndr.reflectbig.interfaces.ViewPhoto;
 import com.rewyndr.reflectbig.model.Photo;
 import com.rewyndr.reflectbig.parse.impl.ViewPhotoParse;
+import com.rewyndr.reflectbig.service.PhotoViewService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
  * Created by Dileeshvar on 7/16/2014.
  */
 public class PhotoMultiViewActivity extends Activity {
+    private final int BUFFER = 100;
     ImageAdapter imageAdapter;
     ArrayList<Photo> photos = new ArrayList<Photo>();
     GridView gridViewImage;
@@ -59,6 +61,7 @@ public class PhotoMultiViewActivity extends Activity {
     }
 
     private void displayPhotos(){
+        Display display = getWindowManager().getDefaultDisplay();
         ViewPhoto viewPhoto = ViewPhotoParse.getInstance(this);
         try {
             addPhotoList();
@@ -78,14 +81,14 @@ public class PhotoMultiViewActivity extends Activity {
                     }
                 }
             });
-            gridViewImage.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            gridViewImage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id) {
                     // Sending image id to FullScreenActivity
                     Intent i = new Intent(getApplicationContext(), SinglePhotoViewActivity.class);
                     // passing array index
-                    Log.i("FromMultiActivity",""+position);
+                    Log.i("FromMultiActivity", "" + position);
                     i.putExtra("id", position);
                     startActivity(i);
                 }
@@ -100,13 +103,12 @@ public class PhotoMultiViewActivity extends Activity {
 
         try {
             if (size <= 0)
-                size = viewPhoto.getCount();
+                size = PhotoViewService.getImageCount(this);
             List<String> urls = null;
             if (start < size) {
-                urls = viewPhoto.getPhotos(start + 1, start + 15 > size ? size : start + 15, PhotoType.THUMBNAIL);
-                start += 15;
+                urls = PhotoViewService.getImageUrls(this, start + 1, start + BUFFER > size ? size : start + BUFFER);
+                start += BUFFER;
                 for (String url : urls) {
-                    Log.i("test", url);
                     Photo p = new Photo(url);
                     photos.add(p);
                 }

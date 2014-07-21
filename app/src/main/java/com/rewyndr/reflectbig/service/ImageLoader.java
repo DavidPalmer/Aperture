@@ -32,7 +32,7 @@ import java.util.concurrent.Executors;
  */
 public class ImageLoader {
 
-    final int stub_id = R.drawable.grey_noise;
+    final int stub_id = R.drawable.gradiant_box;
     MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
     ExecutorService executorService;
@@ -61,7 +61,9 @@ public class ImageLoader {
     }
 
     private Bitmap getBitmap(String url) {
+
         File f = fileCache.getFile(url);
+
         //from SD cache
         Bitmap b = decodeFile(f);
         if (b != null)

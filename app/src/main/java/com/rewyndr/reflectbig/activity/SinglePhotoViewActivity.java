@@ -21,7 +21,7 @@ import android.widget.ViewSwitcher;
 
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.Constants;
-import com.rewyndr.reflectbig.service.FullPhotoViewService;
+import com.rewyndr.reflectbig.service.PhotoViewService;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class SinglePhotoViewActivity extends Activity {
     private static final String CURRENT_POSITION = "current_position";
-
+    int currentId = 0;
     private ImageSwitcher mImageSwitcher;
     private View mOverscrollLeft;
     private View mOverscrollRight;
@@ -43,11 +43,7 @@ public class SinglePhotoViewActivity extends Activity {
     private Animation mOverscrollRightFadeOut;
     private int currentStart = 0;
     private int currentEnd = 0;
-
     private List<String> mImages = new ArrayList<String>();
-
-    int currentId = 0;
-
 
     public void setCurrentId(){
         Intent intent = getIntent();
@@ -60,9 +56,9 @@ public class SinglePhotoViewActivity extends Activity {
         setContentView(R.layout.activity_image_view);
 
         setCurrentId();
-        int total = FullPhotoViewService.getImageCount(this);
-        int start = FullPhotoViewService.getStartLimit(currentId), end = FullPhotoViewService.getEndLimit(currentId, total);
-        mImages = FullPhotoViewService.getImageUrls(this, start, end);
+        int total = PhotoViewService.getImageCount(this);
+        int start = PhotoViewService.getStartLimit(currentId), end = PhotoViewService.getEndLimit(currentId, total);
+        mImages = PhotoViewService.getImageUrls(this, start, end);
 
         mCurrentPosition = currentId - start;
 
@@ -97,7 +93,7 @@ public class SinglePhotoViewActivity extends Activity {
         });
         loadImage(mCurrentPosition);
         currentStart = Math.max(currentId - Constants.FETCH_LENGTH, Constants.IMAGE_START_ID);
-        currentEnd = Math.min(currentId + Constants.FETCH_LENGTH, FullPhotoViewService.getImageCount(this));
+        currentEnd = Math.min(currentId + Constants.FETCH_LENGTH, PhotoViewService.getImageCount(this));
         mGestureDetector = new GestureDetector(this, new SwipeListener());
         mImageSwitcher.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -135,7 +131,7 @@ public class SinglePhotoViewActivity extends Activity {
             int fetchEnd = currentStart - 1;
             Log.d(this.getClass().getName(), "URls start "+fetchStart+ "end "+ fetchEnd);
 
-            List<String> newUrls = FullPhotoViewService.getImageUrls(this, fetchStart, fetchEnd);
+            List<String> newUrls = PhotoViewService.getImageUrls(this, fetchStart, fetchEnd);
             Log.d(this.getClass().getName(), "URls size "+newUrls.size());
             if(newUrls.size() == 0) {
                 mOverscrollLeft.setVisibility(View.VISIBLE);
@@ -151,12 +147,12 @@ public class SinglePhotoViewActivity extends Activity {
             int currentStart = currentEnd - mImages.size();
             Log.d(this.getClass().getName(), "Current URLs start "+currentStart+ "end "+ currentEnd);
 
-            int total = FullPhotoViewService.getImageCount(this);
+            int total = PhotoViewService.getImageCount(this);
             int fetchStart = currentEnd + 1;
             int fetchEnd = Math.min(currentEnd + Constants.FETCH_LENGTH, total);
             Log.d(this.getClass().getName(), "URls start "+fetchStart+ "end "+ fetchEnd);
 
-            List<String> newUrls = FullPhotoViewService.getImageUrls(this, fetchStart, fetchEnd);
+            List<String> newUrls = PhotoViewService.getImageUrls(this, fetchStart, fetchEnd);
             Log.d(this.getClass().getName(), "URls size "+newUrls.size());
             if(newUrls.size() == 0) {
                 mOverscrollRight.setVisibility(View.VISIBLE);
@@ -171,6 +167,11 @@ public class SinglePhotoViewActivity extends Activity {
         mImageSwitcher.setOutAnimation(delta > 0 ? mSlideOutLeft : mSlideOutRight);
         mCurrentPosition = nextImagePos;
         loadImage(mCurrentPosition);
+    }
+
+    private void loadImage(int mCurrentPosition) {
+        ImageView view = new ImageView(this);
+        new DownloadClass(mImageSwitcher, view).execute(mImages.get(mCurrentPosition));
     }
 
     private class SwipeListener extends SimpleOnGestureListener {
@@ -197,11 +198,6 @@ public class SinglePhotoViewActivity extends Activity {
             }
             return false;
         }
-    }
-
-    private void loadImage(int mCurrentPosition) {
-        ImageView view = new ImageView(this);
-        new DownloadClass(mImageSwitcher, view).execute(mImages.get(mCurrentPosition));
     }
 
     private class DownloadClass extends AsyncTask<String, Void, Bitmap> {
