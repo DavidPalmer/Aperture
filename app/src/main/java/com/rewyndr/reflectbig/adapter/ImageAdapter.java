@@ -2,7 +2,6 @@ package com.rewyndr.reflectbig.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.rewyndr.reflectbig.service.ImageLoader;
 import com.rewyndr.reflectbig.model.Photo;
+import com.rewyndr.reflectbig.service.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -48,9 +47,10 @@ public class ImageAdapter extends BaseAdapter {
             Resources r = Resources.getSystem();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, r.getDisplayMetrics());
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams((int) px * 2 - 10, (int) px * 2 - 10));
+            imageView.setLayoutParams(new GridView.LayoutParams((int) px * 2, (int) px * 2));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setBackgroundColor(Color.BLACK);
+//            imageView.setBackgroundColor(Color.BLACK);
+            imageView.setAdjustViewBounds(true);
         } else {
             imageView = (ImageView) convertView;
         }

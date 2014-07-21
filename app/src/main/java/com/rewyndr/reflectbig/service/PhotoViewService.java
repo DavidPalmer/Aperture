@@ -21,7 +21,7 @@ import java.util.List;
  *
  * Created by Raja on 7/16/2014.
  */
-public class FullPhotoViewService {
+public class PhotoViewService {
     /**
      * This utility function is used for fetching the URL's from the Parse API
      *  @param context
