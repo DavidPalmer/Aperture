@@ -1,4 +1,4 @@
-package com.rewyndr.reflectbig.Service;
+package com.rewyndr.reflectbig.service;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -62,7 +62,6 @@ public class ImageLoader {
 
     private Bitmap getBitmap(String url) {
         File f = fileCache.getFile(url);
-
         //from SD cache
         Bitmap b = decodeFile(f);
         if (b != null)

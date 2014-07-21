@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.rewyndr.reflectbig.Service.ImageLoader;
+import com.rewyndr.reflectbig.service.ImageLoader;
 import com.rewyndr.reflectbig.model.Photo;
 
 import java.util.ArrayList;

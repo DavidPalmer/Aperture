@@ -1,4 +1,4 @@
-package com.rewyndr.reflectbig.Service;
+package com.rewyndr.reflectbig.service;
 
 import java.io.InputStream;
 import java.io.OutputStream;

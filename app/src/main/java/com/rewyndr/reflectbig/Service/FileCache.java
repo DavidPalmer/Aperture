@@ -1,4 +1,4 @@
-package com.rewyndr.reflectbig.Service;
+package com.rewyndr.reflectbig.service;
 
 import android.content.Context;
 

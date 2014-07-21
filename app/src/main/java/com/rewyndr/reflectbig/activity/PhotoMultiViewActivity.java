@@ -1,11 +1,14 @@
 package com.rewyndr.reflectbig.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.rewyndr.reflectbig.R;
@@ -73,6 +76,18 @@ public class PhotoMultiViewActivity extends Activity {
                         addPhotoList();
                         imageAdapter.notifyDataSetChanged();
                     }
+                }
+            });
+            gridViewImage.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v,
+                                        int position, long id) {
+                    // Sending image id to FullScreenActivity
+                    Intent i = new Intent(getApplicationContext(), SinglePhotoViewActivity.class);
+                    // passing array index
+                    Log.i("FromMultiActivity",""+position);
+                    i.putExtra("id", position);
+                    startActivity(i);
                 }
             });
         } catch (Exception e) {

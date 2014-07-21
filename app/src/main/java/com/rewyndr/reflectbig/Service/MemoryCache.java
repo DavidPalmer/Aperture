@@ -1,4 +1,4 @@
-package com.rewyndr.reflectbig.Service;
+package com.rewyndr.reflectbig.service;
 
 import android.graphics.Bitmap;
 import android.util.Log;
