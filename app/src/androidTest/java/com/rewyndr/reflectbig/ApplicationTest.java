@@ -1,4 +1,4 @@
-package example.myapplication;
+package com.rewyndr.reflectbig;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
