@@ -3,6 +3,8 @@ package com.rewyndr.reflectbig.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * This provides utility methods for IO operations
@@ -34,6 +36,20 @@ public class IOUtils {
             if (fileInputStream != null) {
                 fileInputStream.close();
             }
+        }
+    }
+
+    public static void CopyStream(InputStream is, OutputStream os) {
+        final int buffer_size = 1024;
+        try {
+            byte[] bytes = new byte[buffer_size];
+            for (; ; ) {
+                int count = is.read(bytes, 0, buffer_size);
+                if (count == -1)
+                    break;
+                os.write(bytes, 0, count);
+            }
+        } catch (Exception ex) {
         }
     }
 }

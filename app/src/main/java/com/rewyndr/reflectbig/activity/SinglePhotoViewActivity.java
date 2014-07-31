@@ -84,7 +84,7 @@ public class SinglePhotoViewActivity extends Activity {
             @Override
             public View makeView() {
                 ImageView view = new ImageView(SinglePhotoViewActivity.this);
-                view.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                view.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 view.setLayoutParams(new ImageSwitcher.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));

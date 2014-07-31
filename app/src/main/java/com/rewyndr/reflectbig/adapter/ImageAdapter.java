@@ -19,7 +19,6 @@ import java.util.ArrayList;
  */
 public class ImageAdapter extends BaseAdapter {
     public ImageLoader imageLoader;
-    private Context mContext;
     private Context context;
     private ArrayList<Photo> photos;
 
@@ -47,9 +46,8 @@ public class ImageAdapter extends BaseAdapter {
             Resources r = Resources.getSystem();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, r.getDisplayMetrics());
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams((int) px * 2, (int) px * 2));
+            imageView.setLayoutParams(new GridView.LayoutParams((int) px * 2 - 10, (int) px * 2 - 10));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//            imageView.setBackgroundColor(Color.BLACK);
             imageView.setAdjustViewBounds(true);
         } else {
             imageView = (ImageView) convertView;
