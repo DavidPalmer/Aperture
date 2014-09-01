@@ -47,7 +47,7 @@ public class SinglePhotoViewActivity extends Activity {
 
     public void setCurrentId(){
         Intent intent = getIntent();
-        currentId = intent.getExtras().getInt("id")+1;
+        currentId = intent.getExtras().getInt("id") + 1;
     }
 
     @Override
@@ -61,8 +61,6 @@ public class SinglePhotoViewActivity extends Activity {
         mImages = PhotoViewService.getImageUrls(this, start, end);
 
         mCurrentPosition = currentId - start;
-
-        // Views
         mImageSwitcher = (ImageSwitcher) findViewById(R.id.image);
         mOverscrollLeft = findViewById(R.id.overscroll_left);
         mOverscrollRight = findViewById(R.id.overscroll_right);
@@ -84,7 +82,7 @@ public class SinglePhotoViewActivity extends Activity {
             @Override
             public View makeView() {
                 ImageView view = new ImageView(SinglePhotoViewActivity.this);
-                view.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                view.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                 view.setLayoutParams(new ImageSwitcher.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
@@ -125,11 +123,11 @@ public class SinglePhotoViewActivity extends Activity {
         int nextImagePos = mCurrentPosition + delta;
         if (nextImagePos < 0) {
             int currentEnd = currentStart + mImages.size();
-            Log.d(this.getClass().getName(), "Current URLs start "+currentStart+ "end "+ currentEnd);
+            Log.d(this.getClass().getName(), "Current URLs start " + currentStart + "end " + currentEnd);
 
             int fetchStart = Math.max(currentStart - Constants.FETCH_LENGTH, 0);
             int fetchEnd = currentStart - 1;
-            Log.d(this.getClass().getName(), "URls start "+fetchStart+ "end "+ fetchEnd);
+            Log.d(this.getClass().getName(), "URls start " + fetchStart + "end " + fetchEnd);
 
             List<String> newUrls = PhotoViewService.getImageUrls(this, fetchStart, fetchEnd);
             Log.d(this.getClass().getName(), "URls size "+newUrls.size());
@@ -150,7 +148,7 @@ public class SinglePhotoViewActivity extends Activity {
             int total = PhotoViewService.getImageCount(this);
             int fetchStart = currentEnd + 1;
             int fetchEnd = Math.min(currentEnd + Constants.FETCH_LENGTH, total);
-            Log.d(this.getClass().getName(), "URls start "+fetchStart+ "end "+ fetchEnd);
+            Log.d(this.getClass().getName(), "URls start " + fetchStart + "end " + fetchEnd);
 
             List<String> newUrls = PhotoViewService.getImageUrls(this, fetchStart, fetchEnd);
             Log.d(this.getClass().getName(), "URls size "+newUrls.size());

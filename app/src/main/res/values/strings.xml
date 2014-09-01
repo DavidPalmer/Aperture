@@ -1,10 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">ReflectBig</string>
     <string name="parse_app_id">dUB6bvVXgV2jeEwABqDGuZs1hKUaEOtP01wfM0SN</string>
     <string name="parse_client_key">BDapL1lS2vfVweTnlRCrKDg1UXU0ZOqpgfjBW07L</string>
-    <string name="title_activity_photo_multi_view">TestEvent</string>
     <string name="camera_pic">Take Picture</string>
+    <string name="title_activity_photo_multi_view">ReflectBig</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_event_detail_layout">Event Info</string>
+    <string name="title_activity_create_event">CreateEventActivity</string>
+    <string name="Event_name">Enter Event Name</string>
+    <string name="event_details">Event Info</string>
+    <string name="title_activity_attendee_list">Attendees</string>
 
 </resources>
