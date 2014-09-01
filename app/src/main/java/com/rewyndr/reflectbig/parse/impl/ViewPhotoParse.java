@@ -19,7 +19,7 @@ import java.util.List;
  * This provides an implementation of <tt>ViewPhoto</tt> by retrieving photos from Parse
  * Created by Satish on 7/16/2014.
  */
-public class ViewPhotoParse implements ViewPhoto {
+public class ViewPhotoParse extends ParseBase implements ViewPhoto {
 
     private static ViewPhotoParse instance = null;
 
@@ -29,8 +29,7 @@ public class ViewPhotoParse implements ViewPhoto {
 
     public static ViewPhotoParse getInstance(Context context) {
         if (instance == null) {
-            ParseObject.registerSubclass(Photo.class);
-            Parse.initialize(context, context.getResources().getString(R.string.parse_app_id), context.getResources().getString(R.string.parse_client_key));
+            initParse(context);
             instance = new ViewPhotoParse();
         }
         return instance;
