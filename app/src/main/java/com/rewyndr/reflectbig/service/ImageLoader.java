@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.widget.ImageView;
 
 import com.rewyndr.reflectbig.R;
+import com.rewyndr.reflectbig.util.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -79,7 +80,7 @@ public class ImageLoader {
             conn.setInstanceFollowRedirects(true);
             InputStream is = conn.getInputStream();
             OutputStream os = new FileOutputStream(f);
-            Utils.CopyStream(is, os);
+            IOUtils.CopyStream(is, os);
             os.close();
             conn.disconnect();
             bitmap = decodeFile(f);
