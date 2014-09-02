@@ -8,11 +8,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseUser;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.model.Event;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class EventDetailActivity extends Activity {
@@ -42,17 +44,22 @@ public class EventDetailActivity extends Activity {
         try {
             Event thisEvent = getEventDetails();
             TextView text_eventName = (TextView) findViewById(R.id.text_event_name);
+            TextView text_eventDesc = (TextView) findViewById(R.id.text_event_description);
             TextView text_invited_by = (TextView) findViewById(R.id.text_invited_by);
-            TextView text_when = (TextView) findViewById(R.id.text_when);
+            TextView text_startDate = (TextView) findViewById(R.id.text_startDate);
+            TextView text_endDate = (TextView) findViewById(R.id.text_endDate);
             TextView text_where = (TextView) findViewById(R.id.text_where);
             TextView text_status = (TextView) findViewById(R.id.text_status);
             TextView text_attendees = (TextView) findViewById(R.id.text_attendees);
+
+            text_eventDesc.setText(thisEvent.getEvent_description());
             text_eventName.setText(thisEvent.getEvent_name());
             text_invited_by.setText(thisEvent.getEvent_invited_by());
-            text_when.setText(thisEvent.getEvent_when());
+            text_startDate.setText(thisEvent.getEvent_startDate());
+            text_endDate.setText(thisEvent.getEvent_endDate());
             text_where.setText(thisEvent.getEvent_where());
             String myStatus;
-            if (thisEvent.isEvent_myStatus() == null) {
+            if (thisEvent.getEvent_myStatus() == null) {
                 myStatus = "Not responded";
             } else {
                 myStatus = "Going/Not Going";
@@ -84,7 +91,9 @@ public class EventDetailActivity extends Activity {
         a.add("R");
         a.add("R");
         listOfAttendes = a;
-        return new Event("1", "Test", "Test", "Test", "Test", true, true, a);
+        Log.d(logClass, String.valueOf(ParseUser.getCurrentUser()));
+        Date d = new Date();
+        return new Event("1", "KennyWood", "KennyWood - Amazing Fun land", "Raja",d.toString(),d.toString() ,"Test Test Test Test Test Test Test Test Test Test Test Test Test Test ", true, true, a);
     }
 
     /*@Override

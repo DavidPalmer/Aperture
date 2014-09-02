@@ -8,24 +8,28 @@ import java.util.List;
 public class Event {
     private String event_id;
     private String event_name;
+    private String event_description;
     private String event_invited_by;
-    private String event_when;
+    private String event_startDate;
+    private String event_endDate;
     private String event_where;
     private boolean event_status;
     private Boolean event_myStatus;
 
-    public Event() {
-    }
-
-    public Event(String event_id, String event_name, String event_invited_by, String event_when, String event_where, boolean event_status, Boolean event_myStatus, List<String> event_attendees) {
+    public Event(String event_id, String event_name, String event_description, String event_invited_by, String event_startDate, String event_endDate, String event_where, boolean event_status, Boolean event_myStatus, List<String> event_attendees) {
         this.event_id = event_id;
         this.event_name = event_name;
+        this.event_description = event_description;
         this.event_invited_by = event_invited_by;
-        this.event_when = event_when;
+        this.event_startDate = event_startDate;
+        this.event_endDate = event_endDate;
         this.event_where = event_where;
         this.event_status = event_status;
         this.event_myStatus = event_myStatus;
         this.event_attendees = event_attendees;
+    }
+
+    public Event() {
     }
 
     private List<String> event_attendees;
@@ -46,6 +50,14 @@ public class Event {
         this.event_name = event_name;
     }
 
+    public String getEvent_description() {
+        return event_description;
+    }
+
+    public void setEvent_description(String event_description) {
+        this.event_description = event_description;
+    }
+
     public String getEvent_invited_by() {
         return event_invited_by;
     }
@@ -54,12 +66,21 @@ public class Event {
         this.event_invited_by = event_invited_by;
     }
 
-    public String getEvent_when() {
-        return event_when;
+
+    public String getEvent_startDate() {
+        return event_startDate;
     }
 
-    public void setEvent_when(String event_when) {
-        this.event_when = event_when;
+    public void setEvent_startDate(String event_startDate) {
+        this.event_startDate = event_startDate;
+    }
+
+    public String getEvent_endDate() {
+        return event_endDate;
+    }
+
+    public void setEvent_endDate(String event_endDate) {
+        this.event_endDate = event_endDate;
     }
 
     public String getEvent_where() {
@@ -78,19 +99,19 @@ public class Event {
         this.event_status = event_status;
     }
 
+    public Boolean getEvent_myStatus() {
+        return event_myStatus;
+    }
+
+    public void setEvent_myStatus(Boolean event_myStatus) {
+        this.event_myStatus = event_myStatus;
+    }
+
     public List<String> getEvent_attendees() {
         return event_attendees;
     }
 
     public void setEvent_attendees(List<String> event_attendees) {
         this.event_attendees = event_attendees;
-    }
-
-    public Boolean isEvent_myStatus() {
-        return event_myStatus;
-    }
-
-    public void setEvent_myStatus(boolean event_myStatus) {
-        this.event_myStatus = event_myStatus;
     }
 }

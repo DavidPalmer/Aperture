@@ -2,309 +2,418 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="5dp"
     tools:context="com.rewyndr.reflectbig.activity.EventDetailActivity">
 
-    <TableLayout
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:stretchColumns="1"
-        android:id="@id/table">
+        android:scrollbars="none"
+        android:layout_weight="1">
 
-        <TableRow
-            android:paddingTop="25dp"
-            android:background="#494949"
-            android:layout_marginBottom="3dp">
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:stretchColumns="1"
+            android:background="@android:color/black"
+            android:id="@id/table">
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:id="@+id/event_details">
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:src="@drawable/list" />
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/event_name">
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="        Event"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/event" />
 
-            </FrameLayout>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Event"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center">
+                </FrameLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Place holder"
-                    android:id="@+id/text_event_name"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
-            </FrameLayout>
-        </TableRow>
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
 
-        <TableRow
-            android:paddingTop="25dp"
-            android:background="#494949"
-            android:layout_marginBottom="3dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Place holder"
+                        android:id="@+id/text_event_name"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"/>
+                </FrameLayout>
+            </TableRow>
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:id="@+id/invited_by">
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:src="@drawable/invited_by" />
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/event_description">
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="        Invited by"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/event" />
 
-            </FrameLayout>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Description"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center">
+                </FrameLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Place holder"
-                    android:id="@+id/text_invited_by"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
-            </FrameLayout>
-        </TableRow>
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
 
-        <TableRow
-            android:paddingTop="25dp"
-            android:background="#494949"
-            android:layout_marginBottom="3dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Place holder"
+                        android:id="@+id/text_event_description"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize" />
+                </FrameLayout>
+            </TableRow>
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:id="@+id/when">
+            <TableRow
+                android:paddingTop="25dp"
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:src="@drawable/calendar" />
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/invited_by">
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="        When"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/invited_by" />
 
-            </FrameLayout>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Invited by"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center">
+                </FrameLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Place holder"
-                    android:id="@+id/text_when"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
-            </FrameLayout>
-        </TableRow>
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
 
-        <TableRow
-            android:paddingTop="25dp"
-            android:background="#494949"
-            android:layout_marginBottom="3dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Place holder"
+                        android:id="@+id/text_invited_by"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize" />
+                </FrameLayout>
+            </TableRow>
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:id="@+id/where">
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:src="@drawable/where"/>
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/startDate">
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="        Where"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/calendar" />
 
-            </FrameLayout>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Starting on "
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center">
+                </FrameLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Place holder"
-                    android:id="@+id/text_where"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
-            </FrameLayout>
-        </TableRow>
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
 
-        <TableRow
-            android:paddingTop="25dp"
-            android:background="#494949"
-            android:layout_marginBottom="3dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Place holder"
+                        android:id="@+id/text_startDate"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"/>
+                </FrameLayout>
+            </TableRow>
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:id="@+id/status">
+            <TableRow
+                android:paddingTop="25dp"
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:src="@drawable/status" />
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/endDate">
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="        Status"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/calendar" />
 
-            </FrameLayout>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Ending on "
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center">
+                </FrameLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Place holder"
-                    android:id="@+id/text_status"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
-            </FrameLayout>
-        </TableRow>
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
 
-        <TableRow android:layout_marginBottom="3dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Place holder"
+                        android:id="@+id/text_endDate"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"/>
+                </FrameLayout>
+            </TableRow>
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:id="@+id/decision"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp">
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
 
-                <Button
-                    android:layout_width="fill_parent"
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:id="@id/accept"
-                    android:background="#269052"
-                    android:text="Accept"
-                    android:onClick="onClickAccept" />
-            </FrameLayout>
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/where">
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/where" />
 
-                <Button
-                    android:layout_width="fill_parent"
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Where"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+
+                </FrameLayout>
+
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:id="@id/accept"
-                    android:text="Decline"
-                    android:background="#AA3933"
-                    android:onClick="onClickDecline" />
-            </FrameLayout>
-        </TableRow>
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
 
-        <TableRow
-            android:paddingTop="25dp"
-            android:background="#494949"
-            android:id="@+id/one"
-            android:onClick="attendeeList">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Place holder"
+                        android:id="@+id/text_where"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"/>
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:id="@+id/attendees">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:src="@drawable/arrow" />
+                </FrameLayout>
+            </TableRow>
 
-                <ImageView
-                    android:layout_width="wrap_content"
+            <TableRow
+                android:paddingTop="25dp"
+
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:src="@drawable/attendees" />
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/status">
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="        Attendees"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/status" />
 
-            </FrameLayout>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Status"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
 
-            <FrameLayout
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center">
+                </FrameLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <FrameLayout
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Place holder"
-                    android:id="@+id/text_attendees"
-                    android:textColor="@android:color/white"
-                    android:layout_gravity="center" />
-            </FrameLayout>
-        </TableRow>
-    </TableLayout>
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Place holder"
+                        android:id="@+id/text_status"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"/>
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow android:layout_marginBottom="3dp">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/decision"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@id/accept"
+                        android:background="#269052"
+                        android:text="Accept"
+                        android:onClick="onClickAccept" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@id/accept"
+                        android:text="Decline"
+                        android:background="#AA3933"
+                        android:onClick="onClickDecline" />
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="25dp"
+
+                android:id="@+id/one"
+                android:onClick="attendeeList">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/attendees">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/attendees" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Attendees"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Place holder"
+                        android:id="@+id/text_attendees"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:src="@drawable/arrow" />
+                </FrameLayout>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 </RelativeLayout>
