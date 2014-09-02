@@ -7,6 +7,8 @@ import java.util.Date;
  */
 public class Event {
 
+    private String eventId;
+
     private String eventName;
 
     private String location;
@@ -26,6 +28,14 @@ public class Event {
     private String createdBy;
 
     private String invitedBy;
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
 
     public String getEventName() {
         return eventName;

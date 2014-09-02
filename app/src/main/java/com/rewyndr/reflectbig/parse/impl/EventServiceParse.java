@@ -53,6 +53,7 @@ public class EventServiceParse extends ParseBase implements EventService {
     private Event getEventInfo(AttendeeParse attendee) throws ParseException {
         Event event = new Event();
         EventParse eventParse = attendee.getEvent();
+        event.setEventId(eventParse.getObjectId());
         event.setEventName(eventParse.getEventName());
         event.setStartDate(eventParse.getStartDateTime());
         event.setEndDate(eventParse.getEndDateTime());
