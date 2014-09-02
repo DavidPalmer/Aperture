@@ -2,15 +2,12 @@ package com.rewyndr.reflectbig.parse.impl;
 
 import android.content.Context;
 
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.PhotoType;
 import com.rewyndr.reflectbig.interfaces.ViewPhoto;
 import com.rewyndr.reflectbig.parse.model.FieldNames;
-import com.rewyndr.reflectbig.parse.model.Photo;
+import com.rewyndr.reflectbig.parse.model.PhotoParse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,21 +35,21 @@ public class ViewPhotoParse extends ParseBase implements ViewPhoto {
     @Override
     public List<String> getPhotos(int start, int end, PhotoType photoType) throws ParseException {
         List<String> result = new ArrayList<String>();
-        List<Photo> queryResult = null;
-        ParseQuery<Photo> query = ParseQuery.getQuery(Photo.class);
+        List<PhotoParse> queryResult = null;
+        ParseQuery<PhotoParse> query = ParseQuery.getQuery(PhotoParse.class);
         List<Integer> idList = new ArrayList<Integer>();
         for (int i = start; i <= end; i++) {
             idList.add(i);
         }
         query.whereContainedIn(FieldNames.PHOTO_NO, idList);
         queryResult = query.find();
-        for (Photo photo : queryResult) {
+        for (PhotoParse photoParse : queryResult) {
             if (photoType == PhotoType.ACTUAL) {
-                result.add(photo.getPhotoFile().getUrl());
+                result.add(photoParse.getPhotoFile().getUrl());
             } else if (photoType == PhotoType.THUMBNAIL) {
-                result.add(photo.getPhotoFile640().getUrl());
+                result.add(photoParse.getPhotoFile640().getUrl());
             } else if (photoType == PhotoType.SMALL) {
-                result.add(photo.getPhotoFile1024().getUrl());
+                result.add(photoParse.getPhotoFile1024().getUrl());
             }
         }
         return result;
@@ -70,7 +67,7 @@ public class ViewPhotoParse extends ParseBase implements ViewPhoto {
 
     @Override
     public int getCount() throws ParseException {
-        ParseQuery<Photo> query = ParseQuery.getQuery(Photo.class);
+        ParseQuery<PhotoParse> query = ParseQuery.getQuery(PhotoParse.class);
         return query.count();
     }
 }

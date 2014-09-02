@@ -25,6 +25,7 @@ import com.rewyndr.reflectbig.interfaces.ViewPhoto;
 import com.rewyndr.reflectbig.model.Photo;
 import com.rewyndr.reflectbig.parse.impl.UploadPhotoParse;
 import com.rewyndr.reflectbig.parse.impl.ViewPhotoParse;
+import com.rewyndr.reflectbig.service.ServiceFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -170,7 +171,7 @@ public class PhotoMultiViewActivity extends Activity {
     }
 
     public void addPhotoList() {
-        ViewPhoto viewPhoto = ViewPhotoParse.getInstance(this);
+        ViewPhoto viewPhoto = ServiceFactory.getViewPhotoInstance(this);
 
         try {
             size = viewPhoto.getCount();
@@ -221,7 +222,7 @@ public class PhotoMultiViewActivity extends Activity {
         }
 
         private boolean uploadFile(File f) {
-            UploadPhoto uploadPhoto = UploadPhotoParse.getInstance(context);
+            UploadPhoto uploadPhoto = ServiceFactory.getUploadPhotoInstance(context);
             try {
                 uploadPhoto.uploadPhoto(f);
                 f.delete();

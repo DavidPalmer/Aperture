@@ -30,7 +30,7 @@ public class PhotoViewService {
      */
     public static List<String> getImageUrls(Context context, int start, int end){
         List<String> urls = new ArrayList<String>();
-        ViewPhoto viewPhoto = ViewPhotoParse.getInstance(context);
+        ViewPhoto viewPhoto = ServiceFactory.getViewPhotoInstance(context);
         try {
             urls = viewPhoto.getPhotos(start, end, PhotoType.THUMBNAIL);
         } catch (Exception e) {
@@ -45,7 +45,7 @@ public class PhotoViewService {
      * @return
      */
     public static int getImageCount(Context context){
-        ViewPhoto viewPhoto = ViewPhotoParse.getInstance(context);
+        ViewPhoto viewPhoto = ServiceFactory.getViewPhotoInstance(context);
         int totalImages = 0;
         try {
             totalImages = viewPhoto.getCount();
