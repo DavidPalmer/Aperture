@@ -22,6 +22,10 @@ public class EventParse extends ParseObject {
 
     private ParseUser createdBy;
 
+    private int photosCount;
+
+    private int attendeesCount;
+
     public String getEventName() {
         return getString(FieldNames.EVENT_NAME);
     }
@@ -60,5 +64,21 @@ public class EventParse extends ParseObject {
 
     public void setCreatedBy(ParseUser createdBy) {
         put(FieldNames.EVENT_CREATED_BY, createdBy);
+    }
+
+    public int getPhotosCount() {
+        return getInt(FieldNames.EVENT_PHOTOS_COUNT);
+    }
+
+    public void setPhotosCount(int photosCount) {
+        put(FieldNames.EVENT_PHOTOS_COUNT, photosCount);
+    }
+
+    public int getAttendeesCount() {
+        return getInt(FieldNames.EVENT_ATTENDEES_COUNT);
+    }
+
+    public void setAttendeesCount(int attendeesCount) {
+        put(FieldNames.EVENT_ATTENDEES_COUNT, attendeesCount);
     }
 }

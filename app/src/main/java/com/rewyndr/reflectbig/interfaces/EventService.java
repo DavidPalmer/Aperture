@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface EventService {
 
-    public List<Event> getEvents();
+    public List<Event> getEvents() throws Exception;
 }

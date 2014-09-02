@@ -26,4 +26,17 @@ public class FieldNames {
     public static final String EVENT_LOCATION = "location";
 
     public static final String EVENT_CREATED_BY = "createdBy";
+
+    public static final String EVENT_PHOTOS_COUNT = "photoCount";
+
+    public static final String EVENT_ATTENDEES_COUNT = "attendeeCount";
+
+    // Attendee
+    public static final String ATTENDEE_EVENT = "event";
+
+    public static final String ATTENDEE = "attendee";
+
+    public static final String ATTENDEE_INVITED_BY = "invitedBy";
+
+    public static final String ATTENDEE_STATUS = "status";
 }

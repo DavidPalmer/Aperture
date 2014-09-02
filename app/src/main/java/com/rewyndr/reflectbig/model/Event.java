@@ -90,4 +90,36 @@ public class Event {
     public void setPhotosCount(int photosCount) {
         this.photosCount = photosCount;
     }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getInvitedBy() {
+        return invitedBy;
+    }
+
+    public void setInvitedBy(String invitedBy) {
+        this.invitedBy = invitedBy;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "eventName='" + eventName + '\'' +
+                ", location='" + location + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", status=" + status +
+                ", myStatus=" + myStatus +
+                ", attendeesCount=" + attendeesCount +
+                ", photosCount=" + photosCount +
+                ", createdBy='" + createdBy + '\'' +
+                ", invitedBy='" + invitedBy + '\'' +
+                '}';
+    }
 }
