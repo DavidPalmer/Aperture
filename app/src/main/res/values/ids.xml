@@ -2,4 +2,5 @@
 <resources>
     <item name="accept" type="id" />
     <item name="table" type="id" />
+    <item name="decisionRow" type="id" />
 </resources>

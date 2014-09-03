@@ -21,7 +21,9 @@ import android.widget.ViewSwitcher;
 
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.Constants;
-import com.rewyndr.reflectbig.service.PhotoViewService;
+import com.rewyndr.reflectbig.common.PhotoType;
+import com.rewyndr.reflectbig.interfaces.PhotoService;
+import com.rewyndr.reflectbig.service.ServiceFactory;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -44,21 +46,33 @@ public class SinglePhotoViewActivity extends Activity {
     private int currentStart = 0;
     private int currentEnd = 0;
     private List<String> mImages = new ArrayList<String>();
+    private String eventId = "";
 
     public void setCurrentId(){
         Intent intent = getIntent();
         currentId = intent.getExtras().getInt("id") + 1;
+        eventId = intent.getExtras().getString("eventId");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_view);
-
         setCurrentId();
-        int total = PhotoViewService.getImageCount(this);
-        int start = PhotoViewService.getStartLimit(currentId), end = PhotoViewService.getEndLimit(currentId, total);
-        mImages = PhotoViewService.getImageUrls(this, start, end);
+
+        PhotoService service = ServiceFactory.getPhotoServiceInstance(this);
+        int total = 0;
+        try {
+            total = service.getCount(eventId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int start = getStartLimit(currentId), end = getEndLimit(currentId, total);
+        try {
+            mImages = service.getPhotos(eventId, start, end, PhotoType.SMALL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         mCurrentPosition = currentId - start;
         mImageSwitcher = (ImageSwitcher) findViewById(R.id.image);
@@ -91,7 +105,7 @@ public class SinglePhotoViewActivity extends Activity {
         });
         loadImage(mCurrentPosition);
         currentStart = Math.max(currentId - Constants.FETCH_LENGTH, Constants.IMAGE_START_ID);
-        currentEnd = Math.min(currentId + Constants.FETCH_LENGTH, PhotoViewService.getImageCount(this));
+        currentEnd = Math.min(currentId + Constants.FETCH_LENGTH, total);
         mGestureDetector = new GestureDetector(this, new SwipeListener());
         mImageSwitcher.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -119,7 +133,7 @@ public class SinglePhotoViewActivity extends Activity {
         outState.putInt(CURRENT_POSITION, mCurrentPosition);
     }
 
-    private void moveNextOrPrevious(int delta) {
+    private void moveNextOrPrevious(int delta) throws Exception {
         int nextImagePos = mCurrentPosition + delta;
         if (nextImagePos < 0) {
             int currentEnd = currentStart + mImages.size();
@@ -129,8 +143,14 @@ public class SinglePhotoViewActivity extends Activity {
             int fetchEnd = currentStart - 1;
             Log.d(this.getClass().getName(), "URls start " + fetchStart + "end " + fetchEnd);
 
-            List<String> newUrls = PhotoViewService.getImageUrls(this, fetchStart, fetchEnd);
-            Log.d(this.getClass().getName(), "URls size "+newUrls.size());
+            PhotoService viewPhoto = ServiceFactory.getPhotoServiceInstance(this);
+            List<String> newUrls = new ArrayList<String>();
+            try {
+                newUrls = viewPhoto.getPhotos(eventId, fetchStart, fetchEnd, PhotoType.SMALL);
+                Log.d(this.getClass().getName(), "URls size "+newUrls.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if(newUrls.size() == 0) {
                 mOverscrollLeft.setVisibility(View.VISIBLE);
                 mOverscrollLeft.startAnimation(mOverscrollLeftFadeOut);
@@ -145,12 +165,11 @@ public class SinglePhotoViewActivity extends Activity {
             int currentStart = currentEnd - mImages.size();
             Log.d(this.getClass().getName(), "Current URLs start "+currentStart+ "end "+ currentEnd);
 
-            int total = PhotoViewService.getImageCount(this);
+            PhotoService viewPhoto = ServiceFactory.getPhotoServiceInstance(this);
+            int total = viewPhoto.getCount(eventId);
             int fetchStart = currentEnd + 1;
             int fetchEnd = Math.min(currentEnd + Constants.FETCH_LENGTH, total);
-            Log.d(this.getClass().getName(), "URls start " + fetchStart + "end " + fetchEnd);
-
-            List<String> newUrls = PhotoViewService.getImageUrls(this, fetchStart, fetchEnd);
+            List<String> newUrls = viewPhoto.getPhotos(eventId, fetchStart, fetchEnd, PhotoType.SMALL);
             Log.d(this.getClass().getName(), "URls size "+newUrls.size());
             if(newUrls.size() == 0) {
                 mOverscrollRight.setVisibility(View.VISIBLE);
@@ -233,6 +252,24 @@ public class SinglePhotoViewActivity extends Activity {
         protected void onPreExecute() {
             super.onPreExecute();
             pb.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private int getStartLimit(int currentId) {
+        int start = (currentId - Constants.FETCH_LENGTH);
+        if (start > 0) {
+            return start;
+        } else {
+            return Constants.IMAGE_START_ID;
+        }
+    }
+
+    private static int getEndLimit(int currentId, int total) {
+        int start = (currentId + Constants.FETCH_LENGTH);
+        if (start < total) {
+            return start;
+        } else {
+            return total;
         }
     }
 }

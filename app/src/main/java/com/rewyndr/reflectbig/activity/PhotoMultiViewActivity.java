@@ -113,6 +113,7 @@ public class PhotoMultiViewActivity extends Activity {
         }
         if (id == R.id.event_details) {
             Intent intent = new Intent(this, EventDetailActivity.class);
+            intent.putExtra("event", event);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
@@ -164,6 +165,7 @@ public class PhotoMultiViewActivity extends Activity {
                     Intent i = new Intent(getApplicationContext(), SinglePhotoViewActivity.class);
                     // passing array index
                     i.putExtra("id", position);
+                    i.putExtra("eventId", event.getEventId());
                     startActivity(i);
                 }
             });

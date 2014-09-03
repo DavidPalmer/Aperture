@@ -327,7 +327,8 @@
                 </FrameLayout>
             </TableRow>
 
-            <TableRow android:layout_marginBottom="3dp">
+            <TableRow android:layout_marginBottom="3dp"
+                android:id="@id/decisionRow">
 
                 <FrameLayout
                     android:layout_height="wrap_content"

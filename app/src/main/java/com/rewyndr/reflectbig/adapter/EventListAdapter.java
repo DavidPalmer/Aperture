@@ -129,7 +129,7 @@ public class EventListAdapter extends SectionAdapter {
             holder.eventName.setText(upcomingEventList.get(row).getEventName());
             holder.eventDate.setText(new SimpleDateFormat("MMM dd, yyyy").format(upcomingEventList.get(row).getStartDate()));
             holder.eventLocation.setText(upcomingEventList.get(row).getShortLocation());
-            holder.eventCountImage.setImageResource(R.drawable.ic_action_group.png);
+            holder.eventCountImage.setImageResource(R.drawable.ic_action_group);
             holder.eventCount.setText(upcomingEventList.get(row).getAttendeesCount() + "");
             if (upcomingEventList.get(row).getMyStatus() == AttendeeStatus.ACCEPTED)
                 holder.eventConfirmation.setImageResource(R.drawable.ic_action_done);

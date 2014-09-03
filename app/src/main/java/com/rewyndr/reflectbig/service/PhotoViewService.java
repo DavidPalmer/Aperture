@@ -88,23 +88,4 @@ public class PhotoViewService {
                 }
             });
     }
-
-    public static int getStartLimit(int currentId) {
-        int start = (currentId - Constants.FETCH_LENGTH);
-        if (start > 0) {
-            return start;
-        } else {
-            return Constants.IMAGE_START_ID;
-        }
-    }
-
-    public static int getEndLimit(int currentId, int total) {
-        int start = (currentId + Constants.FETCH_LENGTH);
-        if (start < total) {
-            return start;
-        } else {
-            return total;
-        }
-    }
-
 }

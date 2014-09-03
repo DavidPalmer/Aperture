@@ -5,33 +5,46 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.R;
+import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.Event;
+import com.rewyndr.reflectbig.model.EventStatus;
+import com.rewyndr.reflectbig.service.ServiceFactory;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 public class EventDetailActivity extends Activity {
     private String logClass = this.getClass().getName();
-    private String eventId = "";
-    private ArrayList<String> listOfAttendes = new ArrayList<String>();
-    public EventDetailActivity() {
-    }
-
-    public EventDetailActivity(String eventId) {
-        this.eventId = eventId;
-    }
+    Event event = null;
+    private List<String> listOfAttendes = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail_layout);
+        event = (Event) getIntent().getSerializableExtra("event");
+        EventService fetchEventAttendees = ServiceFactory.getEventServiceInstance(this);
+        try {
+            listOfAttendes = fetchEventAttendees.getAttendees(event.getEventId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        TableLayout tl = (TableLayout) findViewById(R.id.table);
+        TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
+        if(event.getStatus().equals(EventStatus.PAST)) {
+            tl.removeView(decisionRow);
+        }
     }
 
     @Override
@@ -41,39 +54,29 @@ public class EventDetailActivity extends Activity {
     }
 
     private void feedEventDetails() {
-        try {
-            Event thisEvent = getEventDetails();
-            TextView text_eventName = (TextView) findViewById(R.id.text_event_name);
-            TextView text_eventDesc = (TextView) findViewById(R.id.text_event_description);
-            TextView text_invited_by = (TextView) findViewById(R.id.text_invited_by);
-            TextView text_startDate = (TextView) findViewById(R.id.text_startDate);
-            TextView text_endDate = (TextView) findViewById(R.id.text_endDate);
-            TextView text_where = (TextView) findViewById(R.id.text_where);
-            TextView text_status = (TextView) findViewById(R.id.text_status);
-            TextView text_attendees = (TextView) findViewById(R.id.text_attendees);
+        Event thisEvent = event;
+        TextView text_eventName = (TextView) findViewById(R.id.text_event_name);
+        TextView text_eventDesc = (TextView) findViewById(R.id.text_event_description);
+        TextView text_invited_by = (TextView) findViewById(R.id.text_invited_by);
+        TextView text_startDate = (TextView) findViewById(R.id.text_startDate);
+        TextView text_endDate = (TextView) findViewById(R.id.text_endDate);
+        TextView text_where = (TextView) findViewById(R.id.text_where);
+        TextView text_status = (TextView) findViewById(R.id.text_status);
+        TextView text_attendees = (TextView) findViewById(R.id.text_attendees);
 
-            text_eventDesc.setText(thisEvent.getEvent_description());
-            text_eventName.setText(thisEvent.getEvent_name());
-            text_invited_by.setText(thisEvent.getEvent_invited_by());
-            text_startDate.setText(thisEvent.getEvent_startDate());
-            text_endDate.setText(thisEvent.getEvent_endDate());
-            text_where.setText(thisEvent.getEvent_where());
-            String myStatus;
-            if (thisEvent.getEvent_myStatus() == null) {
-                myStatus = "Not responded";
-            } else {
-                myStatus = "Going/Not Going";
-            }
-            text_status.setText(myStatus);
-            text_attendees.setText(thisEvent.getEvent_attendees().size() + " people");
-        } catch (ParseException e) {
-            Log.d(logClass, "");
-        }
+        text_eventDesc.setText(thisEvent.getEventDesc());
+        text_eventName.setText(thisEvent.getEventName());
+        text_invited_by.setText(thisEvent.getInvitedBy());
+        text_startDate.setText(thisEvent.getStartDate().toString());
+        text_endDate.setText(thisEvent.getEndDate().toString());
+        text_where.setText(thisEvent.getLocation());
+        text_status.setText(thisEvent.getMyStatus().toString());
+        text_attendees.setText(thisEvent.getAttendeesCount() + " people");
     }
 
     public void attendeeList(View view) {
         Intent intent = new Intent(this, AttendeeListActivity.class);
-        intent.putStringArrayListExtra("Attendees", listOfAttendes);
+        intent.putStringArrayListExtra("Attendees", (ArrayList<String>) listOfAttendes);
         startActivity(intent);
     }
 
@@ -83,17 +86,6 @@ public class EventDetailActivity extends Activity {
 
     public void onClickDecline(View view) {
         Toast.makeText(this, "Rejecting", Toast.LENGTH_SHORT).show();
-    }
-
-    private Event getEventDetails() throws ParseException {
-        ArrayList<String> a = new ArrayList<String>();
-        a.add("R");
-        a.add("R");
-        a.add("R");
-        listOfAttendes = a;
-        Log.d(logClass, String.valueOf(ParseUser.getCurrentUser()));
-        Date d = new Date();
-        return new Event("1", "KennyWood", "KennyWood - Amazing Fun land", "Raja",d.toString(),d.toString() ,"Test Test Test Test Test Test Test Test Test Test Test Test Test Test ", true, true, a);
     }
 
     /*@Override
