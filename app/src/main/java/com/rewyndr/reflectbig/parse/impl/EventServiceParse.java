@@ -52,7 +52,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         List<AttendeeParse> attendeeList = query.find();
         for (AttendeeParse attendee : attendeeList) {
             Event event = getEventInfo(attendee);
-            switch(event.getStatus()) {
+            switch (event.getStatus()) {
                 case PAST:
                     pastEvents.add(event);
                     break;
@@ -70,6 +70,20 @@ public class EventServiceParse extends ParseBase implements EventService {
         return eventList;
     }
 
+    @Override
+    public List<String> getAttendees(String eventId) throws Exception {
+        List<String> attendees = new ArrayList<String>();
+        ParseQuery<AttendeeParse> query = ParseQuery.getQuery(AttendeeParse.class);
+        query.whereEqualTo(FieldNames.ATTENDEE_EVENT, new EventParse(eventId));
+        query.whereEqualTo(FieldNames.ATTENDEE_STATUS, AttendeeStatus.ACCEPTED.toString());
+        query.include(FieldNames.ATTENDEE);
+        List<AttendeeParse> attendeeParseList = query.find();
+        for (AttendeeParse attendee : attendeeParseList) {
+            attendees.add(attendee.getAttendee().getUsername());
+        }
+        return attendees;
+    }
+
     private Event getEventInfo(AttendeeParse attendee) throws ParseException {
         Event event = new Event();
         EventParse eventParse = attendee.getEvent();
@@ -81,12 +95,33 @@ public class EventServiceParse extends ParseBase implements EventService {
         event.setLocation(eventParse.getLocation());
         event.setShortLocation(eventParse.getEventShortLocation());
         event.setStatus(DateUtils.getEventType(event.getStartDate(), event.getEndDate()));
-        event.setMyStatus(AttendeeStatus.valueOf(attendee.getStatus()));
+        event.setMyStatus(getAttendeeStatus(event.getStatus(), attendee.getStatus()));
         event.setInvitedBy(attendee.getInvitedBy().getUsername());
         eventParse.getCreatedBy().fetchIfNeeded();
         event.setCreatedBy(eventParse.getCreatedBy().getUsername());
         event.setPhotosCount(eventParse.getPhotosCount());
         event.setAttendeesCount(eventParse.getAttendeesCount());
         return event;
+    }
+
+    private AttendeeStatus getAttendeeStatus(EventStatus eventStatus, String status) {
+        if (status != null) {
+            switch (eventStatus) {
+                case CURRENT:
+                case UPCOMING:
+                    if ("Y".equals(status)) {
+                        return AttendeeStatus.ACCEPTED;
+                    } else {
+                        return AttendeeStatus.DECLINED;
+                    }
+                case PAST:
+                    if ("Y".equals(status)) {
+                        return AttendeeStatus.ATTENDED;
+                    } else {
+                        return AttendeeStatus.MISSED;
+                    }
+            }
+        }
+        return AttendeeStatus.NOT_RESPONDED;
     }
 }
