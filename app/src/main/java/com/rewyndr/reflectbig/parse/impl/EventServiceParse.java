@@ -8,13 +8,18 @@ import com.parse.ParseUser;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.AttendeeStatus;
 import com.rewyndr.reflectbig.model.Event;
+import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.parse.model.AttendeeParse;
 import com.rewyndr.reflectbig.parse.model.EventParse;
 import com.rewyndr.reflectbig.parse.model.FieldNames;
 import com.rewyndr.reflectbig.util.DateUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.rewyndr.reflectbig.model.EventStatus.*;
 
 /**
  * Created by Satish on 9/2/2014.
@@ -36,8 +41,11 @@ public class EventServiceParse extends ParseBase implements EventService {
     }
 
     @Override
-    public List<Event> getEvents() throws ParseException {
-        List<Event> eventList = new ArrayList<Event>();
+    public Map<EventStatus, List<Event>> getEvents() throws ParseException {
+        Map<EventStatus, List<Event>> eventList = new HashMap<EventStatus, List<Event>>();
+        List<Event> pastEvents = new ArrayList<Event>();
+        List<Event> currentEvents = new ArrayList<Event>();
+        List<Event> upcomingEvents = new ArrayList<Event>();
         ParseUser current = ParseUser.getCurrentUser();
         ParseQuery<AttendeeParse> query = ParseQuery.getQuery(AttendeeParse.class);
         query.whereEqualTo(FieldNames.ATTENDEE, current);
@@ -45,7 +53,18 @@ public class EventServiceParse extends ParseBase implements EventService {
         query.include(FieldNames.ATTENDEE_INVITED_BY);
         List<AttendeeParse> attendeeList = query.find();
         for (AttendeeParse attendee : attendeeList) {
-            eventList.add(getEventInfo(attendee));
+            Event event = getEventInfo(attendee);
+            switch(event.getStatus()) {
+                case PAST:
+                    pastEvents.add(event);
+                    break;
+                case CURRENT:
+                    currentEvents.add(event);
+                    break;
+                case UPCOMING:
+                    upcomingEvents.add(event);
+                    break;
+            }
         }
         return eventList;
     }
