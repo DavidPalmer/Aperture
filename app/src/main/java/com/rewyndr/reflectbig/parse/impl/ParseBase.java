@@ -3,7 +3,9 @@ package com.rewyndr.reflectbig.parse.impl;
 import android.content.Context;
 
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.parse.model.AttendeeParse;
 import com.rewyndr.reflectbig.parse.model.EventParse;
@@ -25,6 +27,11 @@ public abstract class ParseBase {
             ParseObject.registerSubclass(AttendeeParse.class);
             Parse.initialize(context, context.getResources().getString(R.string.parse_app_id), context.getResources().getString(R.string.parse_client_key));
             initialised = true;
+            try {
+                ParseUser.logIn("dileeshvar", "password");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

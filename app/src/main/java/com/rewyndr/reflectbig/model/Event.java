@@ -1,11 +1,13 @@
 package com.rewyndr.reflectbig.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Satish on 9/1/2014.
  */
-public class Event {
+public class Event implements Serializable {
+
     private String eventId;
 
     private String eventName;
@@ -13,6 +15,8 @@ public class Event {
     private String eventDesc;
 
     private String location;
+
+    private String shortLocation;
 
     private Date startDate;
 
@@ -126,11 +130,20 @@ public class Event {
         this.invitedBy = invitedBy;
     }
 
+    public String getShortLocation() {
+        return shortLocation;
+    }
+
+    public void setShortLocation(String shortLocation) {
+        this.shortLocation = shortLocation;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
                 "eventName='" + eventName + '\'' +
                 ", location='" + location + '\'' +
+                ", short location='" + shortLocation + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", status=" + status +
