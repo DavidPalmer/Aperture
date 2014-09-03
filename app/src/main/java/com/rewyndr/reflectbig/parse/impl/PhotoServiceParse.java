@@ -47,6 +47,7 @@ public class PhotoServiceParse extends ParseBase implements PhotoService {
         }
         query.whereContainedIn(FieldNames.PHOTO_NO, idList);
         query.whereEqualTo(FieldNames.PHOTO_EVENT, new EventParse(eventId));
+        query.addAscendingOrder(FieldNames.PHOTO_NO);
         queryResult = query.find();
         for (PhotoParse photoParse : queryResult) {
             if (photoType == PhotoType.ACTUAL) {

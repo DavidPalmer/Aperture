@@ -29,4 +29,8 @@ public class EventParseUnitTest extends AndroidTestCase {
         //System.out.println(instance.getEvents());
         Log.d("Events", String.valueOf(instance.getEvents()));
     }
-}
+
+    public void testGetAttendees() throws Exception {
+        Log.d("Attendees", String.valueOf(instance.getAttendees("Fgw57rJi7w")));
+    }
+ }
