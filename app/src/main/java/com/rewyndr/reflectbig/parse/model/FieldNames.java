@@ -31,6 +31,10 @@ public class FieldNames {
 
     public static final String EVENT_ATTENDEES_COUNT = "attendeeCount";
 
+    public static final String EVENT_SHORT_LOCATION = "shortLocation";
+
+    public static final String EVENT_DESCRIPTION = "eventDescription";
+
     // Attendee
     public static final String ATTENDEE_EVENT = "event";
 

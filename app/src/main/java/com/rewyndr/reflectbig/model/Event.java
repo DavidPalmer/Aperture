@@ -6,10 +6,11 @@ import java.util.Date;
  * Created by Satish on 9/1/2014.
  */
 public class Event {
-
     private String eventId;
 
     private String eventName;
+
+    private String eventDesc;
 
     private String location;
 
@@ -28,6 +29,14 @@ public class Event {
     private String createdBy;
 
     private String invitedBy;
+
+    public String getEventDesc() {
+        return eventDesc;
+    }
+
+    public void setEventDesc(String eventDesc) {
+        this.eventDesc = eventDesc;
+    }
 
     public String getEventId() {
         return eventId;

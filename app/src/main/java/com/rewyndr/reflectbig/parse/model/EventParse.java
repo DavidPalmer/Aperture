@@ -26,6 +26,26 @@ public class EventParse extends ParseObject {
 
     private int attendeesCount;
 
+    private String eventShortLocation;
+
+    private String eventDescription;
+
+    public String getEventDescription() {
+        return getString(FieldNames.EVENT_DESCRIPTION);
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+    }
+
+    public String getEventShortLocation() {
+        return getString(FieldNames.EVENT_SHORT_LOCATION);
+    }
+
+    public void setEventShortLocation(String eventShortLocation) {
+        this.eventShortLocation = eventShortLocation;
+    }
+
     public String getEventName() {
         return getString(FieldNames.EVENT_NAME);
     }
