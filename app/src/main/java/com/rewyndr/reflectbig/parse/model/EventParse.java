@@ -30,12 +30,20 @@ public class EventParse extends ParseObject {
 
     private String eventDescription;
 
+    public EventParse() {
+
+    }
+
+    public EventParse(String objectId) {
+        setObjectId(objectId);
+    }
+
     public String getEventDescription() {
         return getString(FieldNames.EVENT_DESCRIPTION);
     }
 
     public void setEventDescription(String eventDescription) {
-        this.eventDescription = eventDescription;
+        put(FieldNames.EVENT_DESCRIPTION, eventDescription);
     }
 
     public String getEventShortLocation() {
@@ -43,7 +51,7 @@ public class EventParse extends ParseObject {
     }
 
     public void setEventShortLocation(String eventShortLocation) {
-        this.eventShortLocation = eventShortLocation;
+        put(FieldNames.EVENT_SHORT_LOCATION, eventShortLocation);
     }
 
     public String getEventName() {

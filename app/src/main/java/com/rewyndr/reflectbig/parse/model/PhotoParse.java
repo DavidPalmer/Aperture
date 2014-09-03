@@ -19,6 +19,8 @@ public class PhotoParse extends ParseObject {
 
     private ParseFile photoFile1024;
 
+    private EventParse event;
+
     public int getPhotoNo() {
         return getInt(FieldNames.PHOTO_NO);
     }
@@ -51,4 +53,11 @@ public class PhotoParse extends ParseObject {
         put(FieldNames.PHOTO_FILE_1024, photoFile);
     }
 
+    public EventParse getEvent() {
+        return (EventParse) getParseObject(FieldNames.PHOTO_EVENT);
+    }
+
+    public void setEvent(EventParse event) {
+        put(FieldNames.PHOTO_EVENT, event);
+    }
 }

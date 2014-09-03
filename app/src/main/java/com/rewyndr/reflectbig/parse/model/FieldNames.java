@@ -16,6 +16,8 @@ public class FieldNames {
 
     public static final String PHOTO_FILE_1024 = "photoFile1024";
 
+    public static final String PHOTO_EVENT = "event";
+
     // Event
     public static final String EVENT_NAME = "eventName";
 
