@@ -9,5 +9,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_events_list">EventsList</string>
+    <string name="title_activity_event_detail_layout">Event Info</string>
+    <string name="title_activity_create_event">CreateEventActivity</string>
+    <string name="Event_name">Enter Event Name</string>
+    <string name="event_details">Event Info</string>
+    <string name="title_activity_attendee_list">Attendees</string>
 
 </resources>

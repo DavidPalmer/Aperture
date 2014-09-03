@@ -1,7 +1,6 @@
 package com.rewyndr.reflectbig.service;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -24,7 +23,7 @@ import java.util.List;
 public class PhotoViewService {
     /**
      * This utility function is used for fetching the URL's from the Parse API
-     *  @param context
+     * @param context
      * @param start
      * @param end
      */
@@ -65,8 +64,6 @@ public class PhotoViewService {
      */
     public static void imageLoad(ImageView view, final ProgressBar progressBar, String url, boolean needsResize) {
         Context context = view.getContext();
-        Log.i("Coming in", "Hello");
-        /*progressBar.setVisibility(View.VISIBLE);*/
         if(needsResize)
             Picasso.with(context).load(url).resize(1024, 768).centerInside().into(view, new Callback.EmptyCallback() {
                 @Override

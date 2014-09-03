@@ -111,8 +111,9 @@ public class PhotoMultiViewActivity extends Activity {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.event_details) {
+            Intent intent = new Intent(this, EventDetailActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
