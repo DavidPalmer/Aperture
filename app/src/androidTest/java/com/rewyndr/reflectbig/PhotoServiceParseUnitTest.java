@@ -1,6 +1,7 @@
 package com.rewyndr.reflectbig;
 
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 import com.rewyndr.reflectbig.common.PhotoType;
 import com.rewyndr.reflectbig.parse.impl.PhotoServiceParse;
@@ -22,6 +23,7 @@ public class PhotoServiceParseUnitTest extends AndroidTestCase {
     public void testGetPhotos() {
         try {
             List<String> results = instance.getPhotos("Fgw57rJi7w", 1, 10, PhotoType.ACTUAL);
+            Log.d("com.rewyndr.reflectbig", String.valueOf(results));
             assertNotNull("Results cannot be null", results);
             assertEquals("Results size must match input size", 10, results.size());
         } catch (Exception e) {

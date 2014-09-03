@@ -12,4 +12,6 @@ import java.util.Map;
 public interface EventService {
 
     public Map<EventStatus, List<Event>> getEvents() throws Exception;
+
+    public List<String> getAttendees(String eventId) throws Exception;
 }
