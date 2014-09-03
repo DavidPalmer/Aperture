@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Aperture.iml" filepath="$PROJECT_DIR$/Aperture.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HeaderListView/HeaderListView.iml" filepath="$PROJECT_DIR$/HeaderListView/HeaderListView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
