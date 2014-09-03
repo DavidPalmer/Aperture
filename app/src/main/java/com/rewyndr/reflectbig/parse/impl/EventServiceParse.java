@@ -19,8 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.rewyndr.reflectbig.model.EventStatus.*;
-
 /**
  * Created by Satish on 9/2/2014.
  */
@@ -66,6 +64,9 @@ public class EventServiceParse extends ParseBase implements EventService {
                     break;
             }
         }
+        eventList.put(EventStatus.PAST, pastEvents);
+        eventList.put(EventStatus.CURRENT, currentEvents);
+        eventList.put(EventStatus.UPCOMING, upcomingEvents);
         return eventList;
     }
 
