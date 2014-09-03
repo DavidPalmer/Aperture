@@ -5,6 +5,7 @@ import android.content.Context;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.AttendeeStatus;
 import com.rewyndr.reflectbig.model.Event;
@@ -75,7 +76,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         List<String> attendees = new ArrayList<String>();
         ParseQuery<AttendeeParse> query = ParseQuery.getQuery(AttendeeParse.class);
         query.whereEqualTo(FieldNames.ATTENDEE_EVENT, new EventParse(eventId));
-        query.whereEqualTo(FieldNames.ATTENDEE_STATUS, AttendeeStatus.ACCEPTED.toString());
+        query.whereEqualTo(FieldNames.ATTENDEE_STATUS, Constants.YES);
         query.include(FieldNames.ATTENDEE);
         List<AttendeeParse> attendeeParseList = query.find();
         for (AttendeeParse attendee : attendeeParseList) {
@@ -109,13 +110,13 @@ public class EventServiceParse extends ParseBase implements EventService {
             switch (eventStatus) {
                 case CURRENT:
                 case UPCOMING:
-                    if ("Y".equals(status)) {
+                    if (Constants.YES.equals(status)) {
                         return AttendeeStatus.ACCEPTED;
                     } else {
                         return AttendeeStatus.DECLINED;
                     }
                 case PAST:
-                    if ("Y".equals(status)) {
+                    if (Constants.YES.equals(status)) {
                         return AttendeeStatus.ATTENDED;
                     } else {
                         return AttendeeStatus.MISSED;
