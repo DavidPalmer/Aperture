@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.parse.ParseFile;
 import com.rewyndr.reflectbig.interfaces.UploadPhoto;
-import com.rewyndr.reflectbig.parse.model.Photo;
+import com.rewyndr.reflectbig.parse.model.PhotoParse;
 import com.rewyndr.reflectbig.util.IOUtils;
 
 import java.io.File;
@@ -32,8 +32,8 @@ public class UploadPhotoParse extends ParseBase implements UploadPhoto {
     public void uploadPhoto(File file) throws Exception {
         ParseFile pFile = new ParseFile(file.getName(), IOUtils.convertFileToBytes(file));
         pFile.save();
-        Photo photo = new Photo();
-        photo.setPhotoFile(pFile);
-        photo.save();
+        PhotoParse photoParse = new PhotoParse();
+        photoParse.setPhotoFile(pFile);
+        photoParse.save();
     }
 }

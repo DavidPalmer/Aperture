@@ -6,8 +6,8 @@
         android:icon="@drawable/camera"
         android:showAsAction="always"
         android:title="@string/title_activity_photo_multi_view" />
-    <item android:id="@+id/action_settings"
+    <item android:id="@+id/event_details"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/action_settings" />
+        android:title="@string/event_details" />
 </menu>

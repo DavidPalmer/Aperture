@@ -20,11 +20,10 @@ import android.widget.Toast;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.adapter.ImageAdapter;
 import com.rewyndr.reflectbig.common.PhotoType;
-import com.rewyndr.reflectbig.interfaces.UploadPhoto;
-import com.rewyndr.reflectbig.interfaces.ViewPhoto;
+import com.rewyndr.reflectbig.interfaces.PhotoService;
+import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.Photo;
-import com.rewyndr.reflectbig.parse.impl.UploadPhotoParse;
-import com.rewyndr.reflectbig.parse.impl.ViewPhotoParse;
+import com.rewyndr.reflectbig.service.ServiceFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,7 +39,7 @@ import java.util.List;
 public class PhotoMultiViewActivity extends Activity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    private static final int BUFFER = 100;
+    private static final int BUFFER = 10;
     private final String CURRENT_CLASS_LOG = this.getClass().getName();
     private final Context context = this;
     ImageAdapter imageAdapter;
@@ -49,6 +48,7 @@ public class PhotoMultiViewActivity extends Activity {
     private Uri fileUri;
     private int start = 0;
     private int size = 0;
+    private Event event;
 
     /**
      * Create a File for saving an image or video
@@ -111,8 +111,10 @@ public class PhotoMultiViewActivity extends Activity {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.event_details) {
+            Intent intent = new Intent(this, EventDetailActivity.class);
+            intent.putExtra("event", event);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -136,6 +138,8 @@ public class PhotoMultiViewActivity extends Activity {
 
     private void displayPhotos() {
         try {
+            Intent intent = getIntent();
+            event = (Event) intent.getSerializableExtra("event");
             addPhotoList();
             imageAdapter = new ImageAdapter(this, photos);
             gridViewImage = (GridView) findViewById(R.id.grid_view1);
@@ -161,6 +165,7 @@ public class PhotoMultiViewActivity extends Activity {
                     Intent i = new Intent(getApplicationContext(), SinglePhotoViewActivity.class);
                     // passing array index
                     i.putExtra("id", position);
+                    i.putExtra("eventId", event.getEventId());
                     startActivity(i);
                 }
             });
@@ -170,13 +175,13 @@ public class PhotoMultiViewActivity extends Activity {
     }
 
     public void addPhotoList() {
-        ViewPhoto viewPhoto = ViewPhotoParse.getInstance(this);
+        PhotoService viewPhoto = ServiceFactory.getPhotoServiceInstance(this);
 
         try {
-            size = viewPhoto.getCount();
+            size = viewPhoto.getCount(event.getEventId());
             List<String> urls = null;
             if (start < size) {
-                urls = viewPhoto.getPhotos(start + 1, start + BUFFER > size ? size : start + BUFFER, PhotoType.THUMBNAIL);
+                urls = viewPhoto.getPhotos(event.getEventId(), start + 1, start + BUFFER > size ? size : start + BUFFER, PhotoType.THUMBNAIL);
                 start += BUFFER;
                 for (String url : urls) {
                     Photo p = new Photo(url);
@@ -221,9 +226,9 @@ public class PhotoMultiViewActivity extends Activity {
         }
 
         private boolean uploadFile(File f) {
-            UploadPhoto uploadPhoto = UploadPhotoParse.getInstance(context);
+            PhotoService uploadPhoto = ServiceFactory.getPhotoServiceInstance(context);
             try {
-                uploadPhoto.uploadPhoto(f);
+                uploadPhoto.uploadPhoto(event.getEventId(), f);
                 f.delete();
             } catch (Exception e) {
                 e.printStackTrace();

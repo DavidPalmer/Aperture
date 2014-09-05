@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Satish on 7/17/2014.
  */
-public class ViewPhotoParseUnitTest extends AndroidTestCase {
+public class ViewPhotoParseParseUnitTest extends AndroidTestCase {
 
     ViewPhotoParse instance = null;
 

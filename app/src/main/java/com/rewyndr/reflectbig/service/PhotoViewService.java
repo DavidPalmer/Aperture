@@ -1,7 +1,6 @@
 package com.rewyndr.reflectbig.service;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -24,13 +23,13 @@ import java.util.List;
 public class PhotoViewService {
     /**
      * This utility function is used for fetching the URL's from the Parse API
-     *  @param context
+     * @param context
      * @param start
      * @param end
      */
     public static List<String> getImageUrls(Context context, int start, int end){
         List<String> urls = new ArrayList<String>();
-        ViewPhoto viewPhoto = ViewPhotoParse.getInstance(context);
+        ViewPhoto viewPhoto = ServiceFactory.getViewPhotoInstance(context);
         try {
             urls = viewPhoto.getPhotos(start, end, PhotoType.THUMBNAIL);
         } catch (Exception e) {
@@ -45,7 +44,7 @@ public class PhotoViewService {
      * @return
      */
     public static int getImageCount(Context context){
-        ViewPhoto viewPhoto = ViewPhotoParse.getInstance(context);
+        ViewPhoto viewPhoto = ServiceFactory.getViewPhotoInstance(context);
         int totalImages = 0;
         try {
             totalImages = viewPhoto.getCount();
@@ -65,8 +64,6 @@ public class PhotoViewService {
      */
     public static void imageLoad(ImageView view, final ProgressBar progressBar, String url, boolean needsResize) {
         Context context = view.getContext();
-        Log.i("Coming in", "Hello");
-        /*progressBar.setVisibility(View.VISIBLE);*/
         if(needsResize)
             Picasso.with(context).load(url).resize(1024, 768).centerInside().into(view, new Callback.EmptyCallback() {
                 @Override
@@ -91,23 +88,4 @@ public class PhotoViewService {
                 }
             });
     }
-
-    public static int getStartLimit(int currentId) {
-        int start = (currentId - Constants.FETCH_LENGTH);
-        if (start > 0) {
-            return start;
-        } else {
-            return Constants.IMAGE_START_ID;
-        }
-    }
-
-    public static int getEndLimit(int currentId, int total) {
-        int start = (currentId + Constants.FETCH_LENGTH);
-        if (start < total) {
-            return start;
-        } else {
-            return total;
-        }
-    }
-
 }

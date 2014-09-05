@@ -6,4 +6,5 @@ package com.rewyndr.reflectbig.common;
 public class Constants {
     public static final int IMAGE_START_ID = 1;
     public static final int FETCH_LENGTH = 30;
+    public static final String YES = "Y";
 }

@@ -9,7 +9,7 @@ import com.parse.ParseObject;
  * Created by Satish on 7/14/2014.
  */
 @ParseClassName("Photo")
-public class Photo extends ParseObject {
+public class PhotoParse extends ParseObject {
 
     private int photoNo;
 
@@ -18,6 +18,8 @@ public class Photo extends ParseObject {
     private ParseFile photoFile640;
 
     private ParseFile photoFile1024;
+
+    private EventParse event;
 
     public int getPhotoNo() {
         return getInt(FieldNames.PHOTO_NO);
@@ -51,4 +53,11 @@ public class Photo extends ParseObject {
         put(FieldNames.PHOTO_FILE_1024, photoFile);
     }
 
+    public EventParse getEvent() {
+        return (EventParse) getParseObject(FieldNames.PHOTO_EVENT);
+    }
+
+    public void setEvent(EventParse event) {
+        put(FieldNames.PHOTO_EVENT, event);
+    }
 }
