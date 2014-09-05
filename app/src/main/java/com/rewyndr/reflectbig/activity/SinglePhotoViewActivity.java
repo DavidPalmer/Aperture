@@ -48,6 +48,15 @@ public class SinglePhotoViewActivity extends Activity {
     private List<String> mImages = new ArrayList<String>();
     private String eventId = "";
 
+    private static int getEndLimit(int currentId, int total) {
+        int start = (currentId + Constants.FETCH_LENGTH);
+        if (start < total) {
+            return start;
+        } else {
+            return total;
+        }
+    }
+
     public void setCurrentId(){
         Intent intent = getIntent();
         currentId = intent.getExtras().getInt("id") + 1;
@@ -96,7 +105,7 @@ public class SinglePhotoViewActivity extends Activity {
             @Override
             public View makeView() {
                 ImageView view = new ImageView(SinglePhotoViewActivity.this);
-                view.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                view.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 view.setLayoutParams(new ImageSwitcher.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
@@ -147,11 +156,11 @@ public class SinglePhotoViewActivity extends Activity {
             List<String> newUrls = new ArrayList<String>();
             try {
                 newUrls = viewPhoto.getPhotos(eventId, fetchStart, fetchEnd, PhotoType.SMALL);
-                Log.d(this.getClass().getName(), "URls size "+newUrls.size());
+                Log.d(this.getClass().getName(), "URls size " + newUrls.size());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if(newUrls.size() == 0) {
+            if (newUrls.size() == 0) {
                 mOverscrollLeft.setVisibility(View.VISIBLE);
                 mOverscrollLeft.startAnimation(mOverscrollLeftFadeOut);
                 return;
@@ -163,15 +172,15 @@ public class SinglePhotoViewActivity extends Activity {
         }
         if (nextImagePos >= mImages.size()) {
             int currentStart = currentEnd - mImages.size();
-            Log.d(this.getClass().getName(), "Current URLs start "+currentStart+ "end "+ currentEnd);
+            Log.d(this.getClass().getName(), "Current URLs start " + currentStart + "end " + currentEnd);
 
             PhotoService viewPhoto = ServiceFactory.getPhotoServiceInstance(this);
             int total = viewPhoto.getCount(eventId);
             int fetchStart = currentEnd + 1;
             int fetchEnd = Math.min(currentEnd + Constants.FETCH_LENGTH, total);
             List<String> newUrls = viewPhoto.getPhotos(eventId, fetchStart, fetchEnd, PhotoType.SMALL);
-            Log.d(this.getClass().getName(), "URls size "+newUrls.size());
-            if(newUrls.size() == 0) {
+            Log.d(this.getClass().getName(), "URls size " + newUrls.size());
+            if (newUrls.size() == 0) {
                 mOverscrollRight.setVisibility(View.VISIBLE);
                 mOverscrollRight.startAnimation(mOverscrollRightFadeOut);
                 return;
@@ -189,6 +198,15 @@ public class SinglePhotoViewActivity extends Activity {
     private void loadImage(int mCurrentPosition) {
         ImageView view = new ImageView(this);
         new DownloadClass(mImageSwitcher, view).execute(mImages.get(mCurrentPosition));
+    }
+
+    private int getStartLimit(int currentId) {
+        int start = (currentId - Constants.FETCH_LENGTH);
+        if (start > 0) {
+            return start;
+        } else {
+            return Constants.IMAGE_START_ID;
+        }
     }
 
     private class SwipeListener extends SimpleOnGestureListener {
@@ -252,24 +270,6 @@ public class SinglePhotoViewActivity extends Activity {
         protected void onPreExecute() {
             super.onPreExecute();
             pb.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private int getStartLimit(int currentId) {
-        int start = (currentId - Constants.FETCH_LENGTH);
-        if (start > 0) {
-            return start;
-        } else {
-            return Constants.IMAGE_START_ID;
-        }
-    }
-
-    private static int getEndLimit(int currentId, int total) {
-        int start = (currentId + Constants.FETCH_LENGTH);
-        if (start < total) {
-            return start;
-        } else {
-            return total;
         }
     }
 }
