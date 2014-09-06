@@ -28,7 +28,7 @@ public abstract class ParseBase {
             Parse.initialize(context, context.getResources().getString(R.string.parse_app_id), context.getResources().getString(R.string.parse_client_key));
             initialised = true;
             try {
-                ParseUser.logIn("dileeshvar", "password");
+                ParseUser.logIn("dradhakr@andrew.cmu.edu", "password");
             } catch (ParseException e) {
                 e.printStackTrace();
             }

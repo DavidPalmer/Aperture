@@ -101,9 +101,9 @@ public class EventServiceParse extends ParseBase implements EventService {
         event.setShortLocation(eventParse.getEventShortLocation());
         event.setStatus(DateUtils.getEventType(event.getStartDate(), event.getEndDate()));
         event.setMyStatus(getAttendeeStatus(event.getStatus(), attendee.getStatus()));
-        event.setInvitedBy(attendee.getInvitedBy().getUsername());
+        event.setInvitedBy((String) attendee.getInvitedBy().get(FieldNames.USER_NAME));
         eventParse.getCreatedBy().fetchIfNeeded();
-        event.setCreatedBy(eventParse.getCreatedBy().getUsername());
+        event.setCreatedBy((String) eventParse.getCreatedBy().get(FieldNames.USER_NAME));
         event.setPhotosCount(eventParse.getPhotosCount());
         event.setAttendeesCount(eventParse.getAttendeesCount());
         return event;
