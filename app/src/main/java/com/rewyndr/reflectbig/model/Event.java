@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by Satish on 9/1/2014.
  */
-public class Event implements Serializable {
+public class Event implements Serializable, Comparable {
 
     private String eventId;
 
@@ -153,5 +153,11 @@ public class Event implements Serializable {
                 ", createdBy='" + createdBy + '\'' +
                 ", invitedBy='" + invitedBy + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object another) {
+        Event that = (Event) another;
+        return this.getStartDate().compareTo(that.getStartDate());
     }
 }

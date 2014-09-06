@@ -6,7 +6,12 @@ import android.util.Log;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.interfaces.EventService;
+import com.rewyndr.reflectbig.model.Event;
+import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.parse.impl.EventServiceParse;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Satish on 9/2/2014.
@@ -25,9 +30,10 @@ public class EventParseUnitTest extends AndroidTestCase {
         usr.setPassword("password");
         usr.signUp();
         Log.d("TestCase", String.valueOf(ParseUser.getCurrentUser()));*/
-        ParseUser.logIn("satishra", "password");
+        ParseUser.logIn("dileeshvar", "password");
         //System.out.println(instance.getEvents());
-        Log.d("Events", String.valueOf(instance.getEvents()));
+        Map<EventStatus, List<Event>> events = instance.getEvents();
+        Log.d("Events----", String.valueOf(events));
     }
 
     public void testGetAttendees() throws Exception {

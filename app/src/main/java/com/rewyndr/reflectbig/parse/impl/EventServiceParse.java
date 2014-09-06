@@ -16,6 +16,7 @@ import com.rewyndr.reflectbig.parse.model.FieldNames;
 import com.rewyndr.reflectbig.util.DateUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,9 @@ public class EventServiceParse extends ParseBase implements EventService {
                     break;
             }
         }
+        Collections.sort(pastEvents);
+        Collections.sort(currentEvents);
+        Collections.sort(upcomingEvents);
         eventList.put(EventStatus.PAST, pastEvents);
         eventList.put(EventStatus.CURRENT, currentEvents);
         eventList.put(EventStatus.UPCOMING, upcomingEvents);
