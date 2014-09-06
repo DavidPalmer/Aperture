@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.rewyndr.reflectbig.common.PhotoType;
 import com.rewyndr.reflectbig.parse.impl.PhotoServiceParse;
-import com.rewyndr.reflectbig.parse.impl.ViewPhotoParse;
 
 import java.util.List;
 
