@@ -2,6 +2,7 @@ package com.rewyndr.reflectbig.parse.impl;
 
 import android.content.Context;
 
+import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.interfaces.LoginService;
 import com.rewyndr.reflectbig.parse.model.FieldNames;
@@ -27,16 +28,21 @@ public class LoginServiceParse extends ParseBase implements LoginService {
     }
 
     @Override
-    public void logIn(String email, String password) throws Exception {
+    public void logIn(String email, String password) throws ParseException {
         ParseUser.logIn(email, password);
     }
 
     @Override
-    public void signUp(String name, String email, String password) throws Exception {
+    public void signUp(String name, String email, String password) throws ParseException {
         ParseUser user = new ParseUser();
         user.setUsername(email);
         user.setPassword(password);
         user.put(FieldNames.USER_NAME, name);
         user.signUp();
+    }
+
+    @Override
+    public void logOut() throws ParseException {
+        ParseUser.logOut();
     }
 }

@@ -22,4 +22,10 @@ public interface LoginService {
      * @throws Exception
      */
     void signUp(String name, String email, String password) throws Exception;
+
+    /**
+     * This method logs out the current user
+     * @throws Exception
+     */
+    void logOut() throws Exception;
 }
