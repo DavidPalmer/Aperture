@@ -2,6 +2,7 @@ package com.rewyndr.reflectbig.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,8 +68,14 @@ public class SinglePhotoViewActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_view);
-        setCurrentId();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCurrentPosition = getCurrentPositionFromPause();
+
+        setCurrentId();
         PhotoService service = ServiceFactory.getPhotoServiceInstance(this);
         int total = 0;
         try {
@@ -83,7 +90,9 @@ public class SinglePhotoViewActivity extends Activity {
             e.printStackTrace();
         }
 
-        mCurrentPosition = currentId - start;
+        if(mCurrentPosition == 0) {
+            mCurrentPosition = currentId - start;
+        }
         mImageSwitcher = (ImageSwitcher) findViewById(R.id.image);
         mOverscrollLeft = findViewById(R.id.overscroll_left);
         mOverscrollRight = findViewById(R.id.overscroll_right);
@@ -133,13 +142,21 @@ public class SinglePhotoViewActivity extends Activity {
         });
     }
 
+    private int getCurrentPositionFromPause() {
+        SharedPreferences preferences = getSharedPreferences(CURRENT_POSITION, MODE_PRIVATE);
+        return preferences.getInt(CURRENT_POSITION, 0);
+    }
+
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (outState == null) {
-            return;
+    public void onDestroy(){
+        super.onDestroy();
+        SharedPreferences preferences = getSharedPreferences(CURRENT_POSITION, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        if(isFinishing()) {
+            mCurrentPosition = 0;
         }
-        outState.putInt(CURRENT_POSITION, mCurrentPosition);
+        editor.putInt(CURRENT_POSITION, mCurrentPosition);
+        editor.commit();
     }
 
     private void moveNextOrPrevious(int delta) throws Exception {

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.interfaces.EventService;
+import com.rewyndr.reflectbig.model.AttendeeStatus;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.service.ServiceFactory;
@@ -42,7 +43,7 @@ public class EventDetailActivity extends Activity {
         }
         TableLayout tl = (TableLayout) findViewById(R.id.table);
         TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
-        if(event.getStatus().equals(EventStatus.PAST)) {
+        if(event.getStatus().equals(EventStatus.PAST) || (!event.getMyStatus().equals(AttendeeStatus.NOT_RESPONDED))) {
             tl.removeView(decisionRow);
         }
     }
