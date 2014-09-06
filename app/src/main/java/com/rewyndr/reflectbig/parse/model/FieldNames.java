@@ -45,4 +45,7 @@ public class FieldNames {
     public static final String ATTENDEE_INVITED_BY = "invitedBy";
 
     public static final String ATTENDEE_STATUS = "status";
+
+    // User
+    public static final String USER_NAME = "name";
 }
