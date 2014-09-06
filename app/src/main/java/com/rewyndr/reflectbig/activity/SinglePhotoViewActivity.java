@@ -23,6 +23,7 @@ import android.widget.ViewSwitcher;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.common.PhotoType;
+import com.rewyndr.reflectbig.common.PreferenceConstants;
 import com.rewyndr.reflectbig.interfaces.PhotoService;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 import com.squareup.picasso.Picasso;
@@ -143,14 +144,14 @@ public class SinglePhotoViewActivity extends Activity {
     }
 
     private int getCurrentPositionFromPause() {
-        SharedPreferences preferences = getSharedPreferences(CURRENT_POSITION, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(PreferenceConstants.PREFERENCE_NAME, MODE_PRIVATE);
         return preferences.getInt(CURRENT_POSITION, 0);
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
-        SharedPreferences preferences = getSharedPreferences(CURRENT_POSITION, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(PreferenceConstants.PREFERENCE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         if(isFinishing()) {
             mCurrentPosition = 0;

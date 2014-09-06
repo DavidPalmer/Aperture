@@ -14,5 +14,7 @@
     <string name="Event_name">Enter Event Name</string>
     <string name="event_details">Event Info</string>
     <string name="title_activity_attendee_list">Attendees</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="user_logout">Logout</string>
 
 </resources>
