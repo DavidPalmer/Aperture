@@ -88,6 +88,9 @@ public class EventsListActivity extends Activity {
             editor.commit();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+        } if (id == R.id.addEvent) {
+            Intent intent = new Intent(this, CreateEventActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

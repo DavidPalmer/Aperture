@@ -1,0 +1,447 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rewyndr.reflectbig.activity.EventDetailActivity">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="none"
+        android:layout_weight="1">
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:stretchColumns="1"
+            android:id="@id/table">
+
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/event_name">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/event" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Event"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:hint="Event Name"
+                        android:id="@+id/text_event_name"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize" />
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/event_description">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/event" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="          Short Description"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:hint="Event Description"
+                        android:id="@+id/text_event_description"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize" />
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/event_type">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/invited_by" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Event type"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <RadioGroup
+                        android:id="@+id/rad_event_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/rad_single_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/single"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/rad_multi_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/multi" />
+                    </RadioGroup>
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/startDate">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/calendar" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Starting on "
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <Button
+                        android:id="@+id/btnStartChangeDate"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Change Date" />
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/endDate">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/calendar" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Ending on "
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <Button
+                        android:id="@+id/btnEndChangeDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Change Date" />
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/startTime">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/calendar" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Starting Time "
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <Button
+                        android:id="@+id/btnStartChangeTime"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Change Time" />
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/endTime">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/calendar" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Ending Time "
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <Button
+                        android:id="@+id/btnEndChangeTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Change Time" />
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/where">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/where" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Where"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:hint="Where"
+                        android:id="@+id/text_where"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:src="@drawable/arrow" />
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow
+                android:paddingTop="25dp"
+                android:layout_marginBottom="3dp">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/invitee">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_action_user_add" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="           Invitee"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize"
+                        android:layout_gravity="center" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="invitee"
+                        android:id="@+id/text_status"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/textSize" />
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="3dp"
+                android:id="@id/decisionRow">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/decision"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@id/accept"
+                        android:background="#269052"
+                        android:text="Create Event"
+                        android:onClick="onClickCreate" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
+
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@id/accept"
+                        android:text="Cancel"
+                        android:background="#AA3933"
+                        android:onClick="onClickCancel" />
+                </FrameLayout>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</RelativeLayout>
