@@ -10,6 +10,7 @@ import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.parse.impl.EventServiceParse;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,16 @@ public class EventParseUnitTest extends AndroidTestCase {
 
     public void testGetAttendees() throws Exception {
         Log.d("Attendees", String.valueOf(instance.getAttendees("Fgw57rJi7w")));
+    }
+
+    public void testInviteParticipants() throws Exception {
+        List<String> emailIds = new ArrayList<String>();
+        emailIds.add("satishra@andrew.cmu.edu");
+        emailIds.add("rajaramr@andrew.cmu.edu");
+        emailIds.add("satishmufc@gmail.com");
+        emailIds.add("yparthas@andrew.cmu.edu");
+        emailIds.add("satishr@sase.ssn.edu.in");
+        instance.inviteParticipants("e8fulZ42Q1", emailIds);
     }
 
     public void testCreateEvent() throws Exception {

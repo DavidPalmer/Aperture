@@ -52,4 +52,11 @@ public class FieldNames {
 
     // User
     public static final String USER_NAME = "name";
+
+    public static final String USER_USERNAME = "username";
+
+    // Invitee
+    public static final String INVITEE_EMAIL = "email";
+
+    public static final String INVITEE_EVENT = "event";
 }
