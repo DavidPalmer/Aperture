@@ -67,7 +67,7 @@ public class LoginActivity extends Activity {
             editor.commit();
             moveToEventsPage();
         } catch (Exception e) {
-            Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show();
         }
     }
 
