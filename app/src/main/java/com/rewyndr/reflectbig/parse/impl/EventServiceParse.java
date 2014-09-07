@@ -115,9 +115,9 @@ public class EventServiceParse extends ParseBase implements EventService {
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
         query.whereContainedIn(FieldNames.USER_USERNAME, inviteeEmailIds);
         List<ParseUser> results = query.find();
-        ParseQuery<AttendeeParse> attendeeQuery = ParseQuery.getQuery(AttendeeParse.class);
 
         // Query for finding existing users that are already invited
+        ParseQuery<AttendeeParse> attendeeQuery = ParseQuery.getQuery(AttendeeParse.class);
         attendeeQuery.whereContainedIn(FieldNames.ATTENDEE, results);
         attendeeQuery.whereEqualTo(FieldNames.ATTENDEE_EVENT, eventParse);
         attendeeQuery.include(FieldNames.ATTENDEE);
@@ -134,13 +134,17 @@ public class EventServiceParse extends ParseBase implements EventService {
             attendee.save();
         }
 
+        // Get non existing users
         List<String> nonExistingUsers = getNonExistingInvitees(inviteeEmailIds, results);
         Log.d("InviteParticipants", "Non existing users: " + nonExistingUsers);
+
+        // Query for getting non existing users that are already invited
         ParseQuery<InviteeParse> inviteeQuery = ParseQuery.getQuery(InviteeParse.class);
         inviteeQuery.whereEqualTo(FieldNames.INVITEE_EVENT, eventParse);
         inviteeQuery.whereContainedIn(FieldNames.INVITEE_EMAIL, nonExistingUsers);
         List<InviteeParse> alreadyInvitedInvitees = inviteeQuery.find();
 
+        // Invite the non existing non invited users
         List<String> nonExistingNonInvitedUsers = getNonExistingNonInvitedUsers(nonExistingUsers, alreadyInvitedInvitees);
         for (String nonInvitedUser : nonExistingNonInvitedUsers) {
             Log.d("InviteParticipants", "Inviting non existing user: " + nonInvitedUser);
