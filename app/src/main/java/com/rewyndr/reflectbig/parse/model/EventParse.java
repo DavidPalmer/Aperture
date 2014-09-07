@@ -13,26 +13,6 @@ import java.util.Date;
 @ParseClassName("Event")
 public class EventParse extends ParseObject {
 
-    private String eventName;
-
-    private Date startDateTime;
-
-    private Date endDateTime;
-
-    private String location;
-
-    private ParseUser createdBy;
-
-    private int photosCount;
-
-    private int attendeesCount;
-
-    private String shortLocation;
-
-    private String eventDescription;
-
-    private ParseGeoPoint geoLocation;
-
     public EventParse() {
 
     }

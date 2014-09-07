@@ -9,13 +9,13 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.interfaces.EventService;
-import com.rewyndr.reflectbig.model.AttendeeStatus;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.parse.model.AttendeeParse;
 import com.rewyndr.reflectbig.parse.model.EventParse;
 import com.rewyndr.reflectbig.parse.model.FieldNames;
 import com.rewyndr.reflectbig.util.DateUtils;
+import com.rewyndr.reflectbig.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -115,7 +115,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         event.setLocation(eventParse.getLocation());
         event.setShortLocation(eventParse.getShortLocation());
         event.setStatus(DateUtils.getEventType(event.getStartDate(), event.getEndDate()));
-        event.setMyStatus(getAttendeeStatus(event.getStatus(), attendee.getStatus()));
+        event.setMyStatus(Utils.getAttendeeStatus(event.getStatus(), attendee.getStatus()));
         event.setInvitedBy((String) attendee.getInvitedBy().get(FieldNames.USER_NAME));
         event.setCreatedBy((String) eventParse.getCreatedBy().get(FieldNames.USER_NAME));
         event.setPhotosCount(eventParse.getPhotosCount());
@@ -124,27 +124,6 @@ public class EventServiceParse extends ParseBase implements EventService {
         event.getGeoLocation().setLatitude(eventParse.getGeoLocation().getLatitude());
         event.getGeoLocation().setLongitude(eventParse.getGeoLocation().getLongitude());
         return event;
-    }
-
-    private AttendeeStatus getAttendeeStatus(EventStatus eventStatus, String status) {
-        if (status != null) {
-            switch (eventStatus) {
-                case CURRENT:
-                case UPCOMING:
-                    if (Constants.YES.equals(status)) {
-                        return AttendeeStatus.ACCEPTED;
-                    } else {
-                        return AttendeeStatus.DECLINED;
-                    }
-                case PAST:
-                    if (Constants.YES.equals(status)) {
-                        return AttendeeStatus.ATTENDED;
-                    } else {
-                        return AttendeeStatus.MISSED;
-                    }
-            }
-        }
-        return AttendeeStatus.NOT_RESPONDED;
     }
 
     private EventParse convertEventToEventParse(Event event) {
