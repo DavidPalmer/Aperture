@@ -13,6 +13,7 @@ public interface EventService {
 
     /**
      * This method gets all events of the current user
+     *
      * @return
      * @throws Exception
      */
@@ -20,6 +21,7 @@ public interface EventService {
 
     /**
      * This method gets all attendees of a given event
+     *
      * @param eventId
      * @return
      * @throws Exception
@@ -28,8 +30,19 @@ public interface EventService {
 
     /**
      * This method creates an event
+     *
      * @param event
+     * @return the eventId
      * @throws Exception
      */
-    void createEvent(Event event) throws Exception;
+    String createEvent(Event event) throws Exception;
+
+    /**
+     * This method adds invitees to the event
+     *
+     * @param eventId
+     * @param inviteeEmailIds
+     * @throws Exception
+     */
+    void inviteParticipants(String eventId, List<String> inviteeEmailIds) throws Exception;
 }

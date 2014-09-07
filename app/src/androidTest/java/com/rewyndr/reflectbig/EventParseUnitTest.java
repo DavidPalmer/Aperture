@@ -44,15 +44,14 @@ public class EventParseUnitTest extends AndroidTestCase {
 
     public void testCreateEvent() throws Exception {
         Event e = new Event();
-        e.setEventName("Dummy Event");
+        e.setEventName("Dummy Event123");
         e.setEventDesc("Dummy event description");
         e.setStartDate(new Date());
         e.setEndDate(new Date());
         e.setLocation("201 Conover Road, Pittsburgh, PA 15208");
         e.setShortLocation("Pittsburgh, PA");
-        e.setGeoLocation(new Location(""));
-        e.getGeoLocation().setLatitude(40.452842);
-        e.getGeoLocation().setLongitude(-79.911363);
-        instance.createEvent(e);
+        e.setLatitude(40.452842);
+        e.setLongitude(-79.911363);
+        Log.d("Event Id---", instance.createEvent(e));
     }
  }

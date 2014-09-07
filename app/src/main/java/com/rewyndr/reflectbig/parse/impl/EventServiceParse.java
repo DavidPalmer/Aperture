@@ -93,7 +93,7 @@ public class EventServiceParse extends ParseBase implements EventService {
     }
 
     @Override
-    public void createEvent(Event event) throws ParseException {
+    public String createEvent(Event event) throws ParseException {
         EventParse eventParse = convertEventToEventParse(event);
         // Saving attendee will automatically save linked event
         AttendeeParse attendeeParse = new AttendeeParse();
@@ -102,6 +102,12 @@ public class EventServiceParse extends ParseBase implements EventService {
         attendeeParse.setAttendee(ParseUser.getCurrentUser());
         attendeeParse.setStatus(Constants.YES);
         attendeeParse.save();
+        return eventParse.getObjectId();
+    }
+
+    @Override
+    public void inviteParticipants(String eventId, List<String> inviteeEmailIds) throws Exception {
+
     }
 
     private Event getEventInfo(AttendeeParse attendee) throws ParseException {
@@ -120,9 +126,8 @@ public class EventServiceParse extends ParseBase implements EventService {
         event.setCreatedBy((String) eventParse.getCreatedBy().get(FieldNames.USER_NAME));
         event.setPhotosCount(eventParse.getPhotosCount());
         event.setAttendeesCount(eventParse.getAttendeesCount());
-        event.setGeoLocation(new Location(""));
-        event.getGeoLocation().setLatitude(eventParse.getGeoLocation().getLatitude());
-        event.getGeoLocation().setLongitude(eventParse.getGeoLocation().getLongitude());
+        event.setLatitude(eventParse.getGeoLocation().getLatitude());
+        event.setLongitude(eventParse.getGeoLocation().getLongitude());
         return event;
     }
 
@@ -135,7 +140,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         eventParse.setEndDateTime(event.getEndDate());
         eventParse.setShortLocation(event.getShortLocation());
         eventParse.setCreatedBy(ParseUser.getCurrentUser());
-        eventParse.setGeoLocation(new ParseGeoPoint(event.getGeoLocation().getLatitude(), event.getGeoLocation().getLongitude()));
+        eventParse.setGeoLocation(new ParseGeoPoint(event.getLatitude(), event.getLongitude()));
         eventParse.setAttendeesCount(1);
         return eventParse;
     }
