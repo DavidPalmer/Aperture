@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -25,8 +24,8 @@ import java.util.Map;
 
 public class EventsListActivity extends Activity {
     EventListAdapter eventListAdapter;
-    SwipeRefreshLayout swipeRefreshLayout;
     HeaderListView headerListView;
+    EventService eventService;
     private ArrayList<Event> pastEventList = new ArrayList<Event>();
     private ArrayList<Event> currentEventList = new ArrayList<Event>();
     private ArrayList<Event> upcomingEventList = new ArrayList<Event>();
@@ -35,6 +34,7 @@ public class EventsListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_events_list);
+        eventService = ServiceFactory.getEventServiceInstance(this);
         headerListView = new HeaderListView(this);
         getEventData();
         eventListAdapter = new EventListAdapter(this, pastEventList, currentEventList, upcomingEventList);
