@@ -5,24 +5,47 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.rewyndr.reflectbig.R;
+import com.rewyndr.reflectbig.interfaces.EventService;
+import com.rewyndr.reflectbig.model.Event;
+import com.rewyndr.reflectbig.service.ServiceFactory;
+import com.rewyndr.reflectbig.util.DateUtils;
+import com.rewyndr.reflectbig.util.Utils;
 
 import java.util.Calendar;
 
 
 public class CreateEventActivity extends Activity {
+    private String CLASS_NAME = this.getClass().getName();
+    private int startDay;
+    private int startMonth;
+    private int startYear;
+    private int startHour;
+    private int startMinute;
 
+    private int endDay;
+    private int endMonth;
+    private int endYear;
+    private int endHour;
+    private int endMinute;
+    
     private Button startChangeDate;
     private Button endChangeDate;
     private Button startChangeTime;
     private Button endChangeTime;
+    private String eventType;
 
     private int year;
     private int month;
@@ -44,7 +67,7 @@ public class CreateEventActivity extends Activity {
         endChangeDate = (Button) findViewById(R.id.btnEndChangeDate);
         startChangeTime = (Button) findViewById(R.id.btnStartChangeTime);
         endChangeTime = (Button) findViewById(R.id.btnEndChangeTime);
-
+        setPageAccordingToEventType();
 
         // Get current date by calender
         final Calendar c = Calendar.getInstance();
@@ -83,6 +106,62 @@ public class CreateEventActivity extends Activity {
         });
     }
 
+    public void onCheckedChanged(View view) {
+        setPageAccordingToEventType();
+    }
+
+    public void onClickCreate(View view) {
+        Event newEvent = new Event();
+        String eventName = ((EditText) findViewById(R.id.createEvent_text_event_name)).getText().toString();
+        String eventDescription = ((EditText) findViewById(R.id.createEvent_text_event_description)).getText().toString();
+        String location = ((EditText) findViewById(R.id.createEvent_text_where)).getText().toString();
+        String shortLocation = Utils.getShortLocation(location);
+
+        if (eventType.contains("Single")) {
+            endYear = startYear;
+            endMonth = startMonth;
+            endDay = startDay;
+        }
+
+        newEvent.setEventName(eventName);
+        newEvent.setEventDesc(eventDescription);
+        newEvent.setStartDate(DateUtils.convertToDate(startDay, startMonth, startYear, startHour, startMinute));
+        newEvent.setEndDate(DateUtils.convertToDate(endDay, endMonth, endYear, endHour, endMinute));
+        newEvent.setLocation(location);
+        newEvent.setLatitude(0);
+        newEvent.setLongitude(0);
+        newEvent.setShortLocation(shortLocation);
+
+        String status = "";
+        EventService service = ServiceFactory.getEventServiceInstance(this);
+        try {
+            service.createEvent(newEvent);
+            status = "Success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            status = "Failure";
+        }
+        Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClickCancel(View view) {
+        setPageAccordingToEventType();
+    }
+
+    private void setPageAccordingToEventType() {
+        RadioGroup eventTypeOption = (RadioGroup) findViewById(R.id.rad_event_type);
+        int selected = eventTypeOption.getCheckedRadioButtonId();
+        this.eventType = ((RadioButton) findViewById(selected)).getText().toString();
+        Log.d(CLASS_NAME, this.eventType);
+
+        if (this.eventType.contains("Single")) {
+            Button edt = (Button) findViewById(R.id.btnEndChangeDate);
+            edt.setEnabled(false);
+        } else {
+            Button edt = (Button) findViewById(R.id.btnEndChangeDate);
+            edt.setEnabled(true);
+        }
+    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -103,34 +182,32 @@ public class CreateEventActivity extends Activity {
             new TimePickerDialog.OnTimeSetListener() {
                 public void onTimeSet(TimePicker view, int selectedHour,
                                       int selectedMinute) {
+                    // These variables are for setting the time picker values
                     hour = selectedHour;
                     minute = selectedMinute;
 
-                    // set current time into textview
-                    startChangeTime.setText(new StringBuilder().append(pad(hour))
-                            .append(":").append(pad(minute)));
+                    startHour = selectedHour;
+                    startMinute = selectedMinute;
+
+                    String delimiter = ":";
+                    startChangeTime.setText(Utils.appendStrings(delimiter, String.valueOf(hour), String.valueOf(minute)));
 
                 }
             };
-
-    private static String pad(int c) {
-        if (c >= 10)
-            return String.valueOf(c);
-        else
-            return "0" + String.valueOf(c);
-    }
 
     private TimePickerDialog.OnTimeSetListener endTimePickerListener =
             new TimePickerDialog.OnTimeSetListener() {
                 public void onTimeSet(TimePicker view, int selectedHour,
                                       int selectedMinute) {
+                    // These variables are for setting the time picker values
                     hour = selectedHour;
                     minute = selectedMinute;
 
-                    // set current time into textview
-                    endChangeTime.setText(new StringBuilder().append(pad(hour))
-                            .append(":").append(pad(minute)));
+                    endHour = selectedHour;
+                    endMinute = selectedMinute;
 
+                    String delimiter = ":";
+                    endChangeTime.setText(Utils.appendStrings(delimiter, String.valueOf(hour), String.valueOf(minute)));
                 }
             };
 
@@ -139,16 +216,16 @@ public class CreateEventActivity extends Activity {
         @Override
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
-
             year = selectedYear;
             month = selectedMonth;
             day = selectedDay;
 
-            // Show selected date
-            startChangeDate.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
-                    .append(" "));
+            startYear = selectedYear;
+            startMonth = selectedMonth;
+            startDay = selectedDay;
 
+            String delimiter = "-";
+            startChangeDate.setText(Utils.appendStrings(delimiter, String.valueOf(year), String.valueOf(month), String.valueOf(day)));
         }
     };
 
@@ -157,16 +234,16 @@ public class CreateEventActivity extends Activity {
         @Override
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
-
             year = selectedYear;
             month = selectedMonth;
             day = selectedDay;
 
-            // Show selected date
-            endChangeDate.setText(new StringBuilder().append(month + 1)
-                    .append("-").append(day).append("-").append(year)
-                    .append(" "));
+            endYear = selectedYear;
+            endMonth = selectedMonth;
+            endDay = selectedDay;
 
+            String delimiter = "-";
+            endChangeDate.setText(Utils.appendStrings(delimiter, String.valueOf(year), String.valueOf(month), String.valueOf(day)));
         }
     };
 
@@ -188,5 +265,4 @@ public class CreateEventActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

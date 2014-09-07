@@ -53,7 +53,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:hint="Event Name"
-                        android:id="@+id/text_event_name"
+                        android:id="@+id/createEvent_text_event_name"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/textSize" />
                 </FrameLayout>
@@ -96,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:hint="Event Description"
-                        android:id="@+id/text_event_description"
+                        android:id="@+id/createEvent_text_event_description"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/textSize" />
                 </FrameLayout>
@@ -137,19 +137,22 @@
                     <RadioGroup
                         android:id="@+id/rad_event_type"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:onClick="onCheckedChanged">
 
                         <RadioButton
                             android:id="@+id/rad_single_day"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/single"
+                            android:onClick="onCheckedChanged"
                             android:checked="true" />
 
                         <RadioButton
                             android:id="@+id/rad_multi_day"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:onClick="onCheckedChanged"
                             android:text="@string/multi" />
                     </RadioGroup>
                 </FrameLayout>
@@ -349,7 +352,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:hint="Where"
-                        android:id="@+id/text_where"
+                        android:id="@+id/createEvent_text_where"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/textSize" />
 

@@ -2,6 +2,7 @@ package com.rewyndr.reflectbig.util;
 
 import com.rewyndr.reflectbig.model.EventStatus;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -18,5 +19,11 @@ public class DateUtils {
         } else {
             return EventStatus.PAST;
         }
+    }
+
+    public static Date convertToDate(int day, int month, int year, int hour, int minute) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day, hour, minute);
+        return cal.getTime();
     }
 }
