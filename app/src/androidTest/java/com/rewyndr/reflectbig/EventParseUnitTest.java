@@ -5,6 +5,7 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.parse.ParseUser;
+import com.rewyndr.reflectbig.common.YNType;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
@@ -24,7 +25,7 @@ public class EventParseUnitTest extends AndroidTestCase {
 
     public void setUp() throws Exception {
         instance = EventServiceParse.getInstance(getContext());
-        ParseUser.logIn("dradhakr@andrew.cmu.edu", "password");
+        ParseUser.logIn("yparthas@andrew.cmu.edu", "password");
     }
 
     public void testGetEvents() throws Exception {
@@ -64,5 +65,9 @@ public class EventParseUnitTest extends AndroidTestCase {
         e.setLatitude(40.452842);
         e.setLongitude(-79.911363);
         Log.d("Event Id---", instance.createEvent(e));
+    }
+
+    public void testRespondToEvent() throws Exception {
+        instance.respondToEvent("e8fulZ42Q1", YNType.N);
     }
  }

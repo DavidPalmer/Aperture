@@ -1,7 +1,6 @@
 package com.rewyndr.reflectbig.parse.impl;
 
 import android.content.Context;
-import android.location.Location;
 import android.util.Log;
 
 import com.parse.ParseException;
@@ -9,6 +8,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.common.Constants;
+import com.rewyndr.reflectbig.common.YNType;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
@@ -153,6 +153,23 @@ public class EventServiceParse extends ParseBase implements EventService {
             invitee.setEmail(nonInvitedUser);
             invitee.save();
         }
+    }
+
+    @Override
+    public void respondToEvent(String eventId, YNType response) throws Exception {
+        ParseQuery<AttendeeParse> attendeeQuery = ParseQuery.getQuery(AttendeeParse.class);
+        EventParse eventParse = new EventParse(eventId);
+        attendeeQuery.whereEqualTo(FieldNames.ATTENDEE_EVENT, new EventParse(eventId));
+        attendeeQuery.whereEqualTo(FieldNames.ATTENDEE, ParseUser.getCurrentUser());
+        attendeeQuery.include(FieldNames.ATTENDEE_EVENT);
+        List<AttendeeParse> attendeeParseList = attendeeQuery.find();
+        AttendeeParse attendee = attendeeParseList.get(0);
+        if (attendee.getStatus() == null && YNType.Y.equals(response)) {
+            eventParse = attendee.getEvent();
+            eventParse.increment(FieldNames.EVENT_ATTENDEES_COUNT);
+        }
+        attendee.setStatus(response.toString());
+        attendee.save();
     }
 
     private Event getEventInfo(AttendeeParse attendee) throws ParseException {
