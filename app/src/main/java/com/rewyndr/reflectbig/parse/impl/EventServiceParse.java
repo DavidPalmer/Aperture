@@ -1,8 +1,10 @@
 package com.rewyndr.reflectbig.parse.impl;
 
 import android.content.Context;
+import android.location.Location;
 
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.common.Constants;
@@ -51,6 +53,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         query.whereEqualTo(FieldNames.ATTENDEE, current);
         query.include(FieldNames.ATTENDEE_EVENT);
         query.include(FieldNames.ATTENDEE_INVITED_BY);
+        query.include(FieldNames.ATTENDEE_EVENT_CREATED_BY);
         List<AttendeeParse> attendeeList = query.find();
         for (AttendeeParse attendee : attendeeList) {
             Event event = getEventInfo(attendee);
@@ -89,6 +92,18 @@ public class EventServiceParse extends ParseBase implements EventService {
         return attendees;
     }
 
+    @Override
+    public void createEvent(Event event) throws ParseException {
+        EventParse eventParse = convertEventToEventParse(event);
+        // Saving attendee will automatically save linked event
+        AttendeeParse attendeeParse = new AttendeeParse();
+        attendeeParse.setEvent(eventParse);
+        attendeeParse.setInvitedBy(ParseUser.getCurrentUser());
+        attendeeParse.setAttendee(ParseUser.getCurrentUser());
+        attendeeParse.setStatus(Constants.YES);
+        attendeeParse.save();
+    }
+
     private Event getEventInfo(AttendeeParse attendee) throws ParseException {
         Event event = new Event();
         EventParse eventParse = attendee.getEvent();
@@ -98,14 +113,16 @@ public class EventServiceParse extends ParseBase implements EventService {
         event.setStartDate(eventParse.getStartDateTime());
         event.setEndDate(eventParse.getEndDateTime());
         event.setLocation(eventParse.getLocation());
-        event.setShortLocation(eventParse.getEventShortLocation());
+        event.setShortLocation(eventParse.getShortLocation());
         event.setStatus(DateUtils.getEventType(event.getStartDate(), event.getEndDate()));
         event.setMyStatus(getAttendeeStatus(event.getStatus(), attendee.getStatus()));
         event.setInvitedBy((String) attendee.getInvitedBy().get(FieldNames.USER_NAME));
-        eventParse.getCreatedBy().fetchIfNeeded();
         event.setCreatedBy((String) eventParse.getCreatedBy().get(FieldNames.USER_NAME));
         event.setPhotosCount(eventParse.getPhotosCount());
         event.setAttendeesCount(eventParse.getAttendeesCount());
+        event.setGeoLocation(new Location(""));
+        event.getGeoLocation().setLatitude(eventParse.getGeoLocation().getLatitude());
+        event.getGeoLocation().setLongitude(eventParse.getGeoLocation().getLongitude());
         return event;
     }
 
@@ -128,5 +145,19 @@ public class EventServiceParse extends ParseBase implements EventService {
             }
         }
         return AttendeeStatus.NOT_RESPONDED;
+    }
+
+    private EventParse convertEventToEventParse(Event event) {
+        EventParse eventParse = new EventParse();
+        eventParse.setEventName(event.getEventName());
+        eventParse.setEventDescription(event.getEventDesc());
+        eventParse.setLocation(event.getLocation());
+        eventParse.setStartDateTime(event.getStartDate());
+        eventParse.setEndDateTime(event.getEndDate());
+        eventParse.setShortLocation(event.getShortLocation());
+        eventParse.setCreatedBy(ParseUser.getCurrentUser());
+        eventParse.setGeoLocation(new ParseGeoPoint(event.getGeoLocation().getLatitude(), event.getGeoLocation().getLongitude()));
+        eventParse.setAttendeesCount(1);
+        return eventParse;
     }
 }

@@ -11,7 +11,25 @@ import java.util.Map;
  */
 public interface EventService {
 
-    public Map<EventStatus, List<Event>> getEvents() throws Exception;
+    /**
+     * This method gets all events of the current user
+     * @return
+     * @throws Exception
+     */
+    Map<EventStatus, List<Event>> getEvents() throws Exception;
 
-    public List<String> getAttendees(String eventId) throws Exception;
+    /**
+     * This method gets all attendees of a given event
+     * @param eventId
+     * @return
+     * @throws Exception
+     */
+    List<String> getAttendees(String eventId) throws Exception;
+
+    /**
+     * This method creates an event
+     * @param event
+     * @throws Exception
+     */
+    void createEvent(Event event) throws Exception;
 }

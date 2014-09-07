@@ -1,5 +1,7 @@
 package com.rewyndr.reflectbig.model;
 
+import android.location.Location;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -33,6 +35,8 @@ public class Event implements Serializable, Comparable {
     private String createdBy;
 
     private String invitedBy;
+
+    private Location geoLocation;
 
     public String getEventDesc() {
         return eventDesc;
@@ -136,6 +140,14 @@ public class Event implements Serializable, Comparable {
 
     public void setShortLocation(String shortLocation) {
         this.shortLocation = shortLocation;
+    }
+
+    public Location getGeoLocation() {
+        return geoLocation;
+    }
+
+    public void setGeoLocation(Location geoLocation) {
+        this.geoLocation = geoLocation;
     }
 
     @Override
