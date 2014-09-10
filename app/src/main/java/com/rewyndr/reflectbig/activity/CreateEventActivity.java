@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -142,6 +143,8 @@ public class CreateEventActivity extends Activity {
             status = "Failure";
         }
         Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, EventsListActivity.class);
+        startActivity(intent);
     }
 
     public void onClickCancel(View view) {
@@ -152,8 +155,6 @@ public class CreateEventActivity extends Activity {
         RadioGroup eventTypeOption = (RadioGroup) findViewById(R.id.rad_event_type);
         int selected = eventTypeOption.getCheckedRadioButtonId();
         this.eventType = ((RadioButton) findViewById(selected)).getText().toString();
-        Log.d(CLASS_NAME, this.eventType);
-
         if (this.eventType.contains("Single")) {
             Button edt = (Button) findViewById(R.id.btnEndChangeDate);
             edt.setEnabled(false);

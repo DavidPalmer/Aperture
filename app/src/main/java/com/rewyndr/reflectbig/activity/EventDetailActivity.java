@@ -102,7 +102,7 @@ public class EventDetailActivity extends Activity {
     public void onClickDecline(View view) {
         EventService service = ServiceFactory.getEventServiceInstance(context);
         try {
-            service.respondToEvent(event.getEventId(), YNType.Y);
+            service.respondToEvent(event.getEventId(), YNType.N);
         } catch (Exception e) {
             Log.e(logClass, "Error occurred while accepting", e);
         }

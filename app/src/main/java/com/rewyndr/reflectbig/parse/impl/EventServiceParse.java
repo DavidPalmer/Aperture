@@ -89,7 +89,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         query.include(FieldNames.ATTENDEE);
         List<AttendeeParse> attendeeParseList = query.find();
         for (AttendeeParse attendee : attendeeParseList) {
-            attendees.add(attendee.getAttendee().getUsername());
+            attendees.add(attendee.getAttendee().getString(FieldNames.USER_NAME));
         }
         return attendees;
     }
