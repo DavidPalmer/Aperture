@@ -1,5 +1,6 @@
 package com.rewyndr.reflectbig.interfaces;
 
+import com.rewyndr.reflectbig.common.YNType;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
 
@@ -45,4 +46,13 @@ public interface EventService {
      * @throws Exception
      */
     void inviteParticipants(String eventId, List<String> inviteeEmailIds) throws Exception;
+
+    /**
+     * This method updates the status of the attendee in an event
+     *
+     * @param eventId
+     * @param response
+     * @throws Exception
+     */
+    void respondToEvent(String eventId, YNType response) throws Exception;
 }

@@ -1,19 +1,21 @@
 package com.rewyndr.reflectbig.parse.impl;
 
 import android.content.Context;
-import android.location.Location;
+import android.util.Log;
 
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.common.Constants;
+import com.rewyndr.reflectbig.common.YNType;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.parse.model.AttendeeParse;
 import com.rewyndr.reflectbig.parse.model.EventParse;
 import com.rewyndr.reflectbig.parse.model.FieldNames;
+import com.rewyndr.reflectbig.parse.model.InviteeParse;
 import com.rewyndr.reflectbig.util.DateUtils;
 import com.rewyndr.reflectbig.util.Utils;
 
@@ -107,7 +109,67 @@ public class EventServiceParse extends ParseBase implements EventService {
 
     @Override
     public void inviteParticipants(String eventId, List<String> inviteeEmailIds) throws Exception {
+        EventParse eventParse = new EventParse(eventId);
 
+        // Query for getting existing users
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereContainedIn(FieldNames.USER_USERNAME, inviteeEmailIds);
+        List<ParseUser> results = query.find();
+
+        // Query for finding existing users that are already invited
+        ParseQuery<AttendeeParse> attendeeQuery = ParseQuery.getQuery(AttendeeParse.class);
+        attendeeQuery.whereContainedIn(FieldNames.ATTENDEE, results);
+        attendeeQuery.whereEqualTo(FieldNames.ATTENDEE_EVENT, eventParse);
+        attendeeQuery.include(FieldNames.ATTENDEE);
+        List<AttendeeParse> alreadyInvited = attendeeQuery.find();
+
+        // Get only those users that aren't invited and invite them
+        List<ParseUser> nonInvitedExistingUsers = getNonInvitedExistingUsers(alreadyInvited, results);
+        for (ParseUser user: nonInvitedExistingUsers)  {
+            Log.d("InviteParticipants", "Inviting existing user: " + user.getUsername());
+            AttendeeParse attendee = new AttendeeParse();
+            attendee.setAttendee(user);
+            attendee.setInvitedBy(ParseUser.getCurrentUser());
+            attendee.setEvent(eventParse);
+            attendee.save();
+        }
+
+        // Get non existing users
+        List<String> nonExistingUsers = getNonExistingInvitees(inviteeEmailIds, results);
+        Log.d("InviteParticipants", "Non existing users: " + nonExistingUsers);
+
+        // Query for getting non existing users that are already invited
+        ParseQuery<InviteeParse> inviteeQuery = ParseQuery.getQuery(InviteeParse.class);
+        inviteeQuery.whereEqualTo(FieldNames.INVITEE_EVENT, eventParse);
+        inviteeQuery.whereContainedIn(FieldNames.INVITEE_EMAIL, nonExistingUsers);
+        List<InviteeParse> alreadyInvitedInvitees = inviteeQuery.find();
+
+        // Invite the non existing non invited users
+        List<String> nonExistingNonInvitedUsers = getNonExistingNonInvitedUsers(nonExistingUsers, alreadyInvitedInvitees);
+        for (String nonInvitedUser : nonExistingNonInvitedUsers) {
+            Log.d("InviteParticipants", "Inviting non existing user: " + nonInvitedUser);
+            InviteeParse invitee = new InviteeParse();
+            invitee.setEvent(eventParse);
+            invitee.setEmail(nonInvitedUser);
+            invitee.save();
+        }
+    }
+
+    @Override
+    public void respondToEvent(String eventId, YNType response) throws Exception {
+        ParseQuery<AttendeeParse> attendeeQuery = ParseQuery.getQuery(AttendeeParse.class);
+        EventParse eventParse = new EventParse(eventId);
+        attendeeQuery.whereEqualTo(FieldNames.ATTENDEE_EVENT, new EventParse(eventId));
+        attendeeQuery.whereEqualTo(FieldNames.ATTENDEE, ParseUser.getCurrentUser());
+        attendeeQuery.include(FieldNames.ATTENDEE_EVENT);
+        List<AttendeeParse> attendeeParseList = attendeeQuery.find();
+        AttendeeParse attendee = attendeeParseList.get(0);
+        if (attendee.getStatus() == null && YNType.Y.equals(response)) {
+            eventParse = attendee.getEvent();
+            eventParse.increment(FieldNames.EVENT_ATTENDEES_COUNT);
+        }
+        attendee.setStatus(response.toString());
+        attendee.save();
     }
 
     private Event getEventInfo(AttendeeParse attendee) throws ParseException {
@@ -143,5 +205,43 @@ public class EventServiceParse extends ParseBase implements EventService {
         eventParse.setGeoLocation(new ParseGeoPoint(event.getLatitude(), event.getLongitude()));
         eventParse.setAttendeesCount(1);
         return eventParse;
+    }
+
+    private List<ParseUser> getNonInvitedExistingUsers(List<AttendeeParse> alreadyInvited, List<ParseUser> existingUsers) {
+        List<ParseUser> nonInvitedExistingUsers = new ArrayList<ParseUser>();
+        List<String> invitedUserIds = new ArrayList<String>();
+        if (alreadyInvited.size() == 0) {
+            nonInvitedExistingUsers.addAll(existingUsers);
+        } else {
+            for (AttendeeParse attendee : alreadyInvited) {
+                invitedUserIds.add(attendee.getAttendee().getObjectId());
+            }
+            for (ParseUser user : existingUsers) {
+                if (!invitedUserIds.contains(user.getObjectId())) {
+                    nonInvitedExistingUsers.add(user);
+                }
+            }
+        }
+        return nonInvitedExistingUsers;
+    }
+
+    private List<String> getNonExistingInvitees(List<String> invitees, List<ParseUser> existingUsers) {
+        List<String> existingEmails = new ArrayList<String>();
+        List<String> nonExistingInvitees = new ArrayList<String>(invitees);
+        for (ParseUser user : existingUsers) {
+            existingEmails.add(user.getUsername());
+        }
+        nonExistingInvitees.removeAll(existingEmails);
+        return nonExistingInvitees;
+    }
+
+    private List<String> getNonExistingNonInvitedUsers(List<String> invitees, List<InviteeParse> alreadyInvited) {
+        List<String> nonInvited = new ArrayList<String>(invitees);
+        List<String> invited = new ArrayList<String>();
+        for (InviteeParse invitedUser : alreadyInvited) {
+            invited.add(invitedUser.getEmail());
+        }
+        nonInvited.removeAll(invited);
+        return nonInvited;
     }
 }

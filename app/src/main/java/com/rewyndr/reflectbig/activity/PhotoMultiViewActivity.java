@@ -23,6 +23,7 @@ import com.rewyndr.reflectbig.adapter.ImageAdapter;
 import com.rewyndr.reflectbig.common.PhotoType;
 import com.rewyndr.reflectbig.interfaces.PhotoService;
 import com.rewyndr.reflectbig.model.Event;
+import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.model.Photo;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 
@@ -97,9 +98,8 @@ public class PhotoMultiViewActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.photo_multi_view, menu);
-        if (!event.getEndDate().equals(new Date())) {
-//            Log.d("hre", "working");
-            menu.findItem(R.id.camera).setVisible(false);
+        if (event.getStatus().equals(EventStatus.CURRENT)) {
+            menu.findItem(R.id.camera).setVisible(true);
         }
         return true;
     }
