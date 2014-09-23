@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,35 +28,96 @@ import java.util.Calendar;
 
 
 public class CreateEventActivity extends Activity {
+    static final int START_DATE_PICKER_ID = 1111;
+    static final int END_DATE_PICKER_ID = 2222;
+    static final int START_TIME_PICKER_ID = 3333;
+    static final int END_TIME_PICKER_ID = 4444;
     private String CLASS_NAME = this.getClass().getName();
     private int startDay;
     private int startMonth;
     private int startYear;
     private int startHour;
     private int startMinute;
-
     private int endDay;
     private int endMonth;
     private int endYear;
     private int endHour;
     private int endMinute;
-    
     private Button startChangeDate;
     private Button endChangeDate;
     private Button startChangeTime;
     private Button endChangeTime;
     private String eventType;
-
     private int year;
     private int month;
     private int day;
+    private DatePickerDialog.OnDateSetListener startPickerListener = new DatePickerDialog.OnDateSetListener() {
+        // when dialog box is closed, below method will be called.
+        @Override
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+
+            startYear = selectedYear;
+            startMonth = selectedMonth;
+            startDay = selectedDay;
+
+            String delimiter = "-";
+            startChangeDate.setText(Utils.appendStrings(delimiter, String.valueOf(year), String.valueOf(month), String.valueOf(day)));
+        }
+    };
+    private DatePickerDialog.OnDateSetListener endPickerListener = new DatePickerDialog.OnDateSetListener() {
+        // when dialog box is closed, below method will be called.
+        @Override
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+
+            endYear = selectedYear;
+            endMonth = selectedMonth;
+            endDay = selectedDay;
+
+            String delimiter = "-";
+            endChangeDate.setText(Utils.appendStrings(delimiter, String.valueOf(year), String.valueOf(month), String.valueOf(day)));
+        }
+    };
     private int hour;
     private int minute;
+    private TimePickerDialog.OnTimeSetListener startTimePickerListener =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int selectedHour,
+                                      int selectedMinute) {
+                    // These variables are for setting the time picker values
+                    hour = selectedHour;
+                    minute = selectedMinute;
 
-    static final int START_DATE_PICKER_ID = 1111;
-    static final int END_DATE_PICKER_ID = 2222;
-    static final int START_TIME_PICKER_ID = 3333;
-    static final int END_TIME_PICKER_ID = 4444;
+                    startHour = selectedHour;
+                    startMinute = selectedMinute;
+
+                    String delimiter = ":";
+                    startChangeTime.setText(Utils.appendStrings(delimiter, String.valueOf(hour), String.valueOf(minute)));
+
+                }
+            };
+    private TimePickerDialog.OnTimeSetListener endTimePickerListener =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int selectedHour,
+                                      int selectedMinute) {
+                    // These variables are for setting the time picker values
+                    hour = selectedHour;
+                    minute = selectedMinute;
+
+                    endHour = selectedHour;
+                    endMinute = selectedMinute;
+
+                    String delimiter = ":";
+                    endChangeTime.setText(Utils.appendStrings(delimiter, String.valueOf(hour), String.valueOf(minute)));
+                }
+            };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,8 +176,9 @@ public class CreateEventActivity extends Activity {
         String eventName = ((EditText) findViewById(R.id.createEvent_text_event_name)).getText().toString();
         String eventDescription = ((EditText) findViewById(R.id.createEvent_text_event_description)).getText().toString();
         String location = ((EditText) findViewById(R.id.createEvent_text_where)).getText().toString();
-        String shortLocation = Utils.getShortLocation(location);
-
+        /*String shortLocation = Utils.getShortLocation(location);*/
+        String shortLocation = location;
+        String eventId = null;
         if (eventType.contains("Single")) {
             endYear = startYear;
             endMonth = startMonth;
@@ -136,14 +197,15 @@ public class CreateEventActivity extends Activity {
         String status = "";
         EventService service = ServiceFactory.getEventServiceInstance(this);
         try {
-            service.createEvent(newEvent);
+            eventId = service.createEvent(newEvent);
             status = "Success";
         } catch (Exception e) {
             e.printStackTrace();
             status = "Failure";
         }
         Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, EventsListActivity.class);
+        Intent intent = new Intent(this, InviteEventActivity.class);
+        intent.putExtra("eventId", eventId);
         startActivity(intent);
     }
 
@@ -178,75 +240,6 @@ public class CreateEventActivity extends Activity {
         }
         return null;
     }
-
-    private TimePickerDialog.OnTimeSetListener startTimePickerListener =
-            new TimePickerDialog.OnTimeSetListener() {
-                public void onTimeSet(TimePicker view, int selectedHour,
-                                      int selectedMinute) {
-                    // These variables are for setting the time picker values
-                    hour = selectedHour;
-                    minute = selectedMinute;
-
-                    startHour = selectedHour;
-                    startMinute = selectedMinute;
-
-                    String delimiter = ":";
-                    startChangeTime.setText(Utils.appendStrings(delimiter, String.valueOf(hour), String.valueOf(minute)));
-
-                }
-            };
-
-    private TimePickerDialog.OnTimeSetListener endTimePickerListener =
-            new TimePickerDialog.OnTimeSetListener() {
-                public void onTimeSet(TimePicker view, int selectedHour,
-                                      int selectedMinute) {
-                    // These variables are for setting the time picker values
-                    hour = selectedHour;
-                    minute = selectedMinute;
-
-                    endHour = selectedHour;
-                    endMinute = selectedMinute;
-
-                    String delimiter = ":";
-                    endChangeTime.setText(Utils.appendStrings(delimiter, String.valueOf(hour), String.valueOf(minute)));
-                }
-            };
-
-    private DatePickerDialog.OnDateSetListener startPickerListener = new DatePickerDialog.OnDateSetListener() {
-        // when dialog box is closed, below method will be called.
-        @Override
-        public void onDateSet(DatePicker view, int selectedYear,
-                              int selectedMonth, int selectedDay) {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
-
-            startYear = selectedYear;
-            startMonth = selectedMonth;
-            startDay = selectedDay;
-
-            String delimiter = "-";
-            startChangeDate.setText(Utils.appendStrings(delimiter, String.valueOf(year), String.valueOf(month), String.valueOf(day)));
-        }
-    };
-
-    private DatePickerDialog.OnDateSetListener endPickerListener = new DatePickerDialog.OnDateSetListener() {
-        // when dialog box is closed, below method will be called.
-        @Override
-        public void onDateSet(DatePicker view, int selectedYear,
-                              int selectedMonth, int selectedDay) {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
-
-            endYear = selectedYear;
-            endMonth = selectedMonth;
-            endDay = selectedDay;
-
-            String delimiter = "-";
-            endChangeDate.setText(Utils.appendStrings(delimiter, String.valueOf(year), String.valueOf(month), String.valueOf(day)));
-        }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
