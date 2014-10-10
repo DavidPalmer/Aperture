@@ -5,4 +5,9 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/user_logout" />
+    <item
+        android:id="@+id/addEvent"
+        android:icon="@drawable/add_event"
+        android:showAsAction="always"
+        android:title="@string/title_activity_photo_multi_view" />
 </menu>
