@@ -11,16 +11,6 @@ import com.parse.ParseObject;
 @ParseClassName("Photo")
 public class PhotoParse extends ParseObject {
 
-    private int photoNo;
-
-    private ParseFile photoFile;
-
-    private ParseFile photoFile640;
-
-    private ParseFile photoFile1024;
-
-    private EventParse event;
-
     public int getPhotoNo() {
         return getInt(FieldNames.PHOTO_NO);
     }

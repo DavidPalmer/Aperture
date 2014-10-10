@@ -1,8 +1,9 @@
 package com.rewyndr.reflectbig.activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -10,6 +11,7 @@ import com.applidium.headerlistview.HeaderListView;
 import com.parse.ParseException;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.adapter.EventListAdapter;
+import com.rewyndr.reflectbig.common.PreferenceConstants;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
@@ -22,8 +24,8 @@ import java.util.Map;
 
 public class EventsListActivity extends Activity {
     EventListAdapter eventListAdapter;
-    SwipeRefreshLayout swipeRefreshLayout;
     HeaderListView headerListView;
+    EventService eventService;
     private ArrayList<Event> pastEventList = new ArrayList<Event>();
     private ArrayList<Event> currentEventList = new ArrayList<Event>();
     private ArrayList<Event> upcomingEventList = new ArrayList<Event>();
@@ -32,6 +34,7 @@ public class EventsListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_events_list);
+        eventService = ServiceFactory.getEventServiceInstance(this);
         headerListView = new HeaderListView(this);
         getEventData();
         eventListAdapter = new EventListAdapter(this, pastEventList, currentEventList, upcomingEventList);
@@ -76,13 +79,27 @@ public class EventsListActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.user_logout) {
+            SharedPreferences preferences = getSharedPreferences(PreferenceConstants.PREFERENCE_NAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(PreferenceConstants.LOGIN_EMAIL_ID, "");
+            editor.putString(PreferenceConstants.LOGIN_PASSWORD, "");
+            editor.commit();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        } if (id == R.id.addEvent) {
+            Intent intent = new Intent(this, CreateEventActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent setIntent = new Intent(Intent.ACTION_MAIN);
+        setIntent.addCategory(Intent.CATEGORY_HOME);
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(setIntent);
     }
 }

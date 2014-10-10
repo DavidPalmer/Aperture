@@ -37,6 +37,8 @@ public class FieldNames {
 
     public static final String EVENT_DESCRIPTION = "eventDescription";
 
+    public static final String EVENT_GEO_LOCATION = "geoLocation";
+
     // Attendee
     public static final String ATTENDEE_EVENT = "event";
 
@@ -45,4 +47,16 @@ public class FieldNames {
     public static final String ATTENDEE_INVITED_BY = "invitedBy";
 
     public static final String ATTENDEE_STATUS = "status";
+
+    public static final String ATTENDEE_EVENT_CREATED_BY = ATTENDEE_EVENT + "." + EVENT_CREATED_BY;
+
+    // User
+    public static final String USER_NAME = "name";
+
+    public static final String USER_USERNAME = "username";
+
+    // Invitee
+    public static final String INVITEE_EMAIL = "email";
+
+    public static final String INVITEE_EVENT = "event";
 }

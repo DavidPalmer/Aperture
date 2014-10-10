@@ -82,9 +82,12 @@ public class PhotoServiceParse extends ParseBase implements PhotoService {
     public void uploadPhoto(String eventId, File file) throws Exception {
         ParseFile pFile = new ParseFile(file.getName(), IOUtils.convertFileToBytes(file));
         pFile.save();
+        //TODO test this increment change
+        EventParse event = new EventParse(eventId);
+        event.increment(FieldNames.EVENT_PHOTOS_COUNT);
         PhotoParse photoParse = new PhotoParse();
         photoParse.setPhotoFile(pFile);
-        photoParse.setEvent(new EventParse(eventId));
+        photoParse.setEvent(event);
         photoParse.save();
     }
 }

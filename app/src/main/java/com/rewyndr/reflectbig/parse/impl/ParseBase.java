@@ -9,6 +9,7 @@ import com.parse.ParseUser;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.parse.model.AttendeeParse;
 import com.rewyndr.reflectbig.parse.model.EventParse;
+import com.rewyndr.reflectbig.parse.model.InviteeParse;
 import com.rewyndr.reflectbig.parse.model.PhotoParse;
 
 /**
@@ -25,10 +26,11 @@ public abstract class ParseBase {
             ParseObject.registerSubclass(PhotoParse.class);
             ParseObject.registerSubclass(EventParse.class);
             ParseObject.registerSubclass(AttendeeParse.class);
+            ParseObject.registerSubclass(InviteeParse.class);
             Parse.initialize(context, context.getResources().getString(R.string.parse_app_id), context.getResources().getString(R.string.parse_client_key));
             initialised = true;
             try {
-                ParseUser.logIn("dileeshvar", "password");
+                ParseUser.logIn("dradhakr@andrew.cmu.edu", "password");
             } catch (ParseException e) {
                 e.printStackTrace();
             }

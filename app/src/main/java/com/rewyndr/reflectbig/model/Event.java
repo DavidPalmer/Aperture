@@ -1,12 +1,14 @@
 package com.rewyndr.reflectbig.model;
 
+import android.location.Location;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Satish on 9/1/2014.
  */
-public class Event implements Serializable {
+public class Event implements Serializable, Comparable {
 
     private String eventId;
 
@@ -33,6 +35,10 @@ public class Event implements Serializable {
     private String createdBy;
 
     private String invitedBy;
+
+    private double latitude;
+
+    private double longitude;
 
     public String getEventDesc() {
         return eventDesc;
@@ -138,6 +144,22 @@ public class Event implements Serializable {
         this.shortLocation = shortLocation;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -153,5 +175,11 @@ public class Event implements Serializable {
                 ", createdBy='" + createdBy + '\'' +
                 ", invitedBy='" + invitedBy + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object another) {
+        Event that = (Event) another;
+        return this.getStartDate().compareTo(that.getStartDate());
     }
 }

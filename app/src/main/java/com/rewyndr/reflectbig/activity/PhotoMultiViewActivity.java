@@ -1,6 +1,7 @@
 package com.rewyndr.reflectbig.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import com.rewyndr.reflectbig.adapter.ImageAdapter;
 import com.rewyndr.reflectbig.common.PhotoType;
 import com.rewyndr.reflectbig.interfaces.PhotoService;
 import com.rewyndr.reflectbig.model.Event;
+import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.model.Photo;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 
@@ -39,7 +41,7 @@ import java.util.List;
 public class PhotoMultiViewActivity extends Activity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    private static final int BUFFER = 10;
+    private static final int BUFFER = 100;
     private final String CURRENT_CLASS_LOG = this.getClass().getName();
     private final Context context = this;
     ImageAdapter imageAdapter;
@@ -96,6 +98,9 @@ public class PhotoMultiViewActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.photo_multi_view, menu);
+        if (event.getStatus().equals(EventStatus.CURRENT)) {
+            menu.findItem(R.id.camera).setVisible(true);
+        }
         return true;
     }
 
@@ -106,10 +111,15 @@ public class PhotoMultiViewActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.camera) {
+//            if(event.getEndDate().equals(new Date())) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+//            }
+//            else{
+//                item.setVisible(false);
+//            }
         }
         if (id == R.id.event_details) {
             Intent intent = new Intent(this, EventDetailActivity.class);
@@ -140,7 +150,8 @@ public class PhotoMultiViewActivity extends Activity {
         try {
             Intent intent = getIntent();
             event = (Event) intent.getSerializableExtra("event");
-            addPhotoList();
+//            addPhotoList();
+            new DataSaveProgress(this).execute();
             imageAdapter = new ImageAdapter(this, photos);
             gridViewImage = (GridView) findViewById(R.id.grid_view1);
             gridViewImage.setAdapter(imageAdapter);
@@ -262,6 +273,34 @@ public class PhotoMultiViewActivity extends Activity {
             Log.d(CURRENT_CLASS_LOG, "" + result);
 
         }
+    }
 
+    private class DataSaveProgress extends AsyncTask<String, Void, Boolean> {
+        private ProgressDialog dialog;
+        private Activity activity;
+
+        public DataSaveProgress(Activity activity) {
+            this.activity = activity;
+            dialog = new ProgressDialog(activity);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            addPhotoList();
+            return true;
+        }
+
+        protected void onPreExecute() {
+            this.dialog.setMessage("Loading Images");
+            this.dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (dialog.isShowing()) {
+                imageAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        }
     }
 }

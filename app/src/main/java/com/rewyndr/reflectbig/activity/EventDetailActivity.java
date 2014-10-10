@@ -1,6 +1,7 @@
 package com.rewyndr.reflectbig.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +13,9 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.R;
+import com.rewyndr.reflectbig.common.YNType;
 import com.rewyndr.reflectbig.interfaces.EventService;
+import com.rewyndr.reflectbig.model.AttendeeStatus;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.service.ServiceFactory;
@@ -27,6 +30,7 @@ import java.util.Map;
 public class EventDetailActivity extends Activity {
     private String logClass = this.getClass().getName();
     Event event = null;
+    Context context = this;
     private List<String> listOfAttendes = new ArrayList<String>();
 
     @Override
@@ -42,7 +46,7 @@ public class EventDetailActivity extends Activity {
         }
         TableLayout tl = (TableLayout) findViewById(R.id.table);
         TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
-        if(event.getStatus().equals(EventStatus.PAST)) {
+        if(event.getStatus().equals(EventStatus.PAST) || (!event.getMyStatus().equals(AttendeeStatus.NOT_RESPONDED))) {
             tl.removeView(decisionRow);
         }
     }
@@ -81,11 +85,33 @@ public class EventDetailActivity extends Activity {
     }
 
     public void onClickAccept(View view) {
-        Toast.makeText(this, "Accepting", Toast.LENGTH_SHORT).show();
+        EventService service = ServiceFactory.getEventServiceInstance(context);
+        try {
+            service.respondToEvent(event.getEventId(), YNType.Y);
+        } catch (Exception e) {
+            Log.e(logClass, "Error occurred while accepting", e);
+        }
+        Toast.makeText(this, "Accepted", Toast.LENGTH_SHORT).show();
+        TableLayout tl = (TableLayout) findViewById(R.id.table);
+        TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
+        tl.removeView(decisionRow);
+        TextView text_status = (TextView) findViewById(R.id.text_status);
+        text_status.setText(AttendeeStatus.ACCEPTED.toString());
     }
 
     public void onClickDecline(View view) {
-        Toast.makeText(this, "Rejecting", Toast.LENGTH_SHORT).show();
+        EventService service = ServiceFactory.getEventServiceInstance(context);
+        try {
+            service.respondToEvent(event.getEventId(), YNType.N);
+        } catch (Exception e) {
+            Log.e(logClass, "Error occurred while accepting", e);
+        }
+        Toast.makeText(this, "Declined", Toast.LENGTH_SHORT).show();
+        TableLayout tl = (TableLayout) findViewById(R.id.table);
+        TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
+        tl.removeView(decisionRow);
+        TextView text_status = (TextView) findViewById(R.id.text_status);
+        text_status.setText(AttendeeStatus.DECLINED.toString());
     }
 
     /*@Override

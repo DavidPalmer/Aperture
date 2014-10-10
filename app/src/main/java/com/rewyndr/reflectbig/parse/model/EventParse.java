@@ -1,6 +1,7 @@
 package com.rewyndr.reflectbig.parse.model;
 
 import com.parse.ParseClassName;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -11,24 +12,6 @@ import java.util.Date;
  */
 @ParseClassName("Event")
 public class EventParse extends ParseObject {
-
-    private String eventName;
-
-    private Date startDateTime;
-
-    private Date endDateTime;
-
-    private String location;
-
-    private ParseUser createdBy;
-
-    private int photosCount;
-
-    private int attendeesCount;
-
-    private String eventShortLocation;
-
-    private String eventDescription;
 
     public EventParse() {
 
@@ -46,12 +29,12 @@ public class EventParse extends ParseObject {
         put(FieldNames.EVENT_DESCRIPTION, eventDescription);
     }
 
-    public String getEventShortLocation() {
+    public String getShortLocation() {
         return getString(FieldNames.EVENT_SHORT_LOCATION);
     }
 
-    public void setEventShortLocation(String eventShortLocation) {
-        put(FieldNames.EVENT_SHORT_LOCATION, eventShortLocation);
+    public void setShortLocation(String shortLocation) {
+        put(FieldNames.EVENT_SHORT_LOCATION, shortLocation);
     }
 
     public String getEventName() {
@@ -108,5 +91,13 @@ public class EventParse extends ParseObject {
 
     public void setAttendeesCount(int attendeesCount) {
         put(FieldNames.EVENT_ATTENDEES_COUNT, attendeesCount);
+    }
+
+    public ParseGeoPoint getGeoLocation() {
+        return getParseGeoPoint(FieldNames.EVENT_GEO_LOCATION);
+    }
+
+    public void setGeoLocation(ParseGeoPoint geoLocation) {
+        put(FieldNames.EVENT_GEO_LOCATION, geoLocation);
     }
 }

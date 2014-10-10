@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.applidium.headerlistview.SectionAdapter;
 import com.rewyndr.reflectbig.R;
+import com.rewyndr.reflectbig.activity.EventDetailActivity;
 import com.rewyndr.reflectbig.activity.PhotoMultiViewActivity;
 import com.rewyndr.reflectbig.model.AttendeeStatus;
 import com.rewyndr.reflectbig.model.Event;
@@ -172,15 +173,22 @@ public class EventListAdapter extends SectionAdapter {
     public void onRowItemClick(AdapterView<?> parent, View view, int section, int row, long id) {
         super.onRowItemClick(parent, view, section, row, id);
         Event event = null;
-        if (section == 0)
+        if (section == 0) {
             event = pastEventList.get(row);
-        else if (section == 1)
+            Intent intent = new Intent(context, PhotoMultiViewActivity.class);
+            intent.putExtra("event", event);
+            context.startActivity(intent);
+        } else if (section == 1) {
             event = currentEventList.get(row);
-        else if (section == 2)
+            Intent intent = new Intent(context, PhotoMultiViewActivity.class);
+            intent.putExtra("event", event);
+            context.startActivity(intent);
+        } else if (section == 2) {
             event = upcomingEventList.get(row);
-        Intent intent = new Intent(context, PhotoMultiViewActivity.class);
-        intent.putExtra("event", event);
-        context.startActivity(intent);
+            Intent intent = new Intent(context, EventDetailActivity.class);
+            intent.putExtra("event", event);
+            context.startActivity(intent);
+        }
 //        Toast.makeText(DemoActivity.this, "Section " + section + " Row " + row, Toast.LENGTH_SHORT).show();
     }
 
