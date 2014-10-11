@@ -26,26 +26,31 @@
             android:label="@string/app_name" />
         <activity
             android:name=".activity.EventsListActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".activity.EventDetailActivity"
-            android:label="@string/title_activity_event_detail_layout"></activity>
+            android:label="@string/title_activity_event_detail_layout" />
         <activity
             android:name=".activity.AttendeeListActivity"
-            android:label="@string/title_activity_attendee_list"></activity>
+            android:label="@string/title_activity_attendee_list" />
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.InviteEventActivity"
-            android:label="@string/title_activity_invite_event"></activity>
+            android:label="@string/title_activity_invite_event" />
         <activity
             android:name=".activity.CreateEventActivity"
-            android:label="@string/title_activity_create_event"></activity>
+            android:label="@string/title_activity_create_event" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="@string/app_name"></activity>
     </application>
+
 </manifest>

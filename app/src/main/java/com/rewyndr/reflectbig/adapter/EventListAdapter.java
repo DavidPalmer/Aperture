@@ -104,10 +104,10 @@ public class EventListAdapter extends SectionAdapter {
             holder.eventName.setText(pastEventList.get(row).getEventName());
             holder.eventDate.setText(new SimpleDateFormat("MMM dd, yyyy").format(pastEventList.get(row).getStartDate()));
             holder.eventLocation.setText(pastEventList.get(row).getShortLocation());
-            holder.eventCountImage.setImageResource(R.drawable.ic_action_photo);
+            holder.eventCountImage.setImageResource(R.drawable.ic_action_camera);
             holder.eventCount.setText(pastEventList.get(row).getPhotosCount() + "");
             if (pastEventList.get(row).getMyStatus() == AttendeeStatus.ACCEPTED)
-                holder.eventConfirmation.setImageResource(R.drawable.ic_action_done);
+                holder.eventConfirmation.setImageResource(R.drawable.ic_action_accept);
             else if (pastEventList.get(row).getMyStatus() == AttendeeStatus.DECLINED)
                 holder.eventConfirmation.setImageResource(R.drawable.ic_action_cancel);
             else if (pastEventList.get(row).getMyStatus() == AttendeeStatus.NOT_RESPONDED)
@@ -117,10 +117,10 @@ public class EventListAdapter extends SectionAdapter {
             holder.eventName.setText(currentEventList.get(row).getEventName());
             holder.eventDate.setText(new SimpleDateFormat("MMM dd, yyyy").format(currentEventList.get(row).getStartDate()));
             holder.eventLocation.setText(currentEventList.get(row).getShortLocation());
-            holder.eventCountImage.setImageResource(R.drawable.ic_action_photo);
+            holder.eventCountImage.setImageResource(R.drawable.ic_action_camera);
             holder.eventCount.setText(currentEventList.get(row).getPhotosCount() + "");
             if (currentEventList.get(row).getMyStatus() == AttendeeStatus.ACCEPTED)
-                holder.eventConfirmation.setImageResource(R.drawable.ic_action_done);
+                holder.eventConfirmation.setImageResource(R.drawable.ic_action_accept);
             else if (currentEventList.get(row).getMyStatus() == AttendeeStatus.DECLINED)
                 holder.eventConfirmation.setImageResource(R.drawable.ic_action_cancel);
             else if (currentEventList.get(row).getMyStatus() == AttendeeStatus.NOT_RESPONDED)
@@ -133,7 +133,7 @@ public class EventListAdapter extends SectionAdapter {
             holder.eventCountImage.setImageResource(R.drawable.ic_action_group);
             holder.eventCount.setText(upcomingEventList.get(row).getAttendeesCount() + "");
             if (upcomingEventList.get(row).getMyStatus() == AttendeeStatus.ACCEPTED)
-                holder.eventConfirmation.setImageResource(R.drawable.ic_action_done);
+                holder.eventConfirmation.setImageResource(R.drawable.ic_action_accept);
             else if (upcomingEventList.get(row).getMyStatus() == AttendeeStatus.DECLINED)
                 holder.eventConfirmation.setImageResource(R.drawable.ic_action_cancel);
             else if (upcomingEventList.get(row).getMyStatus() == AttendeeStatus.NOT_RESPONDED)
