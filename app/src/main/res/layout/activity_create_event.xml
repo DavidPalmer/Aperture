@@ -29,14 +29,13 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/event" />
+                        android:src="@drawable/ic_action_event" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="           Event"
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize"
                         android:layout_gravity="center" />
 
@@ -51,10 +50,9 @@
                     <EditText android:capitalize="sentences"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:hint="Event Name"
                         android:id="@+id/createEvent_text_event_name"
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize" />
                 </FrameLayout>
             </TableRow>
@@ -72,14 +70,13 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/event" />
+                        android:src="@drawable/ic_action_event" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="          Short Description"
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize"
                         android:layout_gravity="center" />
 
@@ -94,10 +91,9 @@
                     <EditText android:capitalize="sentences"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:hint="Event Description"
                         android:id="@+id/createEvent_text_event_description"
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize" />
                 </FrameLayout>
             </TableRow>
@@ -115,14 +111,13 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/invited_by" />
+                        android:src="@drawable/ic_action_person" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="           Event type"
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize"
                         android:layout_gravity="center" />
 
@@ -171,14 +166,13 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/calendar" />
+                        android:src="@drawable/ic_action_time" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="           Starting on "
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize"
                         android:layout_gravity="center" />
 
@@ -211,14 +205,13 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/calendar" />
+                        android:src="@drawable/ic_action_time" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="           Ending on "
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize"
                         android:layout_gravity="center" />
                 </FrameLayout>
@@ -250,14 +243,13 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/calendar" />
+                        android:src="@drawable/ic_action_time" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="           Starting Time "
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize"
                         android:layout_gravity="center" />
 
@@ -289,14 +281,13 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/calendar" />
+                        android:src="@drawable/ic_action_time" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="           Ending Time "
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize"
                         android:layout_gravity="center" />
                 </FrameLayout>
@@ -328,14 +319,13 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/where" />
+                        android:src="@drawable/ic_action_place" />
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="           Where"
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize"
                         android:layout_gravity="center" />
 
@@ -350,60 +340,16 @@
                     <EditText android:capitalize="sentences"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:hint="Where"
                         android:id="@+id/createEvent_text_where"
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:src="@drawable/arrow" />
-                </FrameLayout>
-            </TableRow>
-
-            <TableRow
-                android:paddingTop="25dp"
-                android:layout_marginBottom="3dp">
-
-                <FrameLayout
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:id="@+id/invitee">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_action_user_add" />
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="           Invitee"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/textSize"
-                        android:layout_gravity="center" />
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="invitee"
-                        android:id="@+id/text_status"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/textSize" />
+                        android:src="@drawable/ic_action_forward" />
                 </FrameLayout>
             </TableRow>
 
