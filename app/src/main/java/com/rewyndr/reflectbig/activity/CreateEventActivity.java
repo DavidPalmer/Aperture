@@ -65,7 +65,7 @@ public class CreateEventActivity extends Activity {
             startDay = selectedDay;
 
             String delimiter = "-";
-            startChangeDate.setText(Utils.appendStrings(delimiter, String.valueOf(year), String.valueOf(month), String.valueOf(day)));
+            startChangeDate.setText(Utils.appendStrings(delimiter, String.valueOf(year), String.valueOf(month+1), String.valueOf(day)));
         }
     };
     private DatePickerDialog.OnDateSetListener endPickerListener = new DatePickerDialog.OnDateSetListener() {
@@ -82,7 +82,7 @@ public class CreateEventActivity extends Activity {
             endDay = selectedDay;
 
             String delimiter = "-";
-            endChangeDate.setText(Utils.appendStrings(delimiter, String.valueOf(year), String.valueOf(month), String.valueOf(day)));
+            endChangeDate.setText(Utils.appendStrings(delimiter, String.valueOf(year), String.valueOf(month+1), String.valueOf(day)));
         }
     };
     private int hour;
