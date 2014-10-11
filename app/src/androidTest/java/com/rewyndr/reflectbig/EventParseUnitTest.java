@@ -51,7 +51,7 @@ public class EventParseUnitTest extends AndroidTestCase {
         emailIds.add("satishmufc@gmail.com");
         emailIds.add("yparthas@andrew.cmu.edu");
         emailIds.add("satishr@sase.ssn.edu.in");
-        instance.inviteParticipants("e8fulZ42Q1", emailIds);
+        instance.inviteParticipants("Sr0jtVyma6", emailIds);
     }
 
     public void testCreateEvent() throws Exception {

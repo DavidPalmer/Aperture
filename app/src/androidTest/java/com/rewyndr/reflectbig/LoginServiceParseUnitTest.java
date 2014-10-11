@@ -23,7 +23,7 @@ public class LoginServiceParseUnitTest extends AndroidTestCase {
     }
 
     public void testSignUp() throws Exception {
-        instance.signUp("Satish", "satishra@andrew.cmu.edu", "password");
+        instance.signUp("Satish", "satishr@sase.ssn.edu.in", "password");
         Log.d("Current User----", ParseUser.getCurrentUser().getUsername());
     }
 

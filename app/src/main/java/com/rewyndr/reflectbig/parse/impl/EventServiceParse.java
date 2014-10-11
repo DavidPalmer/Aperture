@@ -151,6 +151,7 @@ public class EventServiceParse extends ParseBase implements EventService {
             InviteeParse invitee = new InviteeParse();
             invitee.setEvent(eventParse);
             invitee.setEmail(nonInvitedUser);
+            invitee.setInvitedBy(ParseUser.getCurrentUser());
             invitee.save();
         }
     }
