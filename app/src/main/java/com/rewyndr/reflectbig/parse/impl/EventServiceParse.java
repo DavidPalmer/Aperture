@@ -3,6 +3,7 @@ package com.rewyndr.reflectbig.parse.impl;
 import android.content.Context;
 import android.util.Log;
 
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -110,6 +111,7 @@ public class EventServiceParse extends ParseBase implements EventService {
     @Override
     public void inviteParticipants(String eventId, List<String> inviteeEmailIds) throws Exception {
         EventParse eventParse = new EventParse(eventId);
+        eventParse.fetchIfNeeded();
 
         // Query for getting existing users
         ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
@@ -125,13 +127,17 @@ public class EventServiceParse extends ParseBase implements EventService {
 
         // Get only those users that aren't invited and invite them
         List<ParseUser> nonInvitedExistingUsers = getNonInvitedExistingUsers(alreadyInvited, results);
+        List<AttendeeParse> attendeeList = new ArrayList<AttendeeParse>();
         for (ParseUser user: nonInvitedExistingUsers)  {
             Log.d("InviteParticipants", "Inviting existing user: " + user.getUsername());
             AttendeeParse attendee = new AttendeeParse();
             attendee.setAttendee(user);
             attendee.setInvitedBy(ParseUser.getCurrentUser());
             attendee.setEvent(eventParse);
-            attendee.save();
+            attendeeList.add(attendee);
+        }
+        if (attendeeList.size() > 0) {
+            AttendeeParse.saveAll(attendeeList);
         }
 
         // Get non existing users
@@ -146,13 +152,41 @@ public class EventServiceParse extends ParseBase implements EventService {
 
         // Invite the non existing non invited users
         List<String> nonExistingNonInvitedUsers = getNonExistingNonInvitedUsers(nonExistingUsers, alreadyInvitedInvitees);
+        List<InviteeParse> inviteeList = new ArrayList<InviteeParse>();
         for (String nonInvitedUser : nonExistingNonInvitedUsers) {
             Log.d("InviteParticipants", "Inviting non existing user: " + nonInvitedUser);
             InviteeParse invitee = new InviteeParse();
             invitee.setEvent(eventParse);
             invitee.setEmail(nonInvitedUser);
-            invitee.save();
+            invitee.setInvitedBy(ParseUser.getCurrentUser());
+            inviteeList.add(invitee);
         }
+        if (inviteeList.size() > 0) {
+            InviteeParse.saveAll(inviteeList);
+        }
+
+        if (attendeeList.size() > 0 || inviteeList.size() > 0) {
+            notifyInvitees(eventParse, attendeeList, inviteeList);
+        }
+    }
+
+    private void notifyInvitees(EventParse eventParse, List<AttendeeParse> attendeeList, List<InviteeParse> inviteeList) throws ParseException {
+        Map<String, Object> params = new HashMap<String, Object>();
+        eventParse = eventParse.fetch();
+        params.put("event", eventParse.getEventName());
+        params.put("eventloc", eventParse.getLocation());
+        params.put("eventtime", DateUtils.getDateInFormat(eventParse.getStartDateTime(), "E, MM/dd/yyyy, HH:mm"));
+        List<String> attendeeId = new ArrayList<String>();
+        for (AttendeeParse attendee : attendeeList) {
+            attendeeId.add(attendee.getAttendee().get(FieldNames.USER_NAME) + ":" + attendee.getAttendee().getUsername());
+        }
+        List<String> inviteeId = new ArrayList<String>();
+        for (InviteeParse invitee : inviteeList) {
+            inviteeId.add(invitee.getEmail());
+        }
+        params.put("attendees", attendeeId);
+        params.put("invitees", inviteeId);
+        ParseCloud.callFunction("notifyInvitees", params);
     }
 
     @Override

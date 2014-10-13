@@ -3,9 +3,16 @@ package com.rewyndr.reflectbig.parse.impl;
 import android.content.Context;
 
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.interfaces.LoginService;
+import com.rewyndr.reflectbig.parse.model.AttendeeParse;
 import com.rewyndr.reflectbig.parse.model.FieldNames;
+import com.rewyndr.reflectbig.parse.model.InviteeParse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This provides an implementation of <tt>LoginService</tt> with Parse as backend
@@ -39,10 +46,35 @@ public class LoginServiceParse extends ParseBase implements LoginService {
         user.setPassword(password);
         user.put(FieldNames.USER_NAME, name);
         user.signUp();
+        convertInviteeToAttendee(user);
     }
 
     @Override
     public void logOut() throws ParseException {
         ParseUser.logOut();
+    }
+
+    /**
+     * This method is used to convert new users from invitee to attendee
+     *
+     * @param user
+     * @throws ParseException
+     */
+    private void convertInviteeToAttendee(ParseUser user) throws ParseException {
+        ParseQuery<InviteeParse> inviteeQuery = ParseQuery.getQuery(InviteeParse.class);
+        inviteeQuery.whereEqualTo(FieldNames.INVITEE_EMAIL, user.getUsername());
+        List<InviteeParse> matchingInvitees = inviteeQuery.find();
+        List<AttendeeParse> attendees = new ArrayList<AttendeeParse>();
+        for (InviteeParse invitee : matchingInvitees) {
+            AttendeeParse attendee = new AttendeeParse();
+            attendee.setEvent(invitee.getEvent());
+            attendee.setAttendee(user);
+            if (invitee.getInvitedBy() != null) {
+                attendee.setInvitedBy(invitee.getInvitedBy());
+            }
+            attendees.add(attendee);
+        }
+        AttendeeParse.saveAll(attendees);
+        InviteeParse.deleteAll(matchingInvitees);
     }
 }
