@@ -46,7 +46,7 @@ public class ImageAdapter extends BaseAdapter {
             Resources r = Resources.getSystem();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, r.getDisplayMetrics());
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams((int) px * 2 - 10, (int) px * 2 - 10));
+            imageView.setLayoutParams(new GridView.LayoutParams((int) px * 2, (int) px * 2));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 //            imageView.setAdjustViewBounds(true);
         } else {

@@ -20,5 +20,8 @@
     <string name="multi">Multi Day</string>
     <string name="title_activity_invite_event">InviteEventActivity</string>
     <string name="title_invite_event">Invite</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="register1">New User ? <b><u>Register</u></b></string>
+    <string name="title_activity_contact">ContactActivity</string>
 
 </resources>
