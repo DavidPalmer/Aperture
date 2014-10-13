@@ -44,6 +44,7 @@
         <activity
             android:name=".activity.InviteEventActivity"
             android:label="@string/title_activity_invite_event"
+            android:noHistory="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.CreateEventActivity"

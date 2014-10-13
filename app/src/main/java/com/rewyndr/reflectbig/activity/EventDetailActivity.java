@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.R;
+import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.common.YNType;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.AttendeeStatus;
@@ -83,7 +84,7 @@ public class EventDetailActivity extends Activity {
     public void attendeeList(View view) {
         Intent intent = new Intent(this, AttendeeListActivity.class);
         intent.putStringArrayListExtra("Attendees", (ArrayList<String>) listOfAttendes);
-        startActivity(intent);
+        startActivityForResult(intent, 1234);
     }
 
     public void onClickAccept(View view) {
@@ -134,7 +135,8 @@ public class EventDetailActivity extends Activity {
         }
         if (id == R.id.addAttendee) {
             Intent intent = new Intent(this, InviteEventActivity.class);
-            intent.putExtra("eventId", event.getEventId());
+            intent.putExtra("Error", "");
+            intent.putExtra("event", event);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

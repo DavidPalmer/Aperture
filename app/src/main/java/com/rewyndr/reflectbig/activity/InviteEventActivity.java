@@ -7,8 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,27 +21,30 @@ import android.widget.Toast;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.Contacts;
+import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 import com.rewyndr.reflectbig.util.SwipeDetector;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
 public class InviteEventActivity extends Activity {
-    String eventId = null;
+    Event event = null;
     private List<String> emails = new ArrayList<String>();
     private Context ctx = this;
     ArrayAdapter<String> adapter;
     ListView view;
+    boolean doubleBackToExitPressedOnce = false;
+    String errorMsg = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_event);
         Intent intent = getIntent();
-        eventId = (String) intent.getSerializableExtra("eventId");
+        errorMsg = intent.getStringExtra("Error");
+        event = (Event) getIntent().getSerializableExtra("event");
         view = (ListView) findViewById(R.id.listView);
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, emails) {
@@ -139,16 +142,44 @@ public class InviteEventActivity extends Activity {
     public void inviteEmail(View v) {
         EventService eventService = ServiceFactory.getEventServiceInstance(this);
         try {
-            eventService.inviteParticipants(eventId, emails);
-            Toast.makeText(ctx, "Invitations sent", Toast.LENGTH_SHORT).show();
+            if(emails.isEmpty()) {
+                Toast.makeText(ctx, "No emails provided", Toast.LENGTH_SHORT).show();
+            } else {
+                eventService.inviteParticipants(event.getEventId(), emails);
+                Toast.makeText(ctx, "Invitations sent", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, EventsListActivity.class);
+                startActivity(intent);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Intent intent = new Intent(this, EventsListActivity.class);
-        startActivity(intent);
     }
 
     public static boolean isValidEmail(String email) {
         return email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})");
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            if("".equals(errorMsg)) {
+                Intent data = new Intent();
+                data.putExtra("event", event);
+                setResult(Activity.RESULT_OK, data);
+                finish();
+            } else {
+                Intent setIntent = new Intent(this, EventsListActivity.class);
+                startActivity(setIntent);
+            }
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, errorMsg + "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }

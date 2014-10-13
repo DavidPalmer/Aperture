@@ -186,9 +186,11 @@
 
                     <Button
                         android:id="@+id/btnStartChangeDate"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Change Date" />
+                        android:text="@string/start_date"
+                        android:onClick="showStartDatePickerDialog" />
+
                 </FrameLayout>
             </TableRow>
 
@@ -226,7 +228,8 @@
                         android:id="@+id/btnEndChangeDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Change Date" />
+                        android:text="End Date"
+                        android:onClick="showEndDatePickerDialog"/>
                 </FrameLayout>
             </TableRow>
 
@@ -265,7 +268,8 @@
                         android:id="@+id/btnStartChangeTime"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="Change Time" />
+                        android:text="Change Time"
+                        android:onClick="showStartTimePickerDialog" />
                 </FrameLayout>
             </TableRow>
 
@@ -302,7 +306,8 @@
                         android:id="@+id/btnEndChangeTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Change Time" />
+                        android:text="Change Time"
+                        android:onClick="showEndTimePickerDialog" />
                 </FrameLayout>
             </TableRow>
 
