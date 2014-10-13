@@ -47,11 +47,8 @@ public class EventParseUnitTest extends AndroidTestCase {
     public void testInviteParticipants() throws Exception {
         List<String> emailIds = new ArrayList<String>();
         emailIds.add("satishra@andrew.cmu.edu");
-        emailIds.add("rajaramr@andrew.cmu.edu");
         emailIds.add("satishmufc@gmail.com");
-        emailIds.add("yparthas@andrew.cmu.edu");
-        emailIds.add("satishr@sase.ssn.edu.in");
-        instance.inviteParticipants("Sr0jtVyma6", emailIds);
+        instance.inviteParticipants("BAB2EswEUn", emailIds);
     }
 
     public void testCreateEvent() throws Exception {
