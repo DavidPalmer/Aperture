@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:layout_toStartOf="@+id/imageButton"
-        android:layout_toLeftOf="@+id/imageButton" />
+        android:layout_toLeftOf="@+id/imageButton"
+        android:hint="Email" />
 
     <ImageButton
         style="?android:attr/buttonStyleSmall"
@@ -26,14 +27,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/button2"
-        android:layout_below="@+id/button" />
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,8 +34,9 @@
         android:text="Invite"
         android:id="@+id/button2"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignTop="@+id/button3"
+        android:layout_alignRight="@+id/listView"
+        android:layout_alignEnd="@+id/listView" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -53,5 +47,15 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/button"
         android:layout_toStartOf="@+id/button" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_toStartOf="@+id/button"
+        android:layout_above="@+id/button2"
+        android:layout_alignRight="@+id/button"
+        android:layout_alignEnd="@+id/button"
+        android:layout_below="@+id/button" />
 
 </RelativeLayout>

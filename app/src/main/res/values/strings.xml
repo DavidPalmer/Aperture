@@ -23,5 +23,6 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="register1">New User ? <b><u>Register</u></b></string>
     <string name="title_activity_contact">ContactActivity</string>
+    <string name="start_date">Start Date</string>
 
 </resources>
