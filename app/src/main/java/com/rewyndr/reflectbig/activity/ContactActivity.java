@@ -36,37 +36,39 @@ public class ContactActivity extends Activity {
     }
 
     public void fetch() {
-        HashSet<String> emlRecsHS = new HashSet<String>();
-        Context context = this;
-        ContentResolver cr = context.getContentResolver();
-        String[] PROJECTION = new String[] { ContactsContract.RawContacts._ID,
-                ContactsContract.Contacts.DISPLAY_NAME,
-                ContactsContract.Contacts.PHOTO_ID,
-                ContactsContract.CommonDataKinds.Email.DATA,
-                ContactsContract.CommonDataKinds.Photo.CONTACT_ID };
-        String order = "CASE WHEN " + ContactsContract.Contacts.DISPLAY_NAME
-                + " NOT LIKE '%@%' THEN 1 ELSE 2 END, "
-                + ContactsContract.Contacts.DISPLAY_NAME + ", "
-                + ContactsContract.CommonDataKinds.Email.DATA
-                + " COLLATE NOCASE";
-        String filter = ContactsContract.CommonDataKinds.Email.DATA
-                + " NOT LIKE ''";
-        Cursor cur = cr.query(
-                ContactsContract.CommonDataKinds.Email.CONTENT_URI, PROJECTION,
-                filter, null, order);
-        if (cur.moveToFirst()) {
-            do {
-                // names comes in hand sometimes
-                String id = cur.getString(0);
-                String name = cur.getString(1);
-                String emlAddr = cur.getString(3);
-                Contacts contact = new Contacts(name, emlAddr, id);
-                if (emlRecsHS.add(emlAddr.toLowerCase())) {
-                    allContacts.add(contact);
-                }
-            } while (cur.moveToNext());
+        if(allContacts.isEmpty()) {
+            HashSet<String> emlRecsHS = new HashSet<String>();
+            Context context = this;
+            ContentResolver cr = context.getContentResolver();
+            String[] PROJECTION = new String[]{ContactsContract.RawContacts._ID,
+                    ContactsContract.Contacts.DISPLAY_NAME,
+                    ContactsContract.Contacts.PHOTO_ID,
+                    ContactsContract.CommonDataKinds.Email.DATA,
+                    ContactsContract.CommonDataKinds.Photo.CONTACT_ID};
+            String order = "CASE WHEN " + ContactsContract.Contacts.DISPLAY_NAME
+                    + " NOT LIKE '%@%' THEN 1 ELSE 2 END, "
+                    + ContactsContract.Contacts.DISPLAY_NAME + ", "
+                    + ContactsContract.CommonDataKinds.Email.DATA
+                    + " COLLATE NOCASE";
+            String filter = ContactsContract.CommonDataKinds.Email.DATA
+                    + " NOT LIKE ''";
+            Cursor cur = cr.query(
+                    ContactsContract.CommonDataKinds.Email.CONTENT_URI, PROJECTION,
+                    filter, null, order);
+            if (cur.moveToFirst()) {
+                do {
+                    // names comes in hand sometimes
+                    String id = cur.getString(0);
+                    String name = cur.getString(1);
+                    String emlAddr = cur.getString(3);
+                    Contacts contact = new Contacts(name, emlAddr, id);
+                    if (emlRecsHS.add(emlAddr.toLowerCase())) {
+                        allContacts.add(contact);
+                    }
+                } while (cur.moveToNext());
+            }
+            cur.close();
         }
-        cur.close();
     }
 
     @Override

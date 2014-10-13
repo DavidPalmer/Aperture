@@ -157,6 +157,7 @@ public class CreateEventActivity extends FragmentActivity {
                 EventService service = ServiceFactory.getEventServiceInstance(this);
                 try {
                     eventId = service.createEvent(newEvent);
+                    newEvent.setEventId(eventId);
                     status = "Success";
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -165,7 +166,7 @@ public class CreateEventActivity extends FragmentActivity {
                 Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, InviteEventActivity.class);
                 intent.putExtra("Error", Constants.CREATE_SCREEN_ERROR_MSG);
-                intent.putExtra("eventId", eventId);
+                intent.putExtra("event", newEvent);
                 startActivity(intent);
             }
         }
