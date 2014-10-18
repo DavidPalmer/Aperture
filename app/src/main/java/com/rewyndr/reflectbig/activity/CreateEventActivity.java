@@ -223,7 +223,7 @@ public class CreateEventActivity extends FragmentActivity {
                 status = "Success";
                 Intent intent = new Intent(act, InviteEventActivity.class);
                 intent.putExtra("Error", Constants.CREATE_SCREEN_ERROR_MSG);
-                intent.putExtra("newEvent", newEvent);
+                intent.putExtra("event", newEvent);
                 startActivity(intent);
             }
             Toast.makeText(act, status, Toast.LENGTH_SHORT).show();
