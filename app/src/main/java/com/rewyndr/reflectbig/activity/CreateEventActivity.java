@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -42,7 +43,6 @@ public class CreateEventActivity extends FragmentActivity {
     private boolean isEndDatePicked = false;
     private boolean isStartTimePicked = false;
     private boolean isEndTimePicked = false;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,7 +127,6 @@ public class CreateEventActivity extends FragmentActivity {
         String location = ((EditText) findViewById(R.id.createEvent_text_where)).getText().toString();
         /*String shortLocation = Utils.getShortLocation(location);*/
         String shortLocation = location;
-        String eventId = null;
         String[] sDate = ((Button) findViewById(R.id.btnStartChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
         String[] eDate = ((Button) findViewById(R.id.btnEndChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
         String[] sTime = ((Button) findViewById(R.id.btnStartChangeTime)).getText().toString().split(Constants.TIME_DELIMITER);
@@ -136,12 +135,12 @@ public class CreateEventActivity extends FragmentActivity {
                 || Constants.EMPTY_STRING.equals(location.trim()) || !(isStartDatePicked) || !(isStartTimePicked && isEndTimePicked)) {
             Toast.makeText(this, "Invalid data entered", Toast.LENGTH_SHORT).show();
         } else {
-            Date startDate = DateUtils.convertToDate(Integer.valueOf(sDate[1]), Integer.valueOf(sDate[0]), Integer.valueOf(sDate[2]), Integer.valueOf(sTime[0]), Integer.valueOf(sTime[1]));
+            Date startDate = DateUtils.convertToDate(Integer.valueOf(sDate[1]), Integer.valueOf(sDate[0]) - 1, Integer.valueOf(sDate[2]), Integer.valueOf(sTime[0]), Integer.valueOf(sTime[1]));
             Date endDate = null;
             if(isEndDatePicked)
-                endDate = DateUtils.convertToDate(Integer.valueOf(eDate[1]), Integer.valueOf(eDate[0]), Integer.valueOf(eDate[2]), Integer.valueOf(eTime[0]), Integer.valueOf(eTime[1]));
+                endDate = DateUtils.convertToDate(Integer.valueOf(eDate[1]), Integer.valueOf(eDate[0]) - 1, Integer.valueOf(eDate[2]), Integer.valueOf(eTime[0]), Integer.valueOf(eTime[1]));
             else
-                endDate = DateUtils.convertToDate(Integer.valueOf(sDate[1]), Integer.valueOf(sDate[0]), Integer.valueOf(sDate[2]), Integer.valueOf(eTime[0]), Integer.valueOf(eTime[1]));
+                endDate = DateUtils.convertToDate(Integer.valueOf(sDate[1]), Integer.valueOf(sDate[0]) - 1, Integer.valueOf(sDate[2]), Integer.valueOf(eTime[0]), Integer.valueOf(eTime[1]));
             if(endDate.getTime() - startDate.getTime() <= 0) {
                 Toast.makeText(this, "Error in start and end date", Toast.LENGTH_SHORT).show();
             } else {
@@ -153,21 +152,7 @@ public class CreateEventActivity extends FragmentActivity {
                 newEvent.setLatitude(0);
                 newEvent.setLongitude(0);
                 newEvent.setShortLocation(shortLocation);
-                String status = "";
-                EventService service = ServiceFactory.getEventServiceInstance(this);
-                try {
-                    eventId = service.createEvent(newEvent);
-                    newEvent.setEventId(eventId);
-                    status = "Success";
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    status = "Failure";
-                }
-                Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, InviteEventActivity.class);
-                intent.putExtra("Error", Constants.CREATE_SCREEN_ERROR_MSG);
-                intent.putExtra("event", newEvent);
-                startActivity(intent);
+                new UseDBService().execute(newEvent);
             }
         }
     }
@@ -206,5 +191,47 @@ public class CreateEventActivity extends FragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class UseDBService extends AsyncTask<Event, Void, String> {
+        Event newEvent;
+
+        public UseDBService() {
+        }
+
+        @Override
+        protected String doInBackground(Event... events) {
+            newEvent = events[0];
+            EventService service = ServiceFactory.getEventServiceInstance(CreateEventActivity.this);
+            String eventId = "";
+            try {
+                eventId = service.createEvent(events[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return eventId;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            String status = "";
+            if(result.equals("")) {
+                status = "Failure";
+            } else {
+                newEvent.setEventId(result);
+                status = "Success";
+                Intent intent = new Intent(act, InviteEventActivity.class);
+                intent.putExtra("Error", Constants.CREATE_SCREEN_ERROR_MSG);
+                intent.putExtra("newEvent", newEvent);
+                startActivity(intent);
+            }
+            Toast.makeText(act, status, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
     }
 }
