@@ -5,4 +5,10 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never"/>
+    <item
+        android:id="@+id/addAttendee"
+        android:icon="@drawable/ic_action_add_person"
+        android:showAsAction="always"
+        android:title="@string/title_activity_photo_multi_view"
+        android:visible="false"/>
 </menu>

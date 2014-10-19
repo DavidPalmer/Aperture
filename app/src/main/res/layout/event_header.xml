@@ -6,4 +6,5 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:minHeight="@dimen/abc_action_bar_subtitle_text_size"
-    android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    android:textColor="@color/abc_search_url_text_holo" />

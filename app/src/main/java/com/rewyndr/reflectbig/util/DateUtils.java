@@ -2,6 +2,8 @@ package com.rewyndr.reflectbig.util;
 
 import com.rewyndr.reflectbig.model.EventStatus;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,5 +27,10 @@ public class DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, day, hour, minute);
         return cal.getTime();
+    }
+
+    public static String getDateInFormat(Date date, String format) {
+        DateFormat formatter  = new SimpleDateFormat(format);
+        return formatter.format(date);
     }
 }

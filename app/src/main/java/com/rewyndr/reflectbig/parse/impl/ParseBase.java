@@ -29,11 +29,6 @@ public abstract class ParseBase {
             ParseObject.registerSubclass(InviteeParse.class);
             Parse.initialize(context, context.getResources().getString(R.string.parse_app_id), context.getResources().getString(R.string.parse_client_key));
             initialised = true;
-            try {
-                ParseUser.logIn("dradhakr@andrew.cmu.edu", "password");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

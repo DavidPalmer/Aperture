@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.rewyndr.reflectbig.R;
+import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.common.YNType;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.AttendeeStatus;
@@ -81,7 +84,7 @@ public class EventDetailActivity extends Activity {
     public void attendeeList(View view) {
         Intent intent = new Intent(this, AttendeeListActivity.class);
         intent.putStringArrayListExtra("Attendees", (ArrayList<String>) listOfAttendes);
-        startActivity(intent);
+        startActivityForResult(intent, 1234);
     }
 
     public void onClickAccept(View view) {
@@ -114,22 +117,28 @@ public class EventDetailActivity extends Activity {
         text_status.setText(AttendeeStatus.DECLINED.toString());
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.event_detail_layout, menu);
+        if (event.getStatus().equals(EventStatus.CURRENT) || event.getStatus().equals(EventStatus.UPCOMING)) {
+            menu.findItem(R.id.addAttendee).setVisible(true);
+        }
         return true;
-    }*/
+    }
 
-    /*@Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.addAttendee) {
+            Intent intent = new Intent(this, InviteEventActivity.class);
+            intent.putExtra("Error", "");
+            intent.putExtra("event", event);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 }

@@ -8,28 +8,54 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.rewyndr.reflectbig.activity.InviteEventActivity">
 
-    <TextView
-        android:id="@+id/event_invite_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/title_invite_event"
-        android:textSize="45dp" />
-
     <EditText
         android:id="@+id/email_invite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_invite_title"
-        android:layout_marginTop="60dp"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:layout_toStartOf="@+id/imageButton"
+        android:layout_toLeftOf="@+id/imageButton"
+        android:hint="Email" />
+
+    <ImageButton
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_person"
+        android:id="@+id/button"
+        android:onClick="fetch"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/email_invite"
-        android:layout_margin="26dp"
         android:onClick="inviteEmail"
-        android:text="Invite" />
+        android:text="Invite"
+        android:id="@+id/button2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/button3"
+        android:layout_alignRight="@+id/listView"
+        android:layout_alignEnd="@+id/listView" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:src="@drawable/ic_action_new"
+        android:onClick="addEmail"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/button"
+        android:layout_toStartOf="@+id/button" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_toStartOf="@+id/button"
+        android:layout_above="@+id/button2"
+        android:layout_alignRight="@+id/button"
+        android:layout_alignEnd="@+id/button"
+        android:layout_below="@+id/button" />
 
 </RelativeLayout>

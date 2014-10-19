@@ -2,6 +2,7 @@ package com.rewyndr.reflectbig.parse.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 /**
  * Created by Satish on 9/7/2014.
@@ -23,5 +24,13 @@ public class InviteeParse extends ParseObject {
 
     public void setEvent(EventParse event) {
         put(FieldNames.INVITEE_EVENT, event);
+    }
+
+    public ParseUser getInvitedBy() {
+        return getParseUser(FieldNames.ATTENDEE_INVITED_BY);
+    }
+
+    public void setInvitedBy(ParseUser invitedBy) {
+        put(FieldNames.ATTENDEE_INVITED_BY, invitedBy);
     }
 }

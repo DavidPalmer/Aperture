@@ -6,12 +6,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -25,7 +21,6 @@ import com.rewyndr.reflectbig.interfaces.LoginService;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -108,6 +103,11 @@ public class LoginActivity extends Activity {
         mEmailView.setAdapter(adapter);
     }
 
+    public void signUp(View view) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
+    }
+
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -126,4 +126,12 @@ public class LoginActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }*/
+
+    @Override
+    public void onBackPressed() {
+        Intent setIntent = new Intent(Intent.ACTION_MAIN);
+        setIntent.addCategory(Intent.CATEGORY_HOME);
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(setIntent);
+    }
 }
