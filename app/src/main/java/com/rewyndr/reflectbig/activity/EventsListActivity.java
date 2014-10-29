@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -58,9 +59,13 @@ public class EventsListActivity extends Activity {
         try {
             EventService eventService = ServiceFactory.getEventServiceInstance(this);
             Map<EventStatus, List<Event>> eventStatusListHashMap = eventService.getEvents();
-            pastEventList = (ArrayList<Event>) eventStatusListHashMap.get(EventStatus.PAST);
-            currentEventList = (ArrayList<Event>) eventStatusListHashMap.get(EventStatus.CURRENT);
-            upcomingEventList = (ArrayList<Event>) eventStatusListHashMap.get(EventStatus.UPCOMING);
+            pastEventList.clear();
+            currentEventList.clear();
+            upcomingEventList.clear();
+            pastEventList.addAll(eventStatusListHashMap.get(EventStatus.PAST));
+            currentEventList.addAll(eventStatusListHashMap.get(EventStatus.CURRENT));
+            upcomingEventList.addAll(eventStatusListHashMap.get(EventStatus.UPCOMING));
+            Log.d("test", pastEventList.size() + " " + currentEventList.size() + " " + upcomingEventList.size());
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -91,6 +96,11 @@ public class EventsListActivity extends Activity {
         } if (id == R.id.addEvent) {
             Intent intent = new Intent(this, CreateEventActivity.class);
             startActivity(intent);
+        }
+        if (id == R.id.user_refresh) {
+            getEventData();
+            eventListAdapter.notifyDataSetChanged();
+            Log.d("err", eventListAdapter.numberOfRows(0) + " " + eventListAdapter.numberOfRows(1) + " " + eventListAdapter.numberOfRows(2) + " ");
         }
         return super.onOptionsItemSelected(item);
     }

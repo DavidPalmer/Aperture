@@ -16,6 +16,7 @@
     <string name="title_activity_attendee_list">Attendees</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="user_logout">Logout</string>
+    <string name="refresh">refresh</string>
     <string name="single">Single Day</string>
     <string name="multi">Multi Day</string>
     <string name="title_activity_invite_event">InviteEventActivity</string>
