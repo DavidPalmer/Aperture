@@ -2,6 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.rewyndr.reflectbig.activity.PhotoMultiViewActivity">
     <item
+        android:id="@+id/photo_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:showAsAction="always"
+        android:title="@string/title_activity_photo_multi_view"
+        android:visible="false" />
+    <item
         android:id="@+id/camera"
         android:icon="@drawable/camera"
         android:showAsAction="always"
