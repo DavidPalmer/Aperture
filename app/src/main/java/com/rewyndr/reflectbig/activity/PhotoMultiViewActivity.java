@@ -156,6 +156,7 @@ public class PhotoMultiViewActivity extends Activity {
         try {
             Intent intent = getIntent();
             event = (Event) intent.getSerializableExtra("event");
+            setTitle(event.getEventName());
 //            addPhotoList();
             new DataSaveProgress(this).execute();
             imageAdapter = new ImageAdapter(this, photos);
@@ -182,7 +183,7 @@ public class PhotoMultiViewActivity extends Activity {
                     Intent i = new Intent(getApplicationContext(), SinglePhotoViewActivity.class);
                     // passing array index
                     i.putExtra("id", position);
-                    i.putExtra("eventId", event.getEventId());
+                    i.putExtra("event", event);
                     startActivity(i);
                 }
             });

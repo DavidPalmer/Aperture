@@ -48,6 +48,7 @@ public class CreateEventActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         act = this;
+        setTitle("Create New Event");
         setContentView(R.layout.activity_create_event);
         setPageAccordingToEventType();
     }

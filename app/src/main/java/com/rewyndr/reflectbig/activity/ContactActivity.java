@@ -29,6 +29,7 @@ public class ContactActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
         fetch();
+        setTitle("Add attendees");
         cadapter = new ContactAdapter(this, allContacts);
         ListView view = new ListView(this);
         view.setAdapter(cadapter);

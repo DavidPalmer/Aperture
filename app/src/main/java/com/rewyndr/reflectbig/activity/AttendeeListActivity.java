@@ -22,6 +22,7 @@ public class AttendeeListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendee_list);
         attendees = getIntent().getStringArrayListExtra("Attendees");
+        setTitle("Attendees");
         ListView view = (ListView) findViewById(R.id.list);
         final ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, attendees) {
