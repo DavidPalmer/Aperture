@@ -45,6 +45,7 @@ public class InviteEventActivity extends Activity {
         Intent intent = getIntent();
         errorMsg = intent.getStringExtra("Error");
         event = (Event) getIntent().getSerializableExtra("event");
+        setTitle(event.getEventName());
         view = (ListView) findViewById(R.id.listView);
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, emails) {

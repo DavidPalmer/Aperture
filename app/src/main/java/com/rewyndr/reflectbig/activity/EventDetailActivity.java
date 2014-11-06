@@ -41,6 +41,7 @@ public class EventDetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail_layout);
         event = (Event) getIntent().getSerializableExtra("event");
+        setTitle(event.getEventName());
         EventService fetchEventAttendees = ServiceFactory.getEventServiceInstance(this);
         try {
             listOfAttendes = fetchEventAttendees.getAttendees(event.getEventId());

@@ -100,6 +100,8 @@ public class PhotoMultiViewActivity extends Activity {
         getMenuInflater().inflate(R.menu.photo_multi_view, menu);
         if (event.getStatus().equals(EventStatus.CURRENT)) {
             menu.findItem(R.id.camera).setVisible(true);
+        } if (event.getStatus().equals(EventStatus.CURRENT)) {
+            menu.findItem(R.id.photo_refresh).setVisible(true);
         }
         return true;
     }
@@ -126,6 +128,10 @@ public class PhotoMultiViewActivity extends Activity {
             intent.putExtra("event", event);
             startActivity(intent);
         }
+        if (id == R.id.photo_refresh) {
+            addPhotoList();
+            imageAdapter.notifyDataSetChanged();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -150,6 +156,7 @@ public class PhotoMultiViewActivity extends Activity {
         try {
             Intent intent = getIntent();
             event = (Event) intent.getSerializableExtra("event");
+            setTitle(event.getEventName());
 //            addPhotoList();
             new DataSaveProgress(this).execute();
             imageAdapter = new ImageAdapter(this, photos);
@@ -176,7 +183,7 @@ public class PhotoMultiViewActivity extends Activity {
                     Intent i = new Intent(getApplicationContext(), SinglePhotoViewActivity.class);
                     // passing array index
                     i.putExtra("id", position);
-                    i.putExtra("eventId", event.getEventId());
+                    i.putExtra("event", event);
                     startActivity(i);
                 }
             });
@@ -191,13 +198,18 @@ public class PhotoMultiViewActivity extends Activity {
         try {
             size = viewPhoto.getCount(event.getEventId());
             List<String> urls = null;
+            if(photos.size() < start) {
+                start = 0;
+            }
             if (start < size) {
                 urls = viewPhoto.getPhotos(event.getEventId(), start + 1, start + BUFFER > size ? size : start + BUFFER, PhotoType.THUMBNAIL);
                 start += BUFFER;
+                photos.clear();
                 for (String url : urls) {
                     Photo p = new Photo(url);
                     photos.add(p);
                 }
+                Log.d("Photo",""+photos.size());
             }
         } catch (Exception e) {
             e.printStackTrace();

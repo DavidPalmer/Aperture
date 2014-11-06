@@ -1,7 +1,6 @@
 package com.rewyndr.reflectbig.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -26,7 +25,7 @@ import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.common.PhotoType;
 import com.rewyndr.reflectbig.common.PreferenceConstants;
 import com.rewyndr.reflectbig.interfaces.PhotoService;
-import com.rewyndr.reflectbig.service.ImageLoader;
+import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 import com.squareup.picasso.Picasso;
 
@@ -34,12 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SinglePhotoViewActivity extends Activity {
+    final String className = this.getClass().getName();
     int currentId = 0;
     private ImageSwitcher mImageSwitcher;
     private View mOverscrollLeft;
     private View mOverscrollRight;
     private GestureDetector mGestureDetector;
-    private int mCurrentPosition = 0;
+    private Integer mCurrentPosition = null;
     private Animation mSlideInLeft;
     private Animation mSlideOutRight;
     private Animation mSlideInRight;
@@ -50,7 +50,7 @@ public class SinglePhotoViewActivity extends Activity {
     private int currentEnd = 0;
     private List<String> mImages = new ArrayList<String>();
     private String eventId = "";
-    private Context context = this;
+    private Event event = null;
 
     private static int getEndLimit(int currentId, int total) {
         int start = (currentId + Constants.FETCH_LENGTH);
@@ -63,13 +63,16 @@ public class SinglePhotoViewActivity extends Activity {
 
     public void setCurrentId() {
         Intent intent = getIntent();
-        currentId = intent.getExtras().getInt("id") + 1;
-        eventId = intent.getExtras().getString("eventId");
+        currentId = intent.getExtras().getInt("id");
+        event = (Event) intent.getSerializableExtra("event");
+        eventId = event.getEventId();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setCurrentId();
+        setTitle(event.getEventName());
         setContentView(R.layout.activity_image_view);
         mImageSwitcher = (ImageSwitcher) findViewById(R.id.image);
         mOverscrollLeft = findViewById(R.id.overscroll_left);
@@ -77,7 +80,7 @@ public class SinglePhotoViewActivity extends Activity {
         SharedPreferences preferences = getSharedPreferences(PreferenceConstants.PREFERENCE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         if(preferences.getBoolean(PreferenceConstants.WAS_PAUSED, false)) {
-            editor.putInt(PreferenceConstants.CURRENT_POSITION, 0);
+            editor.putString(PreferenceConstants.CURRENT_POSITION, String.valueOf(0));
             editor.putBoolean(PreferenceConstants.WAS_PAUSED, false);
             editor.commit();
         }
@@ -100,7 +103,6 @@ public class SinglePhotoViewActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        mCurrentPosition = getCurrentPositionFromPause();
 
         // Read the value from preferences to check if application was just minimized. This can be checked by checking the value of
         // was_paused. As, it will be made to false if destroyed, but it will be true if just paused and waiting for resume
@@ -113,7 +115,6 @@ public class SinglePhotoViewActivity extends Activity {
             editor.remove(PreferenceConstants.WAS_PAUSED);
         } else {
             // This gets executed on happy scenarios
-            setCurrentId();
             PhotoService service = ServiceFactory.getPhotoServiceInstance(this);
             int total = 0;
             try {
@@ -128,9 +129,8 @@ public class SinglePhotoViewActivity extends Activity {
                 e.printStackTrace();
             }
 
-            if (mCurrentPosition == 0) {
-                mCurrentPosition = currentId - start;
-            }
+            String prevValue = getCurrentPositionFromPause();
+            mCurrentPosition = (prevValue == null) ? currentId : Integer.valueOf(prevValue);
 
             // Animations
             mSlideInLeft = AnimationUtils.loadAnimation(this,
@@ -143,7 +143,7 @@ public class SinglePhotoViewActivity extends Activity {
                     .loadAnimation(this, R.anim.fade_out);
             mOverscrollRightFadeOut = AnimationUtils.loadAnimation(this,
                     R.anim.fade_out);
-
+            Log.d(className, "Current Position : " + String.valueOf(mCurrentPosition));
             loadImage(mCurrentPosition);
             currentStart = Math.max(currentId - Constants.FETCH_LENGTH, Constants.IMAGE_START_ID);
             currentEnd = Math.min(currentId + Constants.FETCH_LENGTH, total);
@@ -158,7 +158,7 @@ public class SinglePhotoViewActivity extends Activity {
             mImageSwitcher.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("Clicked", "Came here");
+                    Log.d(className, "Came here");
                     final View contentView = findViewById(R.id.image);
                     contentView.setLayoutParams(new ViewGroup.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT));
                 }
@@ -166,9 +166,9 @@ public class SinglePhotoViewActivity extends Activity {
         }
     }
 
-    private int getCurrentPositionFromPause() {
+    private String getCurrentPositionFromPause() {
         SharedPreferences preferences = getSharedPreferences(PreferenceConstants.PREFERENCE_NAME, MODE_PRIVATE);
-        return preferences.getInt(PreferenceConstants.CURRENT_POSITION, 0);
+        return preferences.getString(PreferenceConstants.CURRENT_POSITION, null);
     }
 
     @Override
@@ -178,6 +178,7 @@ public class SinglePhotoViewActivity extends Activity {
         // There are two times when this activity gets destroyed.
         // When orientation gets changed, the isFinishing() -> False and hence the current position is retained
         // When back is pressed, current position is to be removed
+        Log.d(className, "Calling On Destroy()");
         SharedPreferences preferences = getSharedPreferences(PreferenceConstants.PREFERENCE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(PreferenceConstants.WAS_PAUSED, false);
@@ -194,7 +195,7 @@ public class SinglePhotoViewActivity extends Activity {
         // Saving the current position and paused status for next processing.
         SharedPreferences preferences = getSharedPreferences(PreferenceConstants.PREFERENCE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(PreferenceConstants.CURRENT_POSITION, mCurrentPosition);
+        editor.putString(PreferenceConstants.CURRENT_POSITION, String.valueOf(mCurrentPosition));
         editor.putBoolean(PreferenceConstants.WAS_PAUSED, true);
         editor.commit();
     }
@@ -203,17 +204,17 @@ public class SinglePhotoViewActivity extends Activity {
         int nextImagePos = mCurrentPosition + delta;
         if (nextImagePos < 0) {
             int currentEnd = currentStart + mImages.size();
-            Log.d(this.getClass().getName(), "Current URLs start " + currentStart + "end " + currentEnd);
+            Log.d(className, "Current URLs start " + currentStart + "end " + currentEnd);
 
             int fetchStart = Math.max(currentStart - Constants.FETCH_LENGTH, 0);
             int fetchEnd = currentStart - 1;
-            Log.d(this.getClass().getName(), "URls start " + fetchStart + "end " + fetchEnd);
+            Log.d(className, "URls start " + fetchStart + "end " + fetchEnd);
 
             PhotoService viewPhoto = ServiceFactory.getPhotoServiceInstance(this);
             List<String> newUrls = new ArrayList<String>();
             try {
                 newUrls = viewPhoto.getPhotos(eventId, fetchStart, fetchEnd, PhotoType.SMALL);
-                Log.d(this.getClass().getName(), "URls size " + newUrls.size());
+                Log.d(className, "URls size " + newUrls.size());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -229,14 +230,14 @@ public class SinglePhotoViewActivity extends Activity {
         }
         if (nextImagePos >= mImages.size()) {
             int currentStart = currentEnd - mImages.size();
-            Log.d(this.getClass().getName(), "Current URLs start " + currentStart + "end " + currentEnd);
+            Log.d(className, "Current URLs start " + currentStart + "end " + currentEnd);
 
             PhotoService viewPhoto = ServiceFactory.getPhotoServiceInstance(this);
             int total = viewPhoto.getCount(eventId);
             int fetchStart = currentEnd + 1;
             int fetchEnd = Math.min(currentEnd + Constants.FETCH_LENGTH, total);
             List<String> newUrls = viewPhoto.getPhotos(eventId, fetchStart, fetchEnd, PhotoType.SMALL);
-            Log.d(this.getClass().getName(), "URls size " + newUrls.size());
+            Log.d(className, "URls size " + newUrls.size());
             if (newUrls.size() == 0) {
                 mOverscrollRight.setVisibility(View.VISIBLE);
                 mOverscrollRight.startAnimation(mOverscrollRightFadeOut);
@@ -254,6 +255,7 @@ public class SinglePhotoViewActivity extends Activity {
 
     private void loadImage(int mCurrentPosition) {
         ImageView view = new ImageView(this);
+        Log.d(className, "Total Url size : " + mImages.size());
         new DownloadClass(mImageSwitcher, view).execute(mImages.get(mCurrentPosition));
 
         /* Have to make use of some caching mechanism. This below is DIL's Mechanism. But this is not working for me. See this.
@@ -315,7 +317,7 @@ public class SinglePhotoViewActivity extends Activity {
             try {
                 result = Picasso.with(SinglePhotoViewActivity.this).load(urldisplay).resize(1024, 768).centerInside().get();
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
+                Log.e(className + " : Error", e.getMessage());
                 e.printStackTrace();
             }
             imgView.setImageBitmap(result);

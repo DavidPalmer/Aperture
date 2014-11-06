@@ -2,6 +2,7 @@ package com.rewyndr.reflectbig.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,6 +102,7 @@ public class EventListAdapter extends SectionAdapter {
         }
         ViewHolder holder = (ViewHolder) view.getTag();
         if (section == 0 && pastEventList != null) {
+            view.setBackgroundResource(Color.TRANSPARENT);
             holder.eventName.setText(pastEventList.get(row).getEventName());
             holder.eventDate.setText(new SimpleDateFormat("MMM dd, yyyy").format(pastEventList.get(row).getStartDate()));
             holder.eventLocation.setText(pastEventList.get(row).getShortLocation());
@@ -114,6 +116,7 @@ public class EventListAdapter extends SectionAdapter {
                 holder.eventConfirmation.setImageResource(R.drawable.ic_action_warning);
         }
         if (section == 1 && currentEventList != null) {
+            view.setBackgroundResource(R.drawable.green_gradiant);
             holder.eventName.setText(currentEventList.get(row).getEventName());
             holder.eventDate.setText(new SimpleDateFormat("MMM dd, yyyy").format(currentEventList.get(row).getStartDate()));
             holder.eventLocation.setText(currentEventList.get(row).getShortLocation());
@@ -127,6 +130,7 @@ public class EventListAdapter extends SectionAdapter {
                 holder.eventConfirmation.setImageResource(R.drawable.ic_action_warning);
         }
         if (section == 2 && upcomingEventList != null) {
+            view.setBackgroundResource(Color.TRANSPARENT);
             holder.eventName.setText(upcomingEventList.get(row).getEventName());
             holder.eventDate.setText(new SimpleDateFormat("MMM dd, yyyy").format(upcomingEventList.get(row).getStartDate()));
             holder.eventLocation.setText(upcomingEventList.get(row).getShortLocation());
@@ -168,6 +172,7 @@ public class EventListAdapter extends SectionAdapter {
             convertView.setBackgroundResource(R.drawable.header_color);
         return convertView;
     }
+
 
     @Override
     public void onRowItemClick(AdapterView<?> parent, View view, int section, int row, long id) {

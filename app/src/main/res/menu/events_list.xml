@@ -6,6 +6,11 @@
         android:showAsAction="never"
         android:title="@string/user_logout" />
     <item
+        android:id="@+id/user_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:showAsAction="always"
+        android:title="@string/refresh" />
+    <item
         android:id="@+id/addEvent"
         android:icon="@drawable/add_event"
         android:showAsAction="always"
