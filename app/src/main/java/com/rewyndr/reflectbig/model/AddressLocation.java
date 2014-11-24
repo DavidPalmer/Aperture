@@ -27,7 +27,7 @@ public class AddressLocation implements Serializable{
      * @param latitude
      * @param address
      */
-    public AddressLocation(double longitude, double latitude, String address, int radiusFence) {
+    public AddressLocation(double latitude, double longitude, String address, int radiusFence) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.address = address;
@@ -75,5 +75,10 @@ public class AddressLocation implements Serializable{
 
     public void setRadiusFence(int radiusFence) {
         this.radiusFence = radiusFence;
+    }
+
+    @Override
+    public String toString() {
+        return this.address + " - Latitude : " + this.latitude + " Longitude : " + this.longitude + " - Short location : " + this.shortAddress;
     }
 }

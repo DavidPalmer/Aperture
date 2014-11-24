@@ -131,6 +131,9 @@ public class CreateEventActivity extends FragmentActivity {
 
     public void selectFromMap(View view) {
         Intent intent = new Intent(getApplicationContext(), MapAddressActivity.class);
+        if(location != null) {
+            intent.putExtra("address", location);
+        }
         startActivityForResult(intent, REQUEST_CODE);
     }
 

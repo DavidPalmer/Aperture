@@ -39,7 +39,6 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
     private int fence;
     String CURRENT_CLASS = this.getClass().getName();
     private AddressLocation loc = null;
-    private Location current = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,14 +88,20 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
         Log.d(CURRENT_CLASS, "GPS Accessible : " + isGPSEnabled);
         if(isNetworkEnabled) {
             Log.d(CURRENT_CLASS, "Fetching location from best possible option");
-            LatLng myLocation = null;
-            if (current != null) {
-                myLocation = new LatLng(current.getLatitude(),
-                        current.getLongitude());
+            loc = (AddressLocation) getIntent().getSerializableExtra("address");
+            if (loc != null) {
+                EditText add = (EditText) findViewById(R.id.editText);
+                add.setText(loc.getAddress());
+                Log.d(CURRENT_CLASS, "Showing from already existing location");
+                Log.d(CURRENT_CLASS, loc.toString());
+                LatLng myLocation = new LatLng(loc.getLatitude(),
+                        loc.getLongitude());
                 CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(myLocation, 5);
                 mMap.animateCamera(yourLocation);
+                addMarker(myLocation);
             } else {
-                service.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, null);
+                Log.d(CURRENT_CLASS, "Requesting for new location update");
+                service.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 100, this);
             }
         } else {
             Log.d(CURRENT_CLASS, "Fetching location from GPS");
@@ -119,6 +124,7 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
 
     @Override
     public void onLocationChanged(Location location) {
+        moveToTheAddress(location.getLatitude(), location.getLongitude(), 10);
     }
 
     /**
@@ -165,13 +171,11 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
 
     /**
      * An utility method which helps to focus on the current location of the user in the Map which is rendered.
-     * @param currentLocation
      */
-    private void moveToTheAddress(AddressLocation currentLocation) {
+    private void moveToTheAddress(double latitude, double longitude, int zoomHeight) {
         CameraUpdate center =
-                CameraUpdateFactory.newLatLng(new LatLng(currentLocation.getLatitude(),
-                        currentLocation.getLongitude()));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+                CameraUpdateFactory.newLatLng(new LatLng(latitude,longitude));
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(zoomHeight);
         mMap.moveCamera(center);
         mMap.animateCamera(zoom);
     }
@@ -182,14 +186,15 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
         List<Address> address;
         try {
             address = coder.getFromLocationName(strAddress,1);
-            if (address == null) {
+            if (strAddress == null || strAddress.equals("") || address == null || address.size() == 0) {
                 Toast.makeText(this, "Wrong Address! Try again", Toast.LENGTH_SHORT).show();
             } else {
                 Address location = address.get(0);
-                double lat = (double) (location.getLatitude());
-                double longi = (double) (location.getLongitude());
+                double lat = location.getLatitude();
+                double longi = location.getLongitude();
                 LatLng point = new LatLng(lat, longi);
                 addMarker(point);
+                moveToTheAddress(lat, longi, 15);
                 loc = new AddressLocation(point.latitude, point.longitude, strAddress, fence);
                 loc.setShortAddress(strAddress.split(",")[0]);
             }
