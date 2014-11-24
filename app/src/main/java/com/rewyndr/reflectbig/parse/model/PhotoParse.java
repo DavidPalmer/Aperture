@@ -3,6 +3,7 @@ package com.rewyndr.reflectbig.parse.model;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 /**
  * This class represents the model for the <tt>Photo</tt> datatype in Parse
@@ -49,5 +50,13 @@ public class PhotoParse extends ParseObject {
 
     public void setEvent(EventParse event) {
         put(FieldNames.PHOTO_EVENT, event);
+    }
+
+    public ParseUser getTakenBy() {
+        return getParseUser(FieldNames.PHOTO_TAKEN_BY);
+    }
+
+    public void setTakenBy(ParseUser user) {
+        put(FieldNames.PHOTO_TAKEN_BY, user);
     }
 }

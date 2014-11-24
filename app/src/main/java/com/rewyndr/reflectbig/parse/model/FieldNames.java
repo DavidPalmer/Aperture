@@ -18,6 +18,8 @@ public class FieldNames {
 
     public static final String PHOTO_EVENT = "event";
 
+    public static final String PHOTO_TAKEN_BY = "takenBy";
+
     // Event
     public static final String EVENT_NAME = "eventName";
 
