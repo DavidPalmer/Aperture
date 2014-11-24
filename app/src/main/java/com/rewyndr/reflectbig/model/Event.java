@@ -40,6 +40,8 @@ public class Event implements Serializable, Comparable {
 
     private double longitude;
 
+    private double fenceRadius;
+
     public String getEventDesc() {
         return eventDesc;
     }
@@ -158,6 +160,14 @@ public class Event implements Serializable, Comparable {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public double getFenceRadius() {
+        return fenceRadius;
+    }
+
+    public void setFenceRadius(double fenceRadius) {
+        this.fenceRadius = fenceRadius;
     }
 
     @Override

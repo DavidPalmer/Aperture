@@ -41,6 +41,8 @@ public class FieldNames {
 
     public static final String EVENT_GEO_LOCATION = "geoLocation";
 
+    public static final String EVENT_FENCE_RADIUS = "fenceRadius";
+
     // Attendee
     public static final String ATTENDEE_EVENT = "event";
 

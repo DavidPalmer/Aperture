@@ -224,6 +224,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         event.setAttendeesCount(eventParse.getAttendeesCount());
         event.setLatitude(eventParse.getGeoLocation().getLatitude());
         event.setLongitude(eventParse.getGeoLocation().getLongitude());
+        event.setFenceRadius(eventParse.getFenceRadius());
         return event;
     }
 
@@ -238,6 +239,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         eventParse.setCreatedBy(ParseUser.getCurrentUser());
         eventParse.setGeoLocation(new ParseGeoPoint(event.getLatitude(), event.getLongitude()));
         eventParse.setAttendeesCount(1);
+        eventParse.setFenceRadius(event.getFenceRadius());
         return eventParse;
     }
 
