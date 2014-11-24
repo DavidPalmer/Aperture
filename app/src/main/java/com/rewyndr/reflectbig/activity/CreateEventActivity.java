@@ -155,20 +155,11 @@ public class CreateEventActivity extends FragmentActivity {
         String eventName = ((EditText) findViewById(R.id.createEvent_text_event_name)).getText().toString();
         String eventDescription = ((EditText) findViewById(R.id.createEvent_text_event_description)).getText().toString();
         String location = ((TextView) findViewById(R.id.createEvent_text_where)).getText().toString();
-        if(this.location == null) {
-            Geocoder geocoder = new Geocoder(getApplicationContext());
-            try {
-                geocoder.getFromLocationName(location, 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        /*String shortLocation = Utils.getShortLocation(location);*/
-        String shortLocation = location;
         String[] sDate = ((Button) findViewById(R.id.btnStartChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
         String[] eDate = ((Button) findViewById(R.id.btnEndChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
         String[] sTime = ((Button) findViewById(R.id.btnStartChangeTime)).getText().toString().split(Constants.TIME_DELIMITER);
         String[] eTime = ((Button) findViewById(R.id.btnEndChangeTime)).getText().toString().split(Constants.TIME_DELIMITER);
+
         if (Constants.EMPTY_STRING.equals(eventName.trim()) || Constants.EMPTY_STRING.equals(eventDescription.trim())
                 || Constants.EMPTY_STRING.equals(location.trim()) || !(isStartDatePicked) || !(isStartTimePicked && isEndTimePicked)) {
             Toast.makeText(this, "Invalid data entered", Toast.LENGTH_SHORT).show();
@@ -186,10 +177,10 @@ public class CreateEventActivity extends FragmentActivity {
                 newEvent.setEventDesc(eventDescription);
                 newEvent.setStartDate(startDate);
                 newEvent.setEndDate(endDate);
-                newEvent.setLocation(location);
-                newEvent.setLatitude(0);
-                newEvent.setLongitude(0);
-                newEvent.setShortLocation(shortLocation);
+                newEvent.setLocation(this.location.getAddress());
+                newEvent.setLatitude(this.location.getLatitude());
+                newEvent.setLongitude(this.location.getLongitude());
+                newEvent.setShortLocation(this.location.getShortAddress());
                 new UseDBService().execute(newEvent);
             }
         }
