@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -18,22 +19,28 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.interfaces.EventService;
+import com.rewyndr.reflectbig.model.AddressLocation;
+import com.rewyndr.reflectbig.model.Contacts;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 import com.rewyndr.reflectbig.util.DateUtils;
 import com.rewyndr.reflectbig.util.Utils;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class CreateEventActivity extends FragmentActivity {
+    private int REQUEST_CODE = 12345;
     private String CLASS_NAME = this.getClass().getName();
     private static Button currentDateButton;
     private static Button currentTimeButton;
@@ -43,6 +50,7 @@ public class CreateEventActivity extends FragmentActivity {
     private boolean isEndDatePicked = false;
     private boolean isStartTimePicked = false;
     private boolean isEndTimePicked = false;
+    private AddressLocation location;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,11 +129,37 @@ public class CreateEventActivity extends FragmentActivity {
         setPageAccordingToEventType();
     }
 
+    public void selectFromMap(View view) {
+        Intent intent = new Intent(getApplicationContext(), MapAddressActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        switch (reqCode) {
+            case (12345):
+                if (resultCode == Activity.RESULT_OK) {
+                    location = (AddressLocation) data.getSerializableExtra("address");
+                    ((TextView) findViewById(R.id.createEvent_text_where)).setText(location.getAddress());
+                }
+                break;
+        }
+    }
+
     public void onClickCreate(View view) {
         Event newEvent = new Event();
         String eventName = ((EditText) findViewById(R.id.createEvent_text_event_name)).getText().toString();
         String eventDescription = ((EditText) findViewById(R.id.createEvent_text_event_description)).getText().toString();
-        String location = ((EditText) findViewById(R.id.createEvent_text_where)).getText().toString();
+        String location = ((TextView) findViewById(R.id.createEvent_text_where)).getText().toString();
+        if(this.location == null) {
+            Geocoder geocoder = new Geocoder(getApplicationContext());
+            try {
+                geocoder.getFromLocationName(location, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         /*String shortLocation = Utils.getShortLocation(location);*/
         String shortLocation = location;
         String[] sDate = ((Button) findViewById(R.id.btnStartChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
