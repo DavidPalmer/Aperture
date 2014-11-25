@@ -3,6 +3,7 @@ package com.rewyndr.reflectbig.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -40,7 +41,14 @@ public class EventDetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail_layout);
-        event = (Event) getIntent().getSerializableExtra("event");
+        if(getIntent().getData() != null) {
+            Uri uri = getIntent().getData();
+            String eventId = uri.getQueryParameter("eventId");
+            fetchEventFromEventId(eventId);
+            Log.d(this.getClass().getName(), getIntent().getData().toString());
+        } else {
+            event = (Event) getIntent().getSerializableExtra("event");
+        }
         setTitle(event.getEventName());
         EventService fetchEventAttendees = ServiceFactory.getEventServiceInstance(this);
         try {
@@ -52,6 +60,15 @@ public class EventDetailActivity extends Activity {
         TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
         if(event.getStatus().equals(EventStatus.PAST) || (!event.getMyStatus().equals(AttendeeStatus.NOT_RESPONDED))) {
             tl.removeView(decisionRow);
+        }
+    }
+
+    private void fetchEventFromEventId(String eventId) {
+        EventService service = ServiceFactory.getEventServiceInstance(this);
+        try {
+            event = service.getEvent(eventId);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
