@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
+import com.parse.codec.binary.StringUtils;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.common.YNType;
@@ -48,14 +49,11 @@ public class EventDetailActivity extends Activity {
             Log.d(this.getClass().getName(), getIntent().getData().toString());
         } else {
             event = (Event) getIntent().getSerializableExtra("event");
+            String eventId = event.getEventId();
+            fetchEventFromEventId(eventId);
         }
+
         setTitle(event.getEventName());
-        EventService fetchEventAttendees = ServiceFactory.getEventServiceInstance(this);
-        try {
-            listOfAttendes = fetchEventAttendees.getAttendees(event.getEventId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         TableLayout tl = (TableLayout) findViewById(R.id.table);
         TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
         if(event.getStatus().equals(EventStatus.PAST) || (!event.getMyStatus().equals(AttendeeStatus.NOT_RESPONDED))) {
@@ -100,9 +98,16 @@ public class EventDetailActivity extends Activity {
     }
 
     public void attendeeList(View view) {
+        EventService fetchEventAttendees = ServiceFactory.getEventServiceInstance(this);
+        try {
+            listOfAttendes = fetchEventAttendees.getAttendees(event.getEventId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent(this, AttendeeListActivity.class);
+        getIntent().putExtra("event", event);
         intent.putStringArrayListExtra("Attendees", (ArrayList<String>) listOfAttendes);
-        startActivityForResult(intent, 1234);
+        startActivity(intent);
     }
 
     public void onClickAccept(View view) {
@@ -116,8 +121,12 @@ public class EventDetailActivity extends Activity {
         TableLayout tl = (TableLayout) findViewById(R.id.table);
         TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
         tl.removeView(decisionRow);
+        event.setMyStatus(AttendeeStatus.ACCEPTED);
         TextView text_status = (TextView) findViewById(R.id.text_status);
         text_status.setText(AttendeeStatus.ACCEPTED.toString());
+        event.setAttendeesCount(event.getAttendeesCount() + 1);
+        TextView text_attendees = (TextView) findViewById(R.id.text_attendees);
+        text_attendees.setText(event.getAttendeesCount() + " people");
     }
 
     public void onClickDecline(View view) {
@@ -131,6 +140,7 @@ public class EventDetailActivity extends Activity {
         TableLayout tl = (TableLayout) findViewById(R.id.table);
         TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
         tl.removeView(decisionRow);
+        event.setMyStatus(AttendeeStatus.ACCEPTED);
         TextView text_status = (TextView) findViewById(R.id.text_status);
         text_status.setText(AttendeeStatus.DECLINED.toString());
     }
@@ -158,5 +168,12 @@ public class EventDetailActivity extends Activity {
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent data = new Intent();
+        data.putExtra("event", event);
+        finish();
     }
 }
