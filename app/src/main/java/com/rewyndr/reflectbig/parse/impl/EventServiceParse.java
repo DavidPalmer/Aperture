@@ -178,7 +178,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         params.put("eventtime", DateUtils.getDateInFormat(eventParse.getStartDateTime(), "E, MM/dd/yyyy, HH:mm"));
         List<String> attendeeId = new ArrayList<String>();
         for (AttendeeParse attendee : attendeeList) {
-            attendeeId.add(attendee.getAttendee().get(FieldNames.USER_NAME) + ":" + attendee.getAttendee().getUsername());
+            attendeeId.add(attendee.getAttendee().get(FieldNames.USER_NAME) + ":" + attendee.getAttendee().getUsername() + ":" + attendee.getAttendee().getObjectId());
         }
         List<String> inviteeId = new ArrayList<String>();
         for (InviteeParse invitee : inviteeList) {
