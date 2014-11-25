@@ -34,7 +34,6 @@
         android:text="Invite"
         android:id="@+id/button2"
         android:layout_alignParentBottom="true"
-        android:layout_alignTop="@+id/button3"
         android:layout_alignRight="@+id/listView"
         android:layout_alignEnd="@+id/listView" />
 

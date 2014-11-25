@@ -100,4 +100,12 @@ public class EventParse extends ParseObject {
     public void setGeoLocation(ParseGeoPoint geoLocation) {
         put(FieldNames.EVENT_GEO_LOCATION, geoLocation);
     }
+
+    public double getFenceRadius() {
+        return getDouble(FieldNames.EVENT_FENCE_RADIUS);
+    }
+
+    public void setFenceRadius(double fenceRadius) {
+        put(FieldNames.EVENT_FENCE_RADIUS, fenceRadius);
+    }
 }

@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,7 +15,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.parse.ParseUser;
+import com.parse.codec.binary.StringUtils;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.YNType;
 import com.rewyndr.reflectbig.interfaces.EventService;
@@ -37,18 +39,31 @@ public class EventDetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail_layout);
-        event = (Event) getIntent().getSerializableExtra("event");
-        setTitle(event.getEventName());
-        EventService fetchEventAttendees = ServiceFactory.getEventServiceInstance(this);
-        try {
-            listOfAttendes = fetchEventAttendees.getAttendees(event.getEventId());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(getIntent().getData() != null) {
+            Uri uri = getIntent().getData();
+            String eventId = uri.getQueryParameter("eventId");
+            fetchEventFromEventId(eventId);
+            Log.d(this.getClass().getName(), getIntent().getData().toString());
+        } else {
+            event = (Event) getIntent().getSerializableExtra("event");
+            String eventId = event.getEventId();
+            fetchEventFromEventId(eventId);
         }
+
+        setTitle(event.getEventName());
         TableLayout tl = (TableLayout) findViewById(R.id.table);
         TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
         if(event.getStatus().equals(EventStatus.PAST) || (!event.getMyStatus().equals(AttendeeStatus.NOT_RESPONDED))) {
             tl.removeView(decisionRow);
+        }
+    }
+
+    private void fetchEventFromEventId(String eventId) {
+        EventService service = ServiceFactory.getEventServiceInstance(this);
+        try {
+            event = service.getEvent(eventId);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -80,9 +95,16 @@ public class EventDetailActivity extends Activity {
     }
 
     public void attendeeList(View view) {
+        EventService fetchEventAttendees = ServiceFactory.getEventServiceInstance(this);
+        try {
+            listOfAttendes = fetchEventAttendees.getAttendees(event.getEventId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Intent intent = new Intent(this, AttendeeListActivity.class);
+        getIntent().putExtra("event", event);
         intent.putStringArrayListExtra("Attendees", (ArrayList<String>) listOfAttendes);
-        startActivityForResult(intent, 1234);
+        startActivity(intent);
     }
 
     public void onClickAccept(View view) {
@@ -96,9 +118,13 @@ public class EventDetailActivity extends Activity {
         TableLayout tl = (TableLayout) findViewById(R.id.table);
         TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
         tl.removeView(decisionRow);
+        event.setMyStatus(AttendeeStatus.ACCEPTED);
         TextView text_status = (TextView) findViewById(R.id.text_status);
         text_status.setText(AttendeeStatus.ACCEPTED.toString());
         setRecurringAlarm(getApplicationContext(), event.getStartDate().getTime());
+        event.setAttendeesCount(event.getAttendeesCount() + 1);
+        TextView text_attendees = (TextView) findViewById(R.id.text_attendees);
+        text_attendees.setText(event.getAttendeesCount() + " people");
     }
 
     public void onClickDecline(View view) {
@@ -112,6 +138,7 @@ public class EventDetailActivity extends Activity {
         TableLayout tl = (TableLayout) findViewById(R.id.table);
         TableRow decisionRow = (TableRow) findViewById(R.id.decisionRow);
         tl.removeView(decisionRow);
+        event.setMyStatus(AttendeeStatus.ACCEPTED);
         TextView text_status = (TextView) findViewById(R.id.text_status);
         text_status.setText(AttendeeStatus.DECLINED.toString());
     }
@@ -151,5 +178,12 @@ public class EventDetailActivity extends Activity {
                 time,
                 AlarmManager.INTERVAL_DAY, recurringDownload);
         Log.d("Service", "SCHEDULED");
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent data = new Intent();
+        data.putExtra("event", event);
+        finish();
     }
 }

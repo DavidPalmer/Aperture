@@ -262,11 +262,6 @@
                         android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize"/>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:src="@drawable/ic_action_next_item" />
                 </FrameLayout>
             </TableRow>
 

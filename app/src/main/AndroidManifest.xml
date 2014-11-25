@@ -1,61 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rewyndr.reflectbig" >
+    package="com.rewyndr.reflectbig">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission
+        android:protectionLevel="signature"
+        android:name="com.rewyndr.reflectbig.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.rewyndr.reflectbig.permission.C2D_MESSAGE" />
 
     <application
+        android:name=".ReflectBigApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.PhotoMultiViewActivity"
+            android:name="com.rewyndr.reflectbig.activity.PhotoMultiViewActivity"
             android:label="@string/title_activity_photo_multi_view"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SinglePhotoViewActivity"
+            android:name="com.rewyndr.reflectbig.activity.SinglePhotoViewActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activity.EventsListActivity"
-            android:label="@string/app_name" />
+            android:name="com.rewyndr.reflectbig.activity.EventsListActivity"
+            android:label="@string/app_name"></activity>
         <activity
-            android:name=".activity.EventDetailActivity"
-            android:label="@string/title_activity_event_detail_layout" />
+            android:name="com.rewyndr.reflectbig.activity.EventDetailActivity"
+            android:label="@string/title_activity_event_detail_layout">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="reflectbig" />
+            </intent-filter>
+        </activity>
+
         <activity
-            android:name=".activity.AttendeeListActivity"
+            android:name="com.rewyndr.reflectbig.activity.AttendeeListActivity"
             android:label="@string/title_activity_attendee_list" />
         <activity
-            android:name=".activity.LoginActivity"
-            android:label="@string/app_name" >
+            android:name="com.rewyndr.reflectbig.activity.LoginActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.InviteEventActivity"
+            android:name="com.rewyndr.reflectbig.activity.InviteEventActivity"
             android:label="@string/title_activity_invite_event"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activity.CreateEventActivity"
+            android:name="com.rewyndr.reflectbig.activity.CreateEventActivity"
             android:label="@string/title_activity_create_event" />
         <activity
-            android:name=".activity.RegisterActivity"
+            android:name="com.rewyndr.reflectbig.activity.RegisterActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activity.ContactActivity"
-            android:label="@string/title_activity_contact" >
-        </activity>
+            android:name="com.rewyndr.reflectbig.activity.ContactActivity"
+            android:label="@string/title_activity_contact"></activity>
 
         <receiver
             android:name=".activity.GalleryBroadcastReceiver"
@@ -65,6 +90,48 @@
             </intent-filter>
         </receiver>
         <service android:name=".activity.GalleryService" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name="com.rewyndr.reflectbig.activity.MapAddressActivity"
+            android:label="@string/title_activity_map_address"></activity>
+        <activity
+            android:name="com.rewyndr.reflectbig.activity.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+
+        <service android:name="com.parse.PushService" />
+
+        <receiver android:name="com.parse.ParseBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.parse.ParsePushBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.rewyndr.reflectbig" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

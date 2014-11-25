@@ -117,6 +117,10 @@ public class EventsListActivity extends Activity {
             eventListAdapter.notifyDataSetChanged();
             Log.d("err", eventListAdapter.numberOfRows(0) + " " + eventListAdapter.numberOfRows(1) + " " + eventListAdapter.numberOfRows(2) + " ");
         }
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
