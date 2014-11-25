@@ -45,7 +45,6 @@ import java.util.List;
 
 public class CreateEventActivity extends FragmentActivity {
     private int REQUEST_CODE = 12345;
-    private String CLASS_NAME = this.getClass().getName();
     private static Button currentDateButton;
     private static Button currentTimeButton;
     private static Activity act;

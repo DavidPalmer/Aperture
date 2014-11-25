@@ -55,7 +55,7 @@
                 <data android:scheme="reflectbig" />
             </intent-filter>
         </activity>
-        
+
         <activity
             android:name="com.rewyndr.reflectbig.activity.AttendeeListActivity"
             android:label="@string/title_activity_attendee_list" />
@@ -82,7 +82,7 @@
             android:name="com.rewyndr.reflectbig.activity.ContactActivity"
             android:label="@string/title_activity_contact"></activity>
 
-	<receiver
+        <receiver
             android:name=".activity.GalleryBroadcastReceiver"
             android:exported="false">
             <intent-filter>
@@ -90,7 +90,7 @@
             </intent-filter>
         </receiver>
         <service android:name=".activity.GalleryService" />
-	
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

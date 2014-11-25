@@ -178,6 +178,7 @@ public class EventDetailActivity extends Activity {
                 time,
                 AlarmManager.INTERVAL_DAY, recurringDownload);
         Log.d("Service", "SCHEDULED");
+    }
 
     @Override
     public void onBackPressed() {
