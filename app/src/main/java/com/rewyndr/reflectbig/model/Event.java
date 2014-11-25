@@ -184,6 +184,7 @@ public class Event implements Serializable, Comparable {
                 ", photosCount=" + photosCount +
                 ", createdBy='" + createdBy + '\'' +
                 ", invitedBy='" + invitedBy + '\'' +
+                ", fenceRadius='" + fenceRadius + '\'' +
                 '}';
     }
 

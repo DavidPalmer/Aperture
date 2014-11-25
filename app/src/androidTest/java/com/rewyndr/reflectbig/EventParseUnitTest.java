@@ -25,7 +25,7 @@ public class EventParseUnitTest extends AndroidTestCase {
 
     public void setUp() throws Exception {
         instance = EventServiceParse.getInstance(getContext());
-        ParseUser.logIn("yparthas@andrew.cmu.edu", "password");
+        ParseUser.logIn("satishra@andrew.cmu.edu", "password");
     }
 
     public void testGetEvents() throws Exception {
@@ -53,14 +53,15 @@ public class EventParseUnitTest extends AndroidTestCase {
 
     public void testCreateEvent() throws Exception {
         Event e = new Event();
-        e.setEventName("Dummy Event123");
-        e.setEventDesc("Dummy event description");
+        e.setEventName("Dummy Event");
+        e.setEventDesc("Dummy event for fence radius");
         e.setStartDate(new Date());
         e.setEndDate(new Date());
         e.setLocation("201 Conover Road, Pittsburgh, PA 15208");
         e.setShortLocation("Pittsburgh, PA");
         e.setLatitude(40.452842);
         e.setLongitude(-79.911363);
+        e.setFenceRadius(10);
         Log.d("Event Id---", instance.createEvent(e));
     }
 
