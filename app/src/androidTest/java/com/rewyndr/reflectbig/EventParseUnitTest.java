@@ -25,7 +25,7 @@ public class EventParseUnitTest extends AndroidTestCase {
 
     public void setUp() throws Exception {
         instance = EventServiceParse.getInstance(getContext());
-        ParseUser.logIn("satishra@andrew.cmu.edu", "password");
+        ParseUser.logIn("rajaramr@andrew.cmu.edu", "pass");
     }
 
     public void testGetEvents() throws Exception {
@@ -67,5 +67,11 @@ public class EventParseUnitTest extends AndroidTestCase {
 
     public void testRespondToEvent() throws Exception {
         instance.respondToEvent("e8fulZ42Q1", YNType.N);
+    }
+
+    public void testGetEvent() throws Exception {
+        String eventId = "X5KrTWQxlD";
+        Log.d(this.getClass().getName(), "User--" + ParseUser.getCurrentUser().getObjectId());
+        Log.d(this.getClass().getName(), instance.getEvent(eventId).toString());
     }
  }

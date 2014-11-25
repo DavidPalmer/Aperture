@@ -206,6 +206,21 @@ public class EventServiceParse extends ParseBase implements EventService {
         attendee.save();
     }
 
+    @Override
+    public Event getEvent(String eventId) throws ParseException {
+        ParseQuery<AttendeeParse> attendeeQuery = ParseQuery.getQuery(AttendeeParse.class);
+        EventParse eventParse = new EventParse(eventId);
+        Log.d(this.getClass().getName(), "User---" + ParseUser.getCurrentUser().getObjectId());
+        attendeeQuery.whereEqualTo(FieldNames.ATTENDEE_EVENT, new EventParse(eventId));
+        attendeeQuery.whereEqualTo(FieldNames.ATTENDEE, ParseUser.getCurrentUser());
+        attendeeQuery.include(FieldNames.ATTENDEE_EVENT);
+        attendeeQuery.include(FieldNames.ATTENDEE_INVITED_BY);
+        attendeeQuery.include(FieldNames.ATTENDEE_EVENT_CREATED_BY);
+        List<AttendeeParse> attendeeParseList = attendeeQuery.find();
+        AttendeeParse attendee = attendeeParseList.get(0);
+        return getEventInfo(attendee);
+    }
+
     private Event getEventInfo(AttendeeParse attendee) throws ParseException {
         Event event = new Event();
         EventParse eventParse = attendee.getEvent();
