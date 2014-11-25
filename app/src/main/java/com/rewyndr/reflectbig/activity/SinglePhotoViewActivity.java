@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -15,9 +16,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.rewyndr.reflectbig.R;
@@ -34,6 +37,7 @@ import java.util.List;
 
 public class SinglePhotoViewActivity extends Activity {
     final String className = this.getClass().getName();
+    View decorView;
     int currentId = 0;
     private ImageSwitcher mImageSwitcher;
     private View mOverscrollLeft;
@@ -51,6 +55,7 @@ public class SinglePhotoViewActivity extends Activity {
     private List<String> mImages = new ArrayList<String>();
     private String eventId = "";
     private Event event = null;
+    private FrameLayout layout;
 
     private static int getEndLimit(int currentId, int total) {
         int start = (currentId + Constants.FETCH_LENGTH);
@@ -72,8 +77,9 @@ public class SinglePhotoViewActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setCurrentId();
+        decorView = getWindow().getDecorView();
         setTitle(event.getEventName());
-        setContentView(R.layout.activity_image_view);
+        setContentView(R.layout.activity_photo_single_view);
         mImageSwitcher = (ImageSwitcher) findViewById(R.id.image);
         mOverscrollLeft = findViewById(R.id.overscroll_left);
         mOverscrollRight = findViewById(R.id.overscroll_right);
@@ -163,6 +169,7 @@ public class SinglePhotoViewActivity extends Activity {
                     contentView.setLayoutParams(new ViewGroup.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT));
                 }
             });
+            hideSystemUI();
         }
     }
 
@@ -171,10 +178,24 @@ public class SinglePhotoViewActivity extends Activity {
         return preferences.getString(PreferenceConstants.CURRENT_POSITION, null);
     }
 
+    private void hideSystemUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        } else {
+            decorView.setSystemUiVisibility(View.STATUS_BAR_HIDDEN);
+        }
+
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         // There are two times when this activity gets destroyed.
         // When orientation gets changed, the isFinishing() -> False and hence the current position is retained
         // When back is pressed, current position is to be removed

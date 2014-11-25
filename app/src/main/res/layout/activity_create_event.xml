@@ -342,11 +342,12 @@
                     android:layout_weight="1"
                     android:layout_gravity="center">
 
-                    <EditText android:capitalize="sentences"
+                    <TextView android:capitalize="sentences"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Where"
+                        android:hint="Select from map"
                         android:id="@+id/createEvent_text_where"
+                        android:onClick="selectFromMap"
                         android:textColor="@android:color/primary_text_light"
                         android:textSize="@dimen/textSize" />
 
@@ -354,6 +355,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
+                        android:onClick="selectFromMap"
                         android:src="@drawable/ic_action_next_item" />
                 </FrameLayout>
             </TableRow>

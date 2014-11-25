@@ -3,6 +3,7 @@ package com.rewyndr.reflectbig.parse.impl;
 import android.content.Context;
 
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -37,6 +38,9 @@ public class LoginServiceParse extends ParseBase implements LoginService {
     @Override
     public void logIn(String email, String password) throws ParseException {
         ParseUser.logIn(email, password);
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("userId",ParseUser.getCurrentUser().getObjectId());
+        installation.saveInBackground();
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -22,22 +23,29 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.interfaces.EventService;
+import com.rewyndr.reflectbig.model.AddressLocation;
+import com.rewyndr.reflectbig.model.Contacts;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 import com.rewyndr.reflectbig.util.DateUtils;
 import com.rewyndr.reflectbig.util.Utils;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 public class CreateEventActivity extends FragmentActivity {
+    private int REQUEST_CODE = 12345;
+    private String CLASS_NAME = this.getClass().getName();
     private static Button currentDateButton;
     private static Button currentTimeButton;
     private static Activity act;
@@ -47,6 +55,7 @@ public class CreateEventActivity extends FragmentActivity {
     private boolean isEndDatePicked = false;
     private boolean isStartTimePicked = false;
     private boolean isEndTimePicked = false;
+    private AddressLocation location;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,17 +98,37 @@ public class CreateEventActivity extends FragmentActivity {
         setPageAccordingToEventType();
     }
 
+    public void selectFromMap(View view) {
+        Intent intent = new Intent(getApplicationContext(), MapAddressActivity.class);
+        if(location != null) {
+            intent.putExtra("address", location);
+        }
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        switch (reqCode) {
+            case (12345):
+                if (resultCode == Activity.RESULT_OK) {
+                    location = (AddressLocation) data.getSerializableExtra("address");
+                    ((TextView) findViewById(R.id.createEvent_text_where)).setText(location.getAddress());
+                }
+                break;
+        }
+    }
+
     public void onClickCreate(View view) {
         Event newEvent = new Event();
         String eventName = ((EditText) findViewById(R.id.createEvent_text_event_name)).getText().toString();
         String eventDescription = ((EditText) findViewById(R.id.createEvent_text_event_description)).getText().toString();
-        String location = ((EditText) findViewById(R.id.createEvent_text_where)).getText().toString();
-        /*String shortLocation = Utils.getShortLocation(location);*/
-        String shortLocation = location;
+        String location = ((TextView) findViewById(R.id.createEvent_text_where)).getText().toString();
         String[] sDate = ((Button) findViewById(R.id.btnStartChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
         String[] eDate = ((Button) findViewById(R.id.btnEndChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
         String[] sTime = ((Button) findViewById(R.id.btnStartChangeTime)).getText().toString().split(Constants.TIME_DELIMITER);
         String[] eTime = ((Button) findViewById(R.id.btnEndChangeTime)).getText().toString().split(Constants.TIME_DELIMITER);
+
         if (Constants.EMPTY_STRING.equals(eventName.trim()) || Constants.EMPTY_STRING.equals(eventDescription.trim())
                 || Constants.EMPTY_STRING.equals(location.trim()) || !(isStartDatePicked) || !(isStartTimePicked && isEndTimePicked)) {
             Toast.makeText(this, "Invalid data entered", Toast.LENGTH_SHORT).show();
@@ -117,10 +146,11 @@ public class CreateEventActivity extends FragmentActivity {
                 newEvent.setEventDesc(eventDescription);
                 newEvent.setStartDate(startDate);
                 newEvent.setEndDate(endDate);
-                newEvent.setLocation(location);
-                newEvent.setLatitude(0);
-                newEvent.setLongitude(0);
-                newEvent.setShortLocation(shortLocation);
+                newEvent.setLocation(this.location.getAddress());
+                newEvent.setLatitude(this.location.getLatitude());
+                newEvent.setLongitude(this.location.getLongitude());
+                newEvent.setShortLocation(this.location.getShortAddress());
+                newEvent.setFenceRadius(this.location.getRadiusFence());
                 new UseDBService().execute(newEvent);
             }
         }

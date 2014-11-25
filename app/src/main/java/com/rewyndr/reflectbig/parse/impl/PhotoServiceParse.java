@@ -5,6 +5,7 @@ import android.content.Context;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.rewyndr.reflectbig.common.PhotoType;
 import com.rewyndr.reflectbig.interfaces.PhotoService;
 import com.rewyndr.reflectbig.parse.model.EventParse;
@@ -88,6 +89,7 @@ public class PhotoServiceParse extends ParseBase implements PhotoService {
         PhotoParse photoParse = new PhotoParse();
         photoParse.setPhotoFile(pFile);
         photoParse.setEvent(event);
+        photoParse.setTakenBy(ParseUser.getCurrentUser());
         photoParse.save();
     }
 }

@@ -3,9 +3,7 @@ package com.rewyndr.reflectbig.parse.impl;
 import android.content.Context;
 
 import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.parse.model.AttendeeParse;
 import com.rewyndr.reflectbig.parse.model.EventParse;
@@ -21,7 +19,7 @@ public abstract class ParseBase {
 
     protected static boolean initialised = false;
 
-    protected static void initParse(Context context) {
+    public static void initParse(Context context) {
         if (!initialised) {
             ParseObject.registerSubclass(PhotoParse.class);
             ParseObject.registerSubclass(EventParse.class);
