@@ -26,6 +26,7 @@
     <uses-permission android:name="com.rewyndr.reflectbig.permission.C2D_MESSAGE" />
 
     <application
+        android:name=".ReflectBigApplication"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"

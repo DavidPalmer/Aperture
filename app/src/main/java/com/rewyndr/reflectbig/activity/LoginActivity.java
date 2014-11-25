@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.PreferenceConstants;
 import com.rewyndr.reflectbig.interfaces.LoginService;
-import com.rewyndr.reflectbig.parse.impl.ParseBase;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 
 import java.util.ArrayList;
@@ -37,7 +36,6 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ParseBase.initParse(getApplicationContext());
         setContentView(R.layout.activity_login);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.txt_autoCompleteLogin);
         populateAutoComplete();
