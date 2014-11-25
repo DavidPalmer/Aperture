@@ -36,7 +36,6 @@ import java.util.Map;
  * Created by dil on 11/24/14.
  */
 public class GalleryService extends Service {
-    // Nombre del service
     public static final String mAction = "PhotoService";
     int id = 1;
     ContentResolver content;
@@ -49,14 +48,28 @@ public class GalleryService extends Service {
         Log.i("Status", "Service Start");
         contentResolver = this.getContentResolver();
         contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, new PhotoObserver(new Handler()));
-        mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new NotificationCompat.Builder(getApplicationContext());
-        mBuilder.setContentTitle("ReflectBig Event")
-                .setContentText("Photos are being uploaded")
-                .setSmallIcon(R.drawable.ic_launcher);
-        mNotifyManager.notify(id, mBuilder.build());
-        mBuilder.setOngoing(true);
+        Event event = getEventLive();
+        if (event != null) {
+            mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mBuilder = new NotificationCompat.Builder(getApplicationContext());
+            mBuilder.setContentTitle("ReflectBig Event")
+                    .setContentText("Photos are being uploaded")
+                    .setSmallIcon(R.drawable.ic_launcher);
+            mNotifyManager.notify(id, mBuilder.build());
+        } else {
+            mBuilder.setOngoing(false);
+            mNotifyManager.cancelAll();
+        }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        Event event = getEventLive();
+        if (event == null) {
+            mBuilder.setOngoing(false);
+            mNotifyManager.cancelAll();
+        }
     }
 
     private Media readFromMediaStore(Context context, Uri uri, Event event) {
@@ -66,7 +79,7 @@ public class GalleryService extends Service {
         Cursor cursor = context.getContentResolver().query(uri, null, filter,
                 null, "date_added DESC");
         Media media = null;
-        while (cursor.moveToNext()) {
+        if (cursor.moveToNext()) {
             int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
             String filePath = cursor.getString(dataColumn);
             int mimeTypeColumn = cursor
@@ -103,7 +116,6 @@ public class GalleryService extends Service {
                 Log.d("uploaded", "true");
                 return;
             }
-            exifInterface.setAttribute("isReflect", "yes");
             String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
             String latitudeRef = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
             String longitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
@@ -202,7 +214,6 @@ public class GalleryService extends Service {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mNotifyManager.notify(id, mBuilder.build());
             try {
                 ExifInterface exifInterface = new ExifInterface(file.getAbsolutePath());
                 exifInterface.setAttribute("isReflect", "yes");

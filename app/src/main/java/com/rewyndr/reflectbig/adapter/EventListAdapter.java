@@ -108,7 +108,7 @@ public class EventListAdapter extends SectionAdapter {
             holder.eventLocation.setText(pastEventList.get(row).getShortLocation());
             holder.eventCountImage.setImageResource(R.drawable.ic_action_camera);
             holder.eventCount.setText(pastEventList.get(row).getPhotosCount() + "");
-            if (pastEventList.get(row).getMyStatus() == AttendeeStatus.ACCEPTED)
+            if (pastEventList.get(row).getMyStatus() == AttendeeStatus.ACCEPTED || pastEventList.get(row).getMyStatus() == AttendeeStatus.ATTENDED)
                 holder.eventConfirmation.setImageResource(R.drawable.ic_action_accept);
             else if (pastEventList.get(row).getMyStatus() == AttendeeStatus.DECLINED)
                 holder.eventConfirmation.setImageResource(R.drawable.ic_action_cancel);
