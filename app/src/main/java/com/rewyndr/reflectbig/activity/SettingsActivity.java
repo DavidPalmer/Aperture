@@ -23,7 +23,7 @@ public class SettingsActivity extends Activity {
         Button save = (Button) findViewById(R.id.button4);
         Switch isAutoUpload = (Switch) findViewById(R.id.switch1);
         SharedPreferences preferences = getSharedPreferences(PreferenceConstants.PREFERENCE_NAME, MODE_PRIVATE);
-        if(preferences.getBoolean(PreferenceConstants.AUTO_UPLOAD_STATUS, false)) {
+        if(!preferences.contains(PreferenceConstants.AUTO_UPLOAD_STATUS) || preferences.getBoolean(PreferenceConstants.AUTO_UPLOAD_STATUS, false)) {
             isAutoUpload.setChecked(true);
         } else {
             isAutoUpload.setChecked(false);
