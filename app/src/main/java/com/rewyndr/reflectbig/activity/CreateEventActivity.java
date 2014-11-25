@@ -181,6 +181,7 @@ public class CreateEventActivity extends FragmentActivity {
                 newEvent.setLatitude(this.location.getLatitude());
                 newEvent.setLongitude(this.location.getLongitude());
                 newEvent.setShortLocation(this.location.getShortAddress());
+                newEvent.setFenceRadius(this.location.getRadiusFence());
                 new UseDBService().execute(newEvent);
             }
         }
