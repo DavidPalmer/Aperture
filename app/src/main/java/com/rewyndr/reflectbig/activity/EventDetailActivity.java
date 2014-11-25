@@ -1,6 +1,8 @@
 package com.rewyndr.reflectbig.activity;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,9 +15,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.ParseUser;
 import com.rewyndr.reflectbig.R;
-import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.common.YNType;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.AttendeeStatus;
@@ -23,17 +23,14 @@ import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 
 public class EventDetailActivity extends Activity {
-    private String logClass = this.getClass().getName();
     Event event = null;
     Context context = this;
+    private String logClass = this.getClass().getName();
     private List<String> listOfAttendes = new ArrayList<String>();
 
     @Override
@@ -101,6 +98,7 @@ public class EventDetailActivity extends Activity {
         tl.removeView(decisionRow);
         TextView text_status = (TextView) findViewById(R.id.text_status);
         text_status.setText(AttendeeStatus.ACCEPTED.toString());
+        setRecurringAlarm(getApplicationContext(), event.getStartDate().getTime());
     }
 
     public void onClickDecline(View view) {
@@ -141,5 +139,17 @@ public class EventDetailActivity extends Activity {
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setRecurringAlarm(Context context, long time) {
+        Intent downloader = new Intent(context, GalleryBroadcastReceiver.class);
+        PendingIntent recurringDownload = PendingIntent.getBroadcast(context,
+                0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) this.getSystemService(
+                Context.ALARM_SERVICE);
+        alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                time,
+                AlarmManager.INTERVAL_DAY, recurringDownload);
+        Log.d("Service", "SCHEDULED");
     }
 }

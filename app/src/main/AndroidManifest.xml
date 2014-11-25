@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-feature android:name="android.hardware.camera" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
@@ -55,6 +56,15 @@
             android:name=".activity.ContactActivity"
             android:label="@string/title_activity_contact" >
         </activity>
+
+        <receiver
+            android:name=".activity.GalleryBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="MyBroadcast"></action>
+            </intent-filter>
+        </receiver>
+        <service android:name=".activity.GalleryService" />
     </application>
 
 </manifest>

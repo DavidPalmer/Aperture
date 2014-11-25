@@ -100,7 +100,8 @@ public class PhotoMultiViewActivity extends Activity {
         getMenuInflater().inflate(R.menu.photo_multi_view, menu);
         if (event.getStatus().equals(EventStatus.CURRENT)) {
             menu.findItem(R.id.camera).setVisible(true);
-        } if (event.getStatus().equals(EventStatus.CURRENT)) {
+        }
+        if (event.getStatus().equals(EventStatus.CURRENT)) {
             menu.findItem(R.id.photo_refresh).setVisible(true);
         }
         return true;
@@ -198,7 +199,7 @@ public class PhotoMultiViewActivity extends Activity {
         try {
             size = viewPhoto.getCount(event.getEventId());
             List<String> urls = null;
-            if(photos.size() < start) {
+            if (photos.size() < start) {
                 start = 0;
             }
             if (start < size) {
@@ -209,7 +210,7 @@ public class PhotoMultiViewActivity extends Activity {
                     Photo p = new Photo(url);
                     photos.add(p);
                 }
-                Log.d("Photo",""+photos.size());
+                Log.d("Photo", "" + photos.size());
             }
         } catch (Exception e) {
             e.printStackTrace();

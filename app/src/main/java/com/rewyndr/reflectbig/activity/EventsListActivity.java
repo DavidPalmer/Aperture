@@ -1,9 +1,14 @@
 package com.rewyndr.reflectbig.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.ContentObserver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,10 +19,12 @@ import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.adapter.EventListAdapter;
 import com.rewyndr.reflectbig.common.PreferenceConstants;
 import com.rewyndr.reflectbig.interfaces.EventService;
+import com.rewyndr.reflectbig.interfaces.PhotoService;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +37,9 @@ public class EventsListActivity extends Activity {
     private ArrayList<Event> pastEventList = new ArrayList<Event>();
     private ArrayList<Event> currentEventList = new ArrayList<Event>();
     private ArrayList<Event> upcomingEventList = new ArrayList<Event>();
+    private String saved;
+    private File photoFile;
+    private PhotosObserver instUploadObserver = new PhotosObserver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +63,11 @@ public class EventsListActivity extends Activity {
 //            }
 //        });
         setContentView(headerListView);
+//        this.getApplicationContext()
+//                .getContentResolver()
+//                .registerContentObserver(
+//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false,
+//                        instUploadObserver);
     }
 
     private void getEventData() {
@@ -111,5 +126,78 @@ public class EventsListActivity extends Activity {
         setIntent.addCategory(Intent.CATEGORY_HOME);
         setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(setIntent);
+    }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (saved != null) {
+//            uploadFile(photoFile);
+//            Toast.makeText(this, saved, Toast.LENGTH_SHORT).show();
+//        }
+//    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        this.getApplicationContext().getContentResolver()
+//                .unregisterContentObserver(instUploadObserver);
+//        Log.d("INSTANT", "unregistered content observer");
+//    }
+
+    private boolean uploadFile(File f) {
+        PhotoService uploadPhoto = ServiceFactory.getPhotoServiceInstance(getApplicationContext());
+        try {
+            uploadPhoto.uploadPhoto(pastEventList.get(0).getEventId(), f);
+            f.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+
+    }
+
+    private Media readFromMediaStore(Context context, Uri uri) {
+        Cursor cursor = context.getContentResolver().query(uri, null, null,
+                null, "date_added DESC");
+        Media media = null;
+        if (cursor.moveToNext()) {
+            int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            String filePath = cursor.getString(dataColumn);
+            int mimeTypeColumn = cursor
+                    .getColumnIndexOrThrow(MediaStore.MediaColumns.MIME_TYPE);
+            String mimeType = cursor.getString(mimeTypeColumn);
+            media = new Media(new File(filePath), mimeType);
+        }
+        cursor.close();
+        return media;
+    }
+
+    private class PhotosObserver extends ContentObserver {
+        public PhotosObserver() {
+            super(null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            Media media = readFromMediaStore(getApplicationContext(),
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            saved = "I detected " + media.file.getName();
+            photoFile = media.file;
+            Log.d("INSTANT", "detected picture");
+            Log.d("name", saved);
+        }
+    }
+
+    private class Media {
+        private File file;
+        @SuppressWarnings("unused")
+        private String type;
+
+        public Media(File file, String type) {
+            this.file = file;
+            this.type = type;
+        }
     }
 }
