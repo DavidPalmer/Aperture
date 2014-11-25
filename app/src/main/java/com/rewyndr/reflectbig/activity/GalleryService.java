@@ -112,7 +112,7 @@ public class GalleryService extends Service {
         double longitudeV;
         try {
             ExifInterface exifInterface = new ExifInterface(file.getAbsolutePath());
-            if (exifInterface.getAttribute("isReflect") != null) {
+            if (exifInterface.getAttribute("UserComment") != null) {
                 Log.d("uploaded", "true");
                 return;
             }
@@ -216,8 +216,10 @@ public class GalleryService extends Service {
         protected void onPostExecute(final Boolean success) {
             try {
                 ExifInterface exifInterface = new ExifInterface(file.getAbsolutePath());
-                exifInterface.setAttribute("isReflect", "yes");
+                exifInterface.setAttribute("UserComment", "yes");
                 exifInterface.saveAttributes();
+                Log.d("Set Upload", "true");
+                Log.d("Read", exifInterface.getAttribute("UserComment"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
