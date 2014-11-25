@@ -173,6 +173,7 @@ public class EventServiceParse extends ParseBase implements EventService {
     private void notifyInvitees(EventParse eventParse, List<AttendeeParse> attendeeList, List<InviteeParse> inviteeList) throws ParseException {
         Map<String, Object> params = new HashMap<String, Object>();
         eventParse = eventParse.fetch();
+        params.put("eventId", eventParse.getObjectId());
         params.put("event", eventParse.getEventName());
         params.put("eventloc", eventParse.getLocation());
         params.put("eventtime", DateUtils.getDateInFormat(eventParse.getStartDateTime(), "E, MM/dd/yyyy, HH:mm"));
