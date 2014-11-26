@@ -52,7 +52,7 @@ public class GalleryService extends Service {
         if (event != null) {
             mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mBuilder = new NotificationCompat.Builder(getApplicationContext());
-            mBuilder.setContentTitle("ReflectBig Event")
+            mBuilder.setContentTitle("ReflectBig -" + event.getEventName())
                     .setContentText("Photos are being uploaded")
                     .setSmallIcon(R.drawable.ic_launcher);
             mNotifyManager.notify(id, mBuilder.build());
@@ -60,7 +60,7 @@ public class GalleryService extends Service {
             mBuilder.setOngoing(false);
             mNotifyManager.cancelAll();
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override
@@ -110,6 +110,7 @@ public class GalleryService extends Service {
     private void doUpload(File file, Event event) {
         double latitudeV;
         double longitudeV;
+        double distance = 0;
         try {
             ExifInterface exifInterface = new ExifInterface(file.getAbsolutePath());
             if (exifInterface.getAttribute("UserComment") != null) {
@@ -123,12 +124,14 @@ public class GalleryService extends Service {
             if (latitude != null && latitudeRef != null && longitude != null && longitudeRef != null) {
                 latitudeV = Utils.convertToDegree(latitude, latitudeRef);
                 longitudeV = Utils.convertToDegree(longitude, longitudeRef);
-                Log.d("Latitude", Utils.convertToDegree(latitude, latitudeRef).toString());
-                Log.d("Longitude", Utils.convertToDegree(longitude, longitudeRef).toString());
+                distance = Utils.getLatLongDistance(latitudeV, longitudeV, event.getLatitude(), event.getLongitude());
+                Log.d("distance", distance + "");
             }
             Log.d("TIME", exifInterface.getAttribute(ExifInterface.TAG_DATETIME));
-            PhotoService uploadPhoto = ServiceFactory.getPhotoServiceInstance(getApplicationContext());
-            uploadPhoto.uploadPhoto(event.getEventId(), file);
+            if (event.getFenceRadius() >= distance * 1000) {
+                PhotoService uploadPhoto = ServiceFactory.getPhotoServiceInstance(getApplicationContext());
+                uploadPhoto.uploadPhoto(event.getEventId(), file);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {

@@ -23,8 +23,8 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:protectionLevel="signature"
-        android:name="com.rewyndr.reflectbig.permission.C2D_MESSAGE" />
+        android:name="com.rewyndr.reflectbig.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
     <uses-permission android:name="com.rewyndr.reflectbig.permission.C2D_MESSAGE" />
 
     <application
@@ -86,7 +86,8 @@
             android:name=".activity.GalleryBroadcastReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="MyBroadcast"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
         <service android:name=".activity.GalleryService" />

@@ -88,7 +88,7 @@ public class Utils {
         return result;
     }
 
-    public static double getLatLongDistance(float lat1, float long1, float lat2, float long2) {
+    public static double getLatLongDistance(double lat1, double long1, double lat2, double long2) {
         int R = 6371;
         double dLat = degreeToRadius(lat2 - lat1);
         double dLong = degreeToRadius(long2 - long1);
@@ -101,7 +101,7 @@ public class Utils {
 
     }
 
-    private static double degreeToRadius(float degree) {
+    private static double degreeToRadius(double degree) {
         return degree * (Math.PI / 180);
     }
 }
