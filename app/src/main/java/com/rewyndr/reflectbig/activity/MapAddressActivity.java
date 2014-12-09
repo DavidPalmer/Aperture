@@ -101,11 +101,11 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
                 addMarker(myLocation);
             } else {
                 Log.d(CURRENT_CLASS, "Requesting for new location update");
-                service.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 100, this);
+                service.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, null);
             }
         } else {
             Log.d(CURRENT_CLASS, "Fetching location from GPS");
-            service.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100, this);
+            service.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
         }
     }
 
@@ -124,7 +124,13 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
 
     @Override
     public void onLocationChanged(Location location) {
-        moveToTheAddress(location.getLatitude(), location.getLongitude(), 10);
+        LatLng coords = new LatLng(location.getLatitude(), location.getLongitude());
+        moveToTheAddress(coords, 15);
+        addMarker(coords);
+        loc = new AddressLocation(coords.latitude, coords.longitude, fence);
+        getAddressFromLocation(loc);
+        EditText add = (EditText) findViewById(R.id.editText);
+        add.setText(loc.getAddress());
     }
 
     /**
@@ -157,50 +163,23 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
         cleanMap();
         if (null != mMap) {
             mMap.addMarker(new MarkerOptions()
-                    .position(point).draggable(true));
+                    .position(point));
             fence = Integer.valueOf(((EditText) findViewById(R.id.editText2)).getText().toString());
             if (fence == 0) {
                 fence = 1000;
             }
             mMap.addCircle(new CircleOptions().center(point)
                     .radius(fence)
-                    .strokeColor(Color.GREEN)
-                    .fillColor(Color.WHITE));
+                    .strokeColor(Color.GREEN));
         }
     }
 
     /**
      * An utility method which helps to focus on the current location of the user in the Map which is rendered.
      */
-    private void moveToTheAddress(double latitude, double longitude, int zoomHeight) {
-        CameraUpdate center =
-                CameraUpdateFactory.newLatLng(new LatLng(latitude,longitude));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(zoomHeight);
-        mMap.moveCamera(center);
+    private void moveToTheAddress(LatLng coords, int zoomHeight) {
+        CameraUpdate zoom = CameraUpdateFactory.newLatLngZoom(coords, zoomHeight);
         mMap.animateCamera(zoom);
-    }
-
-    public void locateMe(View view) {
-        String strAddress = ((EditText) findViewById(R.id.editText)).getText().toString();
-        Geocoder coder = new Geocoder(getApplicationContext());
-        List<Address> address;
-        try {
-            address = coder.getFromLocationName(strAddress,1);
-            if (strAddress == null || strAddress.equals("") || address == null || address.size() == 0) {
-                Toast.makeText(this, "Wrong Address! Try again", Toast.LENGTH_SHORT).show();
-            } else {
-                Address location = address.get(0);
-                double lat = location.getLatitude();
-                double longi = location.getLongitude();
-                LatLng point = new LatLng(lat, longi);
-                addMarker(point);
-                moveToTheAddress(lat, longi, 15);
-                loc = new AddressLocation(point.latitude, point.longitude, strAddress, fence);
-                loc.setShortAddress(strAddress.split(",")[0]);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

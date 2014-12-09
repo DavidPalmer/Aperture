@@ -33,4 +33,12 @@ public class DateUtils {
         DateFormat formatter  = new SimpleDateFormat(format);
         return formatter.format(date);
     }
+
+    public static boolean checkDateCorrectness(Date startDate, Date endDate) {
+        Date today = new Date();
+        if (startDate.getTime() - today.getTime() < 0 || endDate.getTime() - today.getTime() < 0) {
+            return false;
+        }
+        return true;
+    }
 }
