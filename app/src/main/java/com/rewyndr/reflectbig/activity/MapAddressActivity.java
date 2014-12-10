@@ -133,6 +133,29 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
         add.setText(loc.getAddress());
     }
 
+    public void locateMe(View view) {
+        String strAddress = ((EditText) findViewById(R.id.editText)).getText().toString();
+        Geocoder coder = new Geocoder(getApplicationContext());
+        List<Address> address;
+        try {
+            address = coder.getFromLocationName(strAddress,1);
+            if (strAddress == null || strAddress.equals("") || address == null || address.size() == 0) {
+                Toast.makeText(this, "Wrong Address! Try again", Toast.LENGTH_SHORT).show();
+            } else {
+                Address location = address.get(0);
+                double lat = location.getLatitude();
+                double longi = location.getLongitude();
+                LatLng point = new LatLng(lat, longi);
+                addMarker(point);
+                moveToTheAddress(point, 15);
+                loc = new AddressLocation(point.latitude, point.longitude, strAddress, fence);
+                loc.setShortAddress(strAddress.split(",")[0]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * This method is used from getting the location information in form of human readable address.
      * @param current
