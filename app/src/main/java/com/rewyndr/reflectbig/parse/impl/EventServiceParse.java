@@ -173,12 +173,13 @@ public class EventServiceParse extends ParseBase implements EventService {
     private void notifyInvitees(EventParse eventParse, List<AttendeeParse> attendeeList, List<InviteeParse> inviteeList) throws ParseException {
         Map<String, Object> params = new HashMap<String, Object>();
         eventParse = eventParse.fetch();
+        params.put("eventId", eventParse.getObjectId());
         params.put("event", eventParse.getEventName());
         params.put("eventloc", eventParse.getLocation());
         params.put("eventtime", DateUtils.getDateInFormat(eventParse.getStartDateTime(), "E, MM/dd/yyyy, HH:mm"));
         List<String> attendeeId = new ArrayList<String>();
         for (AttendeeParse attendee : attendeeList) {
-            attendeeId.add(attendee.getAttendee().get(FieldNames.USER_NAME) + ":" + attendee.getAttendee().getUsername());
+            attendeeId.add(attendee.getAttendee().get(FieldNames.USER_NAME) + ":" + attendee.getAttendee().getUsername() + ":" + attendee.getAttendee().getObjectId());
         }
         List<String> inviteeId = new ArrayList<String>();
         for (InviteeParse invitee : inviteeList) {
@@ -206,6 +207,21 @@ public class EventServiceParse extends ParseBase implements EventService {
         attendee.save();
     }
 
+    @Override
+    public Event getEvent(String eventId) throws ParseException {
+        ParseQuery<AttendeeParse> attendeeQuery = ParseQuery.getQuery(AttendeeParse.class);
+        EventParse eventParse = new EventParse(eventId);
+        Log.d(this.getClass().getName(), "User---" + ParseUser.getCurrentUser().getObjectId());
+        attendeeQuery.whereEqualTo(FieldNames.ATTENDEE_EVENT, new EventParse(eventId));
+        attendeeQuery.whereEqualTo(FieldNames.ATTENDEE, ParseUser.getCurrentUser());
+        attendeeQuery.include(FieldNames.ATTENDEE_EVENT);
+        attendeeQuery.include(FieldNames.ATTENDEE_INVITED_BY);
+        attendeeQuery.include(FieldNames.ATTENDEE_EVENT_CREATED_BY);
+        List<AttendeeParse> attendeeParseList = attendeeQuery.find();
+        AttendeeParse attendee = attendeeParseList.get(0);
+        return getEventInfo(attendee);
+    }
+
     private Event getEventInfo(AttendeeParse attendee) throws ParseException {
         Event event = new Event();
         EventParse eventParse = attendee.getEvent();
@@ -224,6 +240,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         event.setAttendeesCount(eventParse.getAttendeesCount());
         event.setLatitude(eventParse.getGeoLocation().getLatitude());
         event.setLongitude(eventParse.getGeoLocation().getLongitude());
+        event.setFenceRadius(eventParse.getFenceRadius());
         return event;
     }
 
@@ -238,6 +255,7 @@ public class EventServiceParse extends ParseBase implements EventService {
         eventParse.setCreatedBy(ParseUser.getCurrentUser());
         eventParse.setGeoLocation(new ParseGeoPoint(event.getLatitude(), event.getLongitude()));
         eventParse.setAttendeesCount(1);
+        eventParse.setFenceRadius(event.getFenceRadius());
         return eventParse;
     }
 

@@ -55,4 +55,13 @@ public interface EventService {
      * @throws Exception
      */
     void respondToEvent(String eventId, YNType response) throws Exception;
+
+    /**
+     * This method gets event details from event object id
+     *
+     * @param eventId
+     * @return
+     * @throws Exception
+     */
+    Event getEvent(String eventId) throws Exception;
 }
