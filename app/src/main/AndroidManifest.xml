@@ -10,6 +10,7 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -22,8 +23,8 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:protectionLevel="signature"
-        android:name="com.rewyndr.reflectbig.permission.C2D_MESSAGE" />
+        android:name="com.rewyndr.reflectbig.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
     <uses-permission android:name="com.rewyndr.reflectbig.permission.C2D_MESSAGE" />
 
     <application
@@ -54,7 +55,7 @@
                 <data android:scheme="reflectbig" />
             </intent-filter>
         </activity>
-        >
+
         <activity
             android:name="com.rewyndr.reflectbig.activity.AttendeeListActivity"
             android:label="@string/title_activity_attendee_list" />
@@ -80,6 +81,16 @@
         <activity
             android:name="com.rewyndr.reflectbig.activity.ContactActivity"
             android:label="@string/title_activity_contact"></activity>
+
+        <receiver
+            android:name=".activity.GalleryBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".activity.GalleryService" />
 
         <meta-data
             android:name="com.google.android.gms.version"
