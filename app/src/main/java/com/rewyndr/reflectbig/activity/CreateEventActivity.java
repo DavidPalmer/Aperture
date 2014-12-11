@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.internal.ge;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.interfaces.EventService;
@@ -37,6 +38,7 @@ import com.rewyndr.reflectbig.service.ServiceFactory;
 import com.rewyndr.reflectbig.util.DateUtils;
 import com.rewyndr.reflectbig.util.Utils;
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,31 +68,61 @@ public class CreateEventActivity extends FragmentActivity {
     }
 
     public void showStartDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
+        DialogFragment newFragment = null;
+        if(isStartDatePicked) {
+            String[] dateString = ((Button) findViewById(R.id.btnStartChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
+            Calendar cal = Calendar.getInstance();
+            cal.set(Integer.valueOf(dateString[2]) , Integer.valueOf(dateString[0]) - 1, Integer.valueOf(dateString[1]));
+            newFragment = new DatePickerFragment(cal.getTime(), true);
+        } else {
+            newFragment = new DatePickerFragment(null, true);
+        }
         newFragment.show(getSupportFragmentManager(), "datePicker");
         currentDateButton = (Button) act.findViewById(R.id.btnStartChangeDate);
-        isStartDatePicked = true;
     }
 
     public void showEndDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
+        DialogFragment newFragment = null;
+        if(isEndDatePicked) {
+            String[] dateString = ((Button) findViewById(R.id.btnEndChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
+            Calendar cal = Calendar.getInstance();
+            cal.set(Integer.valueOf(dateString[2]) , Integer.valueOf(dateString[0]) - 1, Integer.valueOf(dateString[1]));
+            newFragment = new DatePickerFragment(cal.getTime(), false);
+        } else {
+            newFragment = new DatePickerFragment(null, false);
+        }
         newFragment.show(getSupportFragmentManager(), "datePicker");
         currentDateButton = (Button) act.findViewById(R.id.btnEndChangeDate);
-        isEndDatePicked = true;
     }
 
     public void showStartTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePickerFragment();
+        DialogFragment newFragment = null;
+        if(isStartTimePicked) {
+            String[] timeString = ((Button) findViewById(R.id.btnStartChangeTime)).getText().toString().split(Constants.TIME_DELIMITER);
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeString[0]));
+            cal.set(Calendar.MINUTE, Integer.valueOf(timeString[1]));
+            newFragment = new TimePickerFragment(cal.getTime(), true);
+        } else {
+            newFragment = new TimePickerFragment(null, true);
+        }
         newFragment.show(getSupportFragmentManager(), "timePicker");
         currentTimeButton = (Button) act.findViewById(R.id.btnStartChangeTime);
-        isStartTimePicked = true;
     }
 
     public void showEndTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePickerFragment();
+        DialogFragment newFragment = null;
+        if(isEndTimePicked) {
+            String[] timeString = ((Button) findViewById(R.id.btnEndChangeTime)).getText().toString().split(Constants.TIME_DELIMITER);
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeString[0]));
+            cal.set(Calendar.MINUTE, Integer.valueOf(timeString[1]));
+            newFragment = new TimePickerFragment(cal.getTime(), false);
+        } else {
+            newFragment = new TimePickerFragment(null, false);
+        }
         newFragment.show(getSupportFragmentManager(), "timePicker");
         currentTimeButton = (Button) act.findViewById(R.id.btnEndChangeTime);
-        isEndTimePicked = true;
     }
 
     public void onCheckedChanged(View view) {
@@ -127,6 +159,7 @@ public class CreateEventActivity extends FragmentActivity {
         String[] eDate = ((Button) findViewById(R.id.btnEndChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
         String[] sTime = ((Button) findViewById(R.id.btnStartChangeTime)).getText().toString().split(Constants.TIME_DELIMITER);
         String[] eTime = ((Button) findViewById(R.id.btnEndChangeTime)).getText().toString().split(Constants.TIME_DELIMITER);
+        boolean isCorrectDates = false;
 
         if (Constants.EMPTY_STRING.equals(eventName.trim()) || Constants.EMPTY_STRING.equals(eventDescription.trim())
                 || Constants.EMPTY_STRING.equals(location.trim()) || !(isStartDatePicked) || !(isStartTimePicked && isEndTimePicked)) {
@@ -138,7 +171,8 @@ public class CreateEventActivity extends FragmentActivity {
                 endDate = DateUtils.convertToDate(Integer.valueOf(eDate[1]), Integer.valueOf(eDate[0]) - 1, Integer.valueOf(eDate[2]), Integer.valueOf(eTime[0]), Integer.valueOf(eTime[1]));
             else
                 endDate = DateUtils.convertToDate(Integer.valueOf(sDate[1]), Integer.valueOf(sDate[0]) - 1, Integer.valueOf(sDate[2]), Integer.valueOf(eTime[0]), Integer.valueOf(eTime[1]));
-            if (endDate.getTime() - startDate.getTime() <= 0) {
+            isCorrectDates = DateUtils.checkDateCorrectness(startDate, endDate);
+            if (endDate.getTime() - startDate.getTime() <= 0 || !isCorrectDates) {
                 Toast.makeText(this, "Error in start and end date", Toast.LENGTH_SHORT).show();
             } else {
                 newEvent.setEventName(eventName);
@@ -203,32 +237,53 @@ public class CreateEventActivity extends FragmentActivity {
         Log.d("Service", "SCHEDULED");
     }
 
-    public static class DatePickerFragment extends DialogFragment
+    public class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
+        int year, month, day;
+        boolean startDate;
+
+        public DatePickerFragment(Date date, boolean startDate) {
+            Calendar c = Calendar.getInstance();
+            if(date != null) {
+                c.setTime(date);
+            }
+            this.startDate = startDate;
+            year = c.get(Calendar.YEAR);
+            month = c.get(Calendar.MONTH);
+            day = c.get(Calendar.DAY_OF_MONTH);
+        }
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             currentDateButton.setText(Utils.appendStrings(Constants.DATE_DELIMITER, String.valueOf(month + 1), String.valueOf(day), String.valueOf(year)));
+            if (startDate)
+                isStartDatePicked = true;
+            else
+                isEndDatePicked = true;
         }
     }
 
-    public static class TimePickerFragment extends DialogFragment
+    public class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
+
+        int hour, minute;
+        boolean startTime;
+        public TimePickerFragment(Date date, boolean startTime) {
+            Calendar c = Calendar.getInstance();
+            if(date != null) {
+                c.setTime(date);
+            }
+            hour = c.get(Calendar.HOUR_OF_DAY);
+            minute = c.get(Calendar.MINUTE);
+            this.startTime = startTime;
+        }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
             // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
@@ -236,6 +291,10 @@ public class CreateEventActivity extends FragmentActivity {
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             currentTimeButton.setText(Utils.appendStrings(Constants.TIME_DELIMITER, String.valueOf(hourOfDay), String.valueOf(minute)));
+            if (startTime)
+                isStartTimePicked = true;
+            else
+                isEndTimePicked = true;
         }
     }
 
