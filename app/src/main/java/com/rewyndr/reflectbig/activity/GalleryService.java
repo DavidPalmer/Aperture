@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.media.ExifInterface;
@@ -18,6 +19,7 @@ import android.util.Log;
 
 import com.parse.ParseException;
 import com.rewyndr.reflectbig.R;
+import com.rewyndr.reflectbig.common.PreferenceConstants;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.interfaces.PhotoService;
 import com.rewyndr.reflectbig.model.AttendeeStatus;
@@ -49,7 +51,9 @@ public class GalleryService extends Service {
         contentResolver = this.getContentResolver();
         contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, new PhotoObserver(new Handler()));
         Event event = getEventLive();
-        if (event != null) {
+        SharedPreferences prefs = getSharedPreferences(PreferenceConstants.PREFERENCE_NAME, MODE_PRIVATE);
+        String val = prefs.getString(PreferenceConstants.AUTO_UPLOAD_STATUS, null);
+        if (event != null && val != null) {
             mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mBuilder = new NotificationCompat.Builder(getApplicationContext());
             mBuilder.setContentTitle("ReflectBig -" + event.getEventName())

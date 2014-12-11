@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rewyndr.reflectbig.R;
@@ -160,6 +161,7 @@ public class PhotoMultiViewActivity extends Activity {
             setTitle(event.getEventName());
 //            addPhotoList();
             new DataSaveProgress(this).execute();
+            TextView n = new TextView(context)
             imageAdapter = new ImageAdapter(this, photos);
             gridViewImage = (GridView) findViewById(R.id.grid_view1);
             gridViewImage.setAdapter(imageAdapter);
