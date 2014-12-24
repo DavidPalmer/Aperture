@@ -50,7 +50,7 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
             public void onMapClick(LatLng point) {
                 addMarker(point);
                 loc = new AddressLocation(point.latitude, point.longitude, fence);
-                getAddressFromLocation(loc);
+                getAddressFromLocation();
                 EditText add = (EditText) findViewById(R.id.editText);
                 add.setText(loc.getAddress());
             }
@@ -112,10 +112,10 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
     public static boolean isConnectedToInternet(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null)
-                for (int i = 0; i < info.length; i++)
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+            NetworkInfo[] infos = connectivity.getAllNetworkInfo();
+            if (infos != null)
+                for (NetworkInfo info : infos)
+                    if (info.getState() == NetworkInfo.State.CONNECTED) {
                         return true;
                     }
         }
@@ -128,13 +128,14 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
         moveToTheAddress(coords, 15);
         addMarker(coords);
         loc = new AddressLocation(coords.latitude, coords.longitude, fence);
-        getAddressFromLocation(loc);
+        getAddressFromLocation();
         EditText add = (EditText) findViewById(R.id.editText);
         add.setText(loc.getAddress());
     }
 
     public void locateMe(View view) {
-        String strAddress = ((EditText) findViewById(R.id.editText)).getText().toString();
+        EditText add = ((EditText) findViewById(R.id.editText));
+        String strAddress = add.getText().toString();
         Geocoder coder = new Geocoder(getApplicationContext());
         List<Address> address;
         try {
@@ -148,8 +149,9 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
                 LatLng point = new LatLng(lat, longi);
                 addMarker(point);
                 moveToTheAddress(point, 15);
-                loc = new AddressLocation(point.latitude, point.longitude, strAddress, fence);
-                loc.setShortAddress(strAddress.split(",")[0]);
+                loc = new AddressLocation(point.latitude, point.longitude, fence);
+                getAddressFromLocation();
+                add.setText(loc.getAddress());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -158,25 +160,24 @@ public class MapAddressActivity extends FragmentActivity implements LocationList
 
     /**
      * This method is used from getting the location information in form of human readable address.
-     * @param current
-     * @return
      */
-    private void getAddressFromLocation(AddressLocation current) {
+    private void getAddressFromLocation() {
         Geocoder geocoder;
-        List<Address> addresses = null;
         geocoder = new Geocoder(getApplicationContext());
         Log.d(CURRENT_CLASS, "Geocoder : " + geocoder);
         try {
-            addresses = geocoder.getFromLocation(current.getLatitude(), current.getLongitude(), 1);
+            List<Address> addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+            String address = addresses.get(0).getAddressLine(0);
+            String city = addresses.get(0).getAddressLine(1);
+            String country = addresses.get(0).getAddressLine(2);
+            String fullAddress = address + "," + city + "," + country;
+            loc.setAddress(fullAddress);
+            loc.setShortAddress(address);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
         }
-        String address = addresses.get(0).getAddressLine(0);
-        String city = addresses.get(0).getAddressLine(1);
-        String country = addresses.get(0).getAddressLine(2);
-        String fullAddress = address + "," + city + "," + country;
-        loc.setAddress(fullAddress);
-        loc.setShortAddress(address);
     }
 
     /**

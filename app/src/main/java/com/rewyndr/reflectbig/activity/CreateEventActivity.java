@@ -8,7 +8,6 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -27,35 +26,28 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.internal.ge;
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.common.Constants;
 import com.rewyndr.reflectbig.interfaces.EventService;
 import com.rewyndr.reflectbig.model.AddressLocation;
-import com.rewyndr.reflectbig.model.Contacts;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 import com.rewyndr.reflectbig.util.DateUtils;
 import com.rewyndr.reflectbig.util.Utils;
 
-import java.io.Console;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 
 public class CreateEventActivity extends FragmentActivity {
-    private int REQUEST_CODE = 12345;
     private static Button currentDateButton;
     private static Button currentTimeButton;
     private static Activity act;
-    private String CLASS_NAME = this.getClass().getName();
     private String eventType;
-    private boolean isStartDatePicked = false;
-    private boolean isEndDatePicked = false;
-    private boolean isStartTimePicked = false;
-    private boolean isEndTimePicked = false;
+    private static boolean isStartDatePicked = false;
+    private static boolean isEndDatePicked = false;
+    private static boolean isStartTimePicked = false;
+    private static boolean isEndTimePicked = false;
     private AddressLocation location;
 
     @Override
@@ -73,9 +65,13 @@ public class CreateEventActivity extends FragmentActivity {
             String[] dateString = ((Button) findViewById(R.id.btnStartChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
             Calendar cal = Calendar.getInstance();
             cal.set(Integer.valueOf(dateString[2]) , Integer.valueOf(dateString[0]) - 1, Integer.valueOf(dateString[1]));
-            newFragment = new DatePickerFragment(cal.getTime(), true);
+            Bundle b = bundleData(true, cal.getTime().getTime());
+            newFragment = new DatePickerFragment();
+            newFragment.setArguments(b);
         } else {
-            newFragment = new DatePickerFragment(null, true);
+            Bundle b = bundleData(true, null);
+            newFragment = new DatePickerFragment();
+            newFragment.setArguments(b);
         }
         newFragment.show(getSupportFragmentManager(), "datePicker");
         currentDateButton = (Button) act.findViewById(R.id.btnStartChangeDate);
@@ -87,9 +83,13 @@ public class CreateEventActivity extends FragmentActivity {
             String[] dateString = ((Button) findViewById(R.id.btnEndChangeDate)).getText().toString().split(Constants.DATE_DELIMITER);
             Calendar cal = Calendar.getInstance();
             cal.set(Integer.valueOf(dateString[2]) , Integer.valueOf(dateString[0]) - 1, Integer.valueOf(dateString[1]));
-            newFragment = new DatePickerFragment(cal.getTime(), false);
+            Bundle b = bundleData(false, cal.getTime().getTime());
+            newFragment = new DatePickerFragment();
+            newFragment.setArguments(b);
         } else {
-            newFragment = new DatePickerFragment(null, false);
+            Bundle b = bundleData(false, null);
+            newFragment = new DatePickerFragment();
+            newFragment.setArguments(b);
         }
         newFragment.show(getSupportFragmentManager(), "datePicker");
         currentDateButton = (Button) act.findViewById(R.id.btnEndChangeDate);
@@ -102,9 +102,13 @@ public class CreateEventActivity extends FragmentActivity {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeString[0]));
             cal.set(Calendar.MINUTE, Integer.valueOf(timeString[1]));
-            newFragment = new TimePickerFragment(cal.getTime(), true);
+            Bundle b = bundleData(true, cal.getTime().getTime());
+            newFragment = new TimePickerFragment();
+            newFragment.setArguments(b);
         } else {
-            newFragment = new TimePickerFragment(null, true);
+            Bundle b = bundleData(true, null);
+            newFragment = new TimePickerFragment();
+            newFragment.setArguments(b);
         }
         newFragment.show(getSupportFragmentManager(), "timePicker");
         currentTimeButton = (Button) act.findViewById(R.id.btnStartChangeTime);
@@ -117,12 +121,24 @@ public class CreateEventActivity extends FragmentActivity {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeString[0]));
             cal.set(Calendar.MINUTE, Integer.valueOf(timeString[1]));
-            newFragment = new TimePickerFragment(cal.getTime(), false);
+            Bundle b = bundleData(false, cal.getTime().getTime());
+            newFragment = new TimePickerFragment();
+            newFragment.setArguments(b);
         } else {
-            newFragment = new TimePickerFragment(null, false);
+            Bundle b = bundleData(false, null);
+            newFragment = new TimePickerFragment();
+            newFragment.setArguments(b);
         }
         newFragment.show(getSupportFragmentManager(), "timePicker");
         currentTimeButton = (Button) act.findViewById(R.id.btnEndChangeTime);
+    }
+
+    private Bundle bundleData(boolean isStart, Long timeInMilli) {
+        Bundle b = new Bundle();
+        b.putBoolean("isStart", isStart);
+        if (timeInMilli != null)
+            b.putLong("time", timeInMilli);
+        return b;
     }
 
     public void onCheckedChanged(View view) {
@@ -134,7 +150,7 @@ public class CreateEventActivity extends FragmentActivity {
         if(location != null) {
             intent.putExtra("address", location);
         }
-        startActivityForResult(intent, REQUEST_CODE);
+        startActivityForResult(intent, 12345);
     }
 
     @Override
@@ -237,61 +253,73 @@ public class CreateEventActivity extends FragmentActivity {
         Log.d("Service", "SCHEDULED");
     }
 
-    public class DatePickerFragment extends DialogFragment
+    public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
         int year, month, day;
-        boolean startDate;
+        boolean isStart;
 
-        public DatePickerFragment(Date date, boolean startDate) {
-            Calendar c = Calendar.getInstance();
-            if(date != null) {
-                c.setTime(date);
-            }
-            this.startDate = startDate;
-            year = c.get(Calendar.YEAR);
-            month = c.get(Calendar.MONTH);
-            day = c.get(Calendar.DAY_OF_MONTH);
+        public DatePickerFragment() {
+            // Default Constructor
         }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Bundle b = this.getArguments();
+            Long time = null;
+            if (b.containsKey("time"))
+                time = b.getLong("time");
+            Calendar c = Calendar.getInstance();
+            if(time != null) {
+                c.setTimeInMillis(time);
+            }
+            this.isStart = b.getBoolean("isStart");
+            year = c.get(Calendar.YEAR);
+            month = c.get(Calendar.MONTH);
+            day = c.get(Calendar.DAY_OF_MONTH);
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
+        @Override
         public void onDateSet(DatePicker view, int year, int month, int day) {
             currentDateButton.setText(Utils.appendStrings(Constants.DATE_DELIMITER, String.valueOf(month + 1), String.valueOf(day), String.valueOf(year)));
-            if (startDate)
+            if (isStart)
                 isStartDatePicked = true;
             else
                 isEndDatePicked = true;
         }
     }
 
-    public class TimePickerFragment extends DialogFragment
+    public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
         int hour, minute;
-        boolean startTime;
-        public TimePickerFragment(Date date, boolean startTime) {
-            Calendar c = Calendar.getInstance();
-            if(date != null) {
-                c.setTime(date);
-            }
-            hour = c.get(Calendar.HOUR_OF_DAY);
-            minute = c.get(Calendar.MINUTE);
-            this.startTime = startTime;
+        boolean isStart;
+
+        public TimePickerFragment() {
+            // Default Constructor
         }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Create a new instance of TimePickerDialog and return it
+            Bundle b = this.getArguments();
+            Long time = null;
+            if (b.containsKey("time"))
+                time = b.getLong("time");
+            Calendar c = Calendar.getInstance();
+            if(time != null) {
+                c.setTimeInMillis(time);
+            }
+            hour = c.get(Calendar.HOUR_OF_DAY);
+            minute = c.get(Calendar.MINUTE);
+            this.isStart = b.getBoolean("isStart");
             return new TimePickerDialog(getActivity(), this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }
 
+        @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             currentTimeButton.setText(Utils.appendStrings(Constants.TIME_DELIMITER, String.valueOf(hourOfDay), String.valueOf(minute)));
-            if (startTime)
+            if (isStart)
                 isStartTimePicked = true;
             else
                 isEndTimePicked = true;
