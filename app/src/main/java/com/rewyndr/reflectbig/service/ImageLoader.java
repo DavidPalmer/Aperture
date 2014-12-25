@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.widget.ImageView;
@@ -56,6 +58,37 @@ public class ImageLoader {
         }
     }
 
+    public Bitmap rotateImageFromURL(String url, Bitmap bitmap) {
+        File file = fileCache.getFile(url);
+        try {
+            bitmap = cleanRotatedImage(file.getAbsolutePath(), bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    public Bitmap cleanRotatedImage(String photoPath, Bitmap bitmap) throws IOException {
+        ExifInterface ei = new ExifInterface(photoPath);
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        switch(orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                bitmap = rotateImage(bitmap, 90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                bitmap = rotateImage(bitmap, 180);
+                break;
+            // etc.
+        }
+        return bitmap;
+    }
+
+    public Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+
     private void queuePhoto(String url, ImageView imageView) {
         PhotoToLoad p = new PhotoToLoad(url, imageView);
         executorService.submit(new PhotosLoader(p));
@@ -84,6 +117,7 @@ public class ImageLoader {
             os.close();
             conn.disconnect();
             bitmap = decodeFile(f);
+            bitmap = rotateImageFromURL(url, bitmap);
             return bitmap;
         } catch (Throwable ex) {
             ex.printStackTrace();
@@ -184,7 +218,7 @@ public class ImageLoader {
         PhotoToLoad photoToLoad;
 
         public BitmapDisplayer(Bitmap b, PhotoToLoad p) {
-            bitmap = b;
+            bitmap = rotateImage(b, 90);
             photoToLoad = p;
         }
 

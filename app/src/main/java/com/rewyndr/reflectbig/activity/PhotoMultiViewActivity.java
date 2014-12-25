@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,8 +32,11 @@ import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.model.Photo;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -240,13 +247,11 @@ public class PhotoMultiViewActivity extends Activity {
             Log.d(CURRENT_CLASS_LOG, "Dir path : " + yourDir);
 
             for (File f : yourDir.listFiles()) {
-
                 uploadFile(f);
 
                 fileNames.add(f.getName());
 
             }
-
             return fileNames;
 
         }
