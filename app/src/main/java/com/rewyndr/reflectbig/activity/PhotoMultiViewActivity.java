@@ -4,10 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,13 +26,11 @@ import com.rewyndr.reflectbig.interfaces.PhotoService;
 import com.rewyndr.reflectbig.model.Event;
 import com.rewyndr.reflectbig.model.EventStatus;
 import com.rewyndr.reflectbig.model.Photo;
+import com.rewyndr.reflectbig.service.RotateImage;
 import com.rewyndr.reflectbig.service.ServiceFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -259,12 +253,15 @@ public class PhotoMultiViewActivity extends Activity {
         private boolean uploadFile(File f) {
             PhotoService uploadPhoto = ServiceFactory.getPhotoServiceInstance(context);
             try {
+                String deviceName = android.os.Build.MODEL;
+                if (!deviceName.contains("Nexus")) {
+                    f = RotateImage.rotateImage(f, 90);
+                }
                 uploadPhoto.uploadPhoto(event.getEventId(), f);
                 f.delete();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return false;
 
         }
