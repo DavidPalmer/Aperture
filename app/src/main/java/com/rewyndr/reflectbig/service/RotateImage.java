@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,15 +43,16 @@ public class RotateImage {
     public static File rotateImage(File photo, float angle) {
         File f;
         try {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            Bitmap source = BitmapFactory.decodeFile(photo.getAbsolutePath(), options);
+            String filePath = photo.getAbsolutePath();
+            Bitmap source = BitmapFactory.decodeFile(filePath);
             Matrix matrix = new Matrix();
             matrix.postRotate(angle);
-            String filePath = photo.getAbsolutePath();
-            f = new File(filePath);
-            f.createNewFile();
             Bitmap new_bitmap = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+
+            f = new File(filePath);
+            Log.d("File path",filePath);
+            f.createNewFile();
+
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             new_bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
             byte[] bitmapdata = bos.toByteArray();
