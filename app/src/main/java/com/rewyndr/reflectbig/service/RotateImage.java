@@ -50,7 +50,7 @@ public class RotateImage {
             Bitmap new_bitmap = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
 
             f = new File(filePath);
-            Log.d("File path",filePath);
+            Log.d("Rotating File: ",filePath + " by " + Float.toString(angle) + " degrees.");
             f.createNewFile();
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();

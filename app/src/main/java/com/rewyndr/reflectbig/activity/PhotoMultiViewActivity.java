@@ -257,11 +257,13 @@ public class PhotoMultiViewActivity extends Activity {
 
         }
 
-        public int getExifOrientation(File bitmapFile) {// YOUR MEDIA PATH AS STRING
+        // This method looks for the Exif Orientation in the file and returns the degrees of
+        // rotation needed to right the image.
+        public int getExifOrientation(File f) {
             int degree = 0;
             ExifInterface exif = null;
             try {
-                exif = new ExifInterface(bitmapFile.getAbsolutePath());
+                exif = new ExifInterface(f.getAbsolutePath());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -288,16 +290,14 @@ public class PhotoMultiViewActivity extends Activity {
         private boolean uploadFile(File f) {
             PhotoService uploadPhoto = ServiceFactory.getPhotoServiceInstance(context);
             try {
-//                int degree = getExifOrientation(f);
-//                Log.d("###########", "Rotating by degree: " + Integer.toString(degree));
-//                RotateImage.rotateImage(f, degree);
+                int degree = getExifOrientation(f);
+                RotateImage.rotateImage(f, degree);
                 uploadPhoto.uploadPhoto(event.getEventId(), f);
                 f.delete();
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return false;
-
         }
 
         private byte[] getDataFromFile(File file) throws IOException {

@@ -115,12 +115,10 @@ public class GalleryService extends Service {
         double latitudeV;
         double longitudeV;
         double distance = 0;
-        Log.d("Calling doUpload", "we are getting this far GalleryService" );
         try {
             ExifInterface exifInterface = new ExifInterface(file.getAbsolutePath());
 
             int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            Log.d("Photo Rotation:", "************This is our orientation: " + Integer.toString(orientation));
 
             if (exifInterface.getAttribute("UserComment") != null) {
                 Log.d("uploaded", "true");
@@ -142,7 +140,6 @@ public class GalleryService extends Service {
                 uploadPhoto.uploadPhoto(event.getEventId(), file);
             }
         } catch (IOException e) {
-            Log.e("IOException", "###########never got past Exifinterface");
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
