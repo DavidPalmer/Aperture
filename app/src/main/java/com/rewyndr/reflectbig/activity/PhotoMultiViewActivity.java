@@ -259,7 +259,7 @@ public class PhotoMultiViewActivity extends Activity {
 
         // This method looks for the Exif Orientation in the file and returns the degrees of
         // rotation needed to right the image.
-        public int getExifOrientation(File f) {
+        private int getExifOrientation(File f) {
             int degree = 0;
             ExifInterface exif = null;
             try {
