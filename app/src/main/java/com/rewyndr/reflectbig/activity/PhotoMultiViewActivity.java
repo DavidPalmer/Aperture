@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.media.ExifInterface;
 
 import com.rewyndr.reflectbig.R;
 import com.rewyndr.reflectbig.adapter.ImageAdapter;
@@ -57,12 +58,12 @@ public class PhotoMultiViewActivity extends Activity {
     /**
      * Create a File for saving an image or video
      */
-    private static File getOutputMediaFile(int type) {
+    private static File getOutputMediaFile(int type){
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
-//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_PICTURES), "reflectBig");
+        // File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+        // Environment.DIRECTORY_PICTURES), "reflectBig");
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "reflectBig");
         // This location works best if you want the created images to be shared
@@ -80,6 +81,11 @@ public class PhotoMultiViewActivity extends Activity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE) {
+
+            String imageURI = mediaStorageDir.getPath() + File.separator +
+                    "IMG_" + timeStamp + ".jpg";
+
+
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "IMG_" + timeStamp + ".jpg");
         } else {
@@ -116,9 +122,10 @@ public class PhotoMultiViewActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.camera) {
-//            if(event.getEndDate().equals(new Date())) {
+        //            if(event.getEndDate().equals(new Date())) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 //            }
@@ -250,13 +257,40 @@ public class PhotoMultiViewActivity extends Activity {
 
         }
 
+        public int getExifOrientation(File bitmapFile) {// YOUR MEDIA PATH AS STRING
+            int degree = 0;
+            ExifInterface exif = null;
+            try {
+                exif = new ExifInterface(bitmapFile.getAbsolutePath());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            if (exif != null) {
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+                if (orientation != -1) {
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            degree = 90;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            degree = 180;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            degree = 270;
+                            break;
+                    }
+
+                }
+            }
+            return degree;
+        }
+
         private boolean uploadFile(File f) {
             PhotoService uploadPhoto = ServiceFactory.getPhotoServiceInstance(context);
             try {
-                String deviceName = android.os.Build.MODEL;
-                if (!deviceName.contains("Nexus")) {
-                    f = RotateImage.rotateImage(f, 90);
-                }
+//                int degree = getExifOrientation(f);
+//                Log.d("###########", "Rotating by degree: " + Integer.toString(degree));
+//                RotateImage.rotateImage(f, degree);
                 uploadPhoto.uploadPhoto(event.getEventId(), f);
                 f.delete();
             } catch (Exception e) {
