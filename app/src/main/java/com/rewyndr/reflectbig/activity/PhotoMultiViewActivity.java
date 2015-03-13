@@ -291,7 +291,10 @@ public class PhotoMultiViewActivity extends Activity {
             PhotoService uploadPhoto = ServiceFactory.getPhotoServiceInstance(context);
             try {
                 int degree = getExifOrientation(f);
-                RotateImage.rotateImage(f, degree);
+                Log.d("EXIF ORIENTATION", "Photo has degrees: " + Integer.toString(degree));
+                if(degree != 0){
+                    RotateImage.rotateImage(f, degree);
+                }
                 uploadPhoto.uploadPhoto(event.getEventId(), f);
                 f.delete();
             } catch (Exception e) {
