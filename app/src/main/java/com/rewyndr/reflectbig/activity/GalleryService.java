@@ -117,6 +117,9 @@ public class GalleryService extends Service {
         double distance = 0;
         try {
             ExifInterface exifInterface = new ExifInterface(file.getAbsolutePath());
+
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
             if (exifInterface.getAttribute("UserComment") != null) {
                 Log.d("uploaded", "true");
                 return;

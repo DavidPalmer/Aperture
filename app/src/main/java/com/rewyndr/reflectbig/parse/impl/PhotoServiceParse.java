@@ -1,6 +1,8 @@
 package com.rewyndr.reflectbig.parse.impl;
 
 import android.content.Context;
+import android.media.ExifInterface;
+import android.util.Log;
 
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -14,6 +16,7 @@ import com.rewyndr.reflectbig.parse.model.PhotoParse;
 import com.rewyndr.reflectbig.util.IOUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +84,8 @@ public class PhotoServiceParse extends ParseBase implements PhotoService {
 
     @Override
     public void uploadPhoto(String eventId, File file) throws Exception {
+        Log.d("Calling uploadPhoto", "we are getting to PhotoServiceParse");
+
         ParseFile pFile = new ParseFile(file.getName(), IOUtils.convertFileToBytes(file));
         pFile.save();
         //TODO test this increment change
