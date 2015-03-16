@@ -33,6 +33,7 @@
         <activity
             android:name="com.rewyndr.reflectbig.activity.PhotoMultiViewActivity"
             android:label="@string/title_activity_photo_multi_view"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.rewyndr.reflectbig.activity.SinglePhotoViewActivity"
