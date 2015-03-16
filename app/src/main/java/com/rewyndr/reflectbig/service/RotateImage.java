@@ -48,6 +48,8 @@ public class RotateImage {
             Matrix matrix = new Matrix();
             matrix.postRotate(angle);
             Bitmap new_bitmap = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+            // Finished with the source bitmap, release the memory
+            source.recycle();
 
             f = new File(filePath);
             Log.d("Rotating File: ",filePath + " by " + Float.toString(angle) + " degrees.");
@@ -55,14 +57,16 @@ public class RotateImage {
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             new_bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
+            // Finished with the new bitmap, release the memory
+            new_bitmap.recycle();
+
             byte[] bitmapdata = bos.toByteArray();
             FileOutputStream fos = new FileOutputStream(f);
             fos.write(bitmapdata);
             fos.flush();
 
-            // Recycle
-            new_bitmap.recycle();
-            source.recycle();
+
+
 
         } catch (Exception e) {
             return photo;
