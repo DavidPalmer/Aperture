@@ -59,6 +59,11 @@ public class RotateImage {
             FileOutputStream fos = new FileOutputStream(f);
             fos.write(bitmapdata);
             fos.flush();
+
+            // Recycle
+            new_bitmap.recycle();
+            source.recycle();
+
         } catch (Exception e) {
             return photo;
         }
