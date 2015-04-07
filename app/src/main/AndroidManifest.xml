@@ -10,9 +10,6 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -28,23 +25,24 @@
     <uses-permission android:name="com.rewyndr.reflectbig.permission.C2D_MESSAGE" />
 
     <application
-        android:name=".ReflectBigApplication"
+        android:name="io.rewyndr.reflectbig.ReflectBigApplication"
         android:allowBackup="true"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.rewyndr.reflectbig.activity.PhotoMultiViewActivity"
+            android:name="io.rewyndr.reflectbig.activity.PhotoMultiViewActivity"
             android:label="@string/title_activity_photo_multi_view"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.rewyndr.reflectbig.activity.SinglePhotoViewActivity"
+            android:name="io.rewyndr.reflectbig.activity.SinglePhotoViewActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.rewyndr.reflectbig.activity.EventsListActivity"
-            android:label="@string/app_name"></activity>
+            android:name="io.rewyndr.reflectbig.activity.EventsListActivity"
+            android:label="@string/app_name" />
         <activity
-            android:name="com.rewyndr.reflectbig.activity.EventDetailActivity"
+            android:name="io.rewyndr.reflectbig.activity.EventDetailActivity"
             android:label="@string/title_activity_event_detail_layout">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -57,10 +55,10 @@
         </activity>
 
         <activity
-            android:name="com.rewyndr.reflectbig.activity.AttendeeListActivity"
+            android:name="io.rewyndr.reflectbig.activity.AttendeeListActivity"
             android:label="@string/title_activity_attendee_list" />
         <activity
-            android:name="com.rewyndr.reflectbig.activity.LoginActivity"
+            android:name="io.rewyndr.reflectbig.activity.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -69,28 +67,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.rewyndr.reflectbig.activity.InviteEventActivity"
+            android:name="io.rewyndr.reflectbig.activity.InviteEventActivity"
             android:label="@string/title_activity_invite_event"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.rewyndr.reflectbig.activity.CreateEventActivity"
+            android:name="io.rewyndr.reflectbig.activity.CreateEventActivity"
             android:label="@string/title_activity_create_event" />
         <activity
-            android:name="com.rewyndr.reflectbig.activity.RegisterActivity"
+            android:name="io.rewyndr.reflectbig.activity.RegisterActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.rewyndr.reflectbig.activity.ContactActivity"
+            android:name="io.rewyndr.reflectbig.activity.ContactActivity"
             android:label="@string/title_activity_contact"></activity>
 
         <receiver
-            android:name=".activity.GalleryBroadcastReceiver"
+            android:name="io.rewyndr.reflectbig.activity.GalleryBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-        <service android:name=".activity.GalleryService" />
+        <service android:name="io.rewyndr.reflectbig.activity.GalleryService" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -100,10 +98,10 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.rewyndr.reflectbig.activity.MapAddressActivity"
+            android:name="io.rewyndr.reflectbig.activity.MapAddressActivity"
             android:label="@string/title_activity_map_address"></activity>
         <activity
-            android:name="com.rewyndr.reflectbig.activity.SettingsActivity"
+            android:name="io.rewyndr.reflectbig.activity.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
 
         <service android:name="com.parse.PushService" />

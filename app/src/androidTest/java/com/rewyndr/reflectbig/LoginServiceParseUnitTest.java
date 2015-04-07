@@ -4,7 +4,7 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.parse.ParseUser;
-import com.rewyndr.reflectbig.parse.impl.LoginServiceParse;
+import io.rewyndr.reflectbig.parse.impl.LoginServiceParse;
 
 /**
  * Created by Satish on 9/6/2014.

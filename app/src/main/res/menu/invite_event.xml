@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.rewyndr.reflectbig.activity.InviteEventActivity">
+    tools:context="io.rewyndr.reflectbig.activity.InviteEventActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
