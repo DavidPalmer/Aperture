@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.rewyndr.reflectbig.activity.AttendeeListActivity" >
+    tools:context="io.rewyndr.reflectbig.activity.AttendeeListActivity" >
     <item android:id="@+id/use"
         android:title="@string/use"
         android:orderInCategory="100"

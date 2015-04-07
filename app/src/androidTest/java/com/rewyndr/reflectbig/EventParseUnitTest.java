@@ -1,15 +1,14 @@
 package com.rewyndr.reflectbig;
 
-import android.location.Location;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
 import com.parse.ParseUser;
-import com.rewyndr.reflectbig.common.YNType;
-import com.rewyndr.reflectbig.interfaces.EventService;
-import com.rewyndr.reflectbig.model.Event;
-import com.rewyndr.reflectbig.model.EventStatus;
-import com.rewyndr.reflectbig.parse.impl.EventServiceParse;
+import io.rewyndr.reflectbig.common.YNType;
+import io.rewyndr.reflectbig.interfaces.EventService;
+import io.rewyndr.reflectbig.model.Event;
+import io.rewyndr.reflectbig.model.EventStatus;
+import io.rewyndr.reflectbig.parse.impl.EventServiceParse;
 
 import java.util.ArrayList;
 import java.util.Date;

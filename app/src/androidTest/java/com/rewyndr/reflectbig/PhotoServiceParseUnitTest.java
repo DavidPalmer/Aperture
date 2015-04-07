@@ -3,8 +3,8 @@ package com.rewyndr.reflectbig;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.rewyndr.reflectbig.common.PhotoType;
-import com.rewyndr.reflectbig.parse.impl.PhotoServiceParse;
+import io.rewyndr.reflectbig.common.PhotoType;
+import io.rewyndr.reflectbig.parse.impl.PhotoServiceParse;
 
 import java.util.List;
 
