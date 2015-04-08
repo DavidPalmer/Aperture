@@ -61,10 +61,12 @@ public class GalleryService extends Service {
                     .setSmallIcon(R.drawable.ic_launcher);
             mNotifyManager.notify(id, mBuilder.build());
         } else {
-            if(mBuilder != null){
+            if(mBuilder != null & mNotifyManager != null){
                 mBuilder.setOngoing(false);
             }
-            mNotifyManager.cancelAll();
+            if(mNotifyManager != null){
+                mNotifyManager.cancelAll();
+            }
         }
         return START_STICKY;
     }
